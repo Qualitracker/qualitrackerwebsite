@@ -3,6 +3,8 @@ import { Link } from 'wouter';
 import { PageShell } from '@/components/site/page-shell';
 import { StatusBadge } from '@/components/site/status-badge';
 import { Button } from '@/components/site/button';
+import { LifecycleTimeline } from '@/components/product/lifecycle-timeline';
+import { CAPA_STAGES, DOCUMENT_STAGES } from '@/lib/lifecycles';
 import { useDocumentMeta } from '@/lib/use-document-meta';
 
 interface DocLeaf {
@@ -107,15 +109,40 @@ function IntroductionContent() {
   );
 }
 
+// Pages with real content. Both render the actual workflow states the QMS
+// uses, shared with the landing page so the two can never disagree.
+function LifecyclePage({ group, label, intro, stages, accent }: { group: string; label: string; intro: string; stages: typeof DOCUMENT_STAGES; accent?: string }) {
+  return (
+    <div className="max-w-[720px]">
+      <p className="qt-technical-label">{group}</p>
+      <h1 className="font-brand mt-2 text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>{label}</h1>
+      <div className="mt-4"><StatusBadge status="private-beta" /></div>
+      <p className="mt-4 text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>{intro}</p>
+      <div className="mt-6">
+        <LifecycleTimeline stages={stages} accent={accent} />
+      </div>
+    </div>
+  );
+}
+
 function ComingSoon({ label, group }: { label: string; group: string }) {
   return (
-    <div className="qt-reveal max-w-[520px]">
+    <div className="qt-reveal max-w-[560px]">
       <p className="qt-technical-label">{group}</p>
       <h1 className="font-brand mt-2 text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>{label}</h1>
       <div className="mt-4"><StatusBadge status="coming-soon" /></div>
       <p className="mt-4 text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-        This section isn't written yet. QualiTracker's documentation is being built alongside the product — this page will have real content once that part of the platform is ready to document.
+        This page isn't written yet. Documentation is being written alongside the product, so a page appears once that part of the platform is ready to document.
       </p>
+      <div className="qt-brackets relative mt-6 p-5">
+        <span className="qt-bracket-b absolute inset-0" aria-hidden="true" />
+        <p className="qt-technical-label">In the meantime</p>
+        <ul className="mt-3 space-y-2 text-sm" style={{ color: 'var(--qt-body-grey)' }}>
+          <li>See how modules are staged on the <Link href="/product" style={{ color: 'var(--qt-deep-teal)' }}>Product page</Link>.</li>
+          <li>Read what is and is not claimed on the <Link href="/security" style={{ color: 'var(--qt-deep-teal)' }}>Security page</Link>.</li>
+          <li>Tell us what you need documented first: <Link href="/talk-to-team" style={{ color: 'var(--qt-deep-teal)' }}>talk to the team</Link>.</li>
+        </ul>
+      </div>
     </div>
   );
 }
@@ -155,6 +182,10 @@ function DocsPage() {
           <div>
             {active === 'introduction' ? (
               <IntroductionContent />
+            ) : active === 'documents' ? (
+              <LifecyclePage group="QualiTracker QMS" label="Documents" intro="Every controlled document moves through the same states, from a draft to an approved, version-locked record. These are the actual states used by the QMS." stages={DOCUMENT_STAGES} />
+            ) : active === 'capa' ? (
+              <LifecyclePage group="QualiTracker QMS" label="CAPA" intro="A finding closes only after two independent reviews and a final sign-off. These are the actual states a corrective action moves through." stages={CAPA_STAGES} accent="var(--qt-deep-teal)" />
             ) : (
               <ComingSoon label={activeItem?.label ?? ''} group={activeItem?.group ?? ''} />
             )}
