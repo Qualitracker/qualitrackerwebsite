@@ -1,14 +1,15 @@
 /**
  * The product-status vocabulary the site uses everywhere a capability isn't
- * simply live today: "In Development" / "Coming Soon" / "Early Access" /
+ * simply live today: "Private Beta" / "In Development" / "Coming Soon" /
  * "Preview" / "Planned". Never omit this on anything not fully shipped —
  * it's the mechanism that keeps an honest, still-building product from
  * reading as either unfinished or overclaiming.
  */
-export type ProductStatus = 'live' | 'early-access' | 'preview' | 'in-development' | 'coming-soon' | 'planned';
+export type ProductStatus = 'live' | 'private-beta' | 'early-access' | 'preview' | 'in-development' | 'coming-soon' | 'planned';
 
 const LABEL: Record<ProductStatus, string> = {
   live: 'Live',
+  'private-beta': 'Private beta',
   'early-access': 'Early access',
   preview: 'Preview',
   'in-development': 'In development',

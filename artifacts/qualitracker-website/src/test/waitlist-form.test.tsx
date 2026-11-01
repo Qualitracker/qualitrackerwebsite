@@ -17,7 +17,7 @@ async function fillRequiredFields() {
   await user.type(screen.getByLabelText(/organization type/i), 'Medical laboratory');
   await user.type(screen.getByLabelText(/^country$/i), 'Kenya');
   await user.type(screen.getByLabelText(/your role/i), 'Lab director');
-  await user.type(screen.getByLabelText(/expectations for the product/i), 'A simpler way to manage laboratory quality processes.');
+  await user.type(screen.getByLabelText(/quality workflow would you want to test/i), 'A simpler way to manage laboratory quality processes.');
   return user;
 }
 
@@ -37,9 +37,9 @@ describe('WaitlistPage', () => {
       </Router>,
     );
     const user = await fillRequiredFields();
-    await user.click(screen.getByRole('button', { name: /join the waitlist/i }));
+    await user.click(screen.getByRole('button', { name: /submit beta interest/i }));
 
-    expect(await screen.findByText(/you're on the list/i)).toBeInTheDocument();
+    expect(await screen.findByText(/your interest is recorded/i)).toBeInTheDocument();
   });
 
   it('shows an error message when the request fails (e.g. no backend running)', async () => {
@@ -50,7 +50,7 @@ describe('WaitlistPage', () => {
       </Router>,
     );
     const user = await fillRequiredFields();
-    await user.click(screen.getByRole('button', { name: /join the waitlist/i }));
+    await user.click(screen.getByRole('button', { name: /submit beta interest/i }));
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(/something went wrong/i);

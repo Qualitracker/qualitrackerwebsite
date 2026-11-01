@@ -13,6 +13,8 @@ import { LifecycleTimeline } from '@/components/product/lifecycle-timeline';
 import { ComparisonTable } from '@/components/site/comparison-table';
 import { useDocumentMeta, useStructuredData } from '@/lib/use-document-meta';
 import { SOFTWARE_APPLICATION_SCHEMA } from '@/lib/structured-data';
+import { PaperToProof } from '@/components/product/paper-to-proof';
+import { RoadmapBuildLog } from '@/components/product/roadmap-build-log';
 import { Reveal } from '@/components/site/reveal';
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -88,7 +90,7 @@ function RealitySequence() {
 function LandingPage() {
   useDocumentMeta(
     'QualiTracker — Quality that works for every lab',
-    "QualiTracker is a digital quality-management system for laboratories, with an AI assistant grounded in your lab's own documents.",
+    "QualiTracker is a pre-revenue digital quality-management system entering private beta with laboratories in November 2026.",
     '/',
   );
   useStructuredData(SOFTWARE_APPLICATION_SCHEMA);
@@ -102,7 +104,7 @@ function LandingPage() {
               splitting it with the widget (as before) capped how large it
               could go before crowding. */}
           <Reveal>
-            <p className="qt-eyebrow qt-eyebrow-light">Standards-aware · ISO 15189 · WHO LQMS · SLIPTA</p>
+            <p className="qt-eyebrow qt-eyebrow-light">Private beta · Testing begins mid-November 2026</p>
             <h1 className="font-brand mt-5 max-w-[960px] text-[clamp(3.5rem,9vw,8rem)] font-bold leading-[0.94] tracking-[-.03em]" style={{ color: '#FFFFFF' }}>
               Quality that <span style={{ color: 'var(--qt-quality-gold)' }}>works</span> for every lab.
             </h1>
@@ -113,16 +115,115 @@ function LandingPage() {
                 Document control, corrective actions, and an AI assistant that only answers from your lab's own records — with the source shown, or a plain "not found" instead of a guess.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Button href="/waitlist" variant="gold" data-testid="button-hero-waitlist">Join the waitlist</Button>
+                <Button href="/waitlist" variant="gold" data-testid="button-hero-waitlist">Register beta interest</Button>
                 <Button href="/talk-to-team" variant="reversed" data-testid="button-hero-talk">Talk to the team</Button>
               </div>
               <div className="mt-8 flex items-center gap-2">
-                <StatusBadge status="early-access" />
-                <span className="text-xs" style={{ color: 'var(--qt-light-teal)' }}>Building toward launch with a small first group of laboratories.</span>
+                <StatusBadge status="private-beta" />
+                <span className="text-xs" style={{ color: 'var(--qt-light-teal)' }}>Pre-revenue. The eQMS is being tested with a small cohort of laboratories, not sold.</span>
               </div>
             </Reveal>
             <Reveal delay={0.15}>
               <AccreditationReadinessWidget />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Pilot truth: current stage, scope, and claim boundary. */}
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <Reveal>
+            <SectionHeader eyebrow="Private beta" title="The next milestone is evidence, not a sales launch." />
+            <p className="mt-5 max-w-[620px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+              Mid-November testing will put the eQMS in front of laboratory teams so we can observe real workflows, collect structured feedback, and decide what is ready for a wider pilot. QualiBOT is being developed and tested separately as an educational, source-grounded assistant.
+            </p>
+          </Reveal>
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {[
+              { label: 'Testing now', title: 'eQMS workflows', copy: 'Document control, quality records, and day-to-day usability with a small laboratory cohort.' },
+              { label: 'Learning', title: 'What works in practice', copy: 'Training needs, workflow gaps, connectivity constraints, and the changes users need before a wider pilot.' },
+              { label: 'Not claiming', title: 'Sales or proven outcomes', copy: 'QualiTracker is pre-revenue. Beta participation is not a customer sale, accreditation result, or performance guarantee.' },
+            ].map((item) => (
+              <div key={item.label} className="qt-card p-6">
+                <p className="qt-technical-label">{item.label}</p>
+                <h3 className="font-brand mt-3 text-lg font-bold" style={{ color: 'var(--qt-near-black)' }}>{item.title}</h3>
+                <p className="mt-2 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{item.copy}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Verified event evidence, explicitly separated from product adoption. */}
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-dark-navy)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <Reveal>
+            <SectionHeader light eyebrow="Quality Excellence Challenge · September 2026" title="The laboratory community showed up." />
+            <p className="mt-5 max-w-[660px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
+              At the 39th MeLSAT Scientific Conference, QualiTracker delivered a timed laboratory-QMS knowledge challenge. These are event participation and feedback results—not evidence of eQMS adoption, recurring product use, or revenue.
+            </p>
+          </Reveal>
+          <div className="mt-10 grid gap-px overflow-hidden rounded-lg sm:grid-cols-2 lg:grid-cols-4" style={{ background: 'rgba(255,255,255,.14)' }}>
+            {[
+              { value: '276', label: 'registrations' },
+              { value: '154', label: 'completed attempts' },
+              { value: '27', label: 'regions represented' },
+              { value: '4.35 / 5', label: 'average rating · 57 responses' },
+            ].map((metric) => (
+              <div key={metric.label} className="p-6" style={{ background: 'var(--qt-dark-navy)' }}>
+                <p className="font-brand text-3xl font-bold" style={{ color: 'var(--qt-quality-gold)' }}>{metric.value}</p>
+                <p className="mt-2 text-xs" style={{ color: 'var(--qt-mint-light)' }}>{metric.label}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-5 max-w-[700px] text-[11px] leading-5" style={{ color: 'var(--qt-light-teal)' }}>
+            Source: challenge platform records and post-challenge survey summarized in the October 2026 detailed report. Registration records may include duplicates; the rating reflects survey respondents, not all registrants.
+          </p>
+        </div>
+      </section>
+
+      {/* Paper vs digital: the problem laboratories describe, shown as an illustrative example. */}
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
+            <Reveal>
+              <SectionHeader eyebrow="Why we're building this" title="Most laboratory quality records still live on paper." />
+              <p className="mt-5 max-w-[420px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+                Laboratories tell us entries get forgotten, misread or misrecorded, and the cost shows up later as repeated work, delayed results, or lost samples. Toggle the example to see what we are testing in the beta.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <PaperToProof />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap: sourced from the Oct 2026 strategy, product, and technology plans. */}
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+            <Reveal>
+              <SectionHeader eyebrow="Where we're going" title="Built in the open, one gate at a time." />
+              <p className="mt-5 max-w-[400px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+                We would rather show you the plan, and what it depends on, than promise a launch date. Switch between horizons to see what is happening now, next, and later.
+              </p>
+              <ul className="mt-8 space-y-4">
+                {[
+                  { k: 'Ownership first', v: 'No agreement is signed until the company demonstrably owns what it builds.' },
+                  { k: 'Evidence before scale', v: 'Beta and event data come before any claim about outcomes.' },
+                  { k: 'Safe by default', v: 'The assistant answers only from your documents, cites its source, and says so when it cannot find an answer.' },
+                ].map((p) => (
+                  <li key={p.k} className="border-l-2 pl-4" style={{ borderColor: 'var(--qt-quality-gold)' }}>
+                    <p className="font-mono-ui text-[11px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-deep-teal)' }}>{p.k}</p>
+                    <p className="mt-1 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{p.v}</p>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <RoadmapBuildLog />
             </Reveal>
           </div>
         </div>
@@ -196,7 +297,7 @@ function LandingPage() {
           <SectionHeader eyebrow="The system" title="Two connected layers, one system of record." />
           <Reveal className="mt-10 grid gap-5 lg:grid-cols-2">
             <div className="qt-card-dark p-8">
-              <StatusBadge status="early-access" />
+              <StatusBadge status="private-beta" />
               <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: 'var(--qt-quality-gold)', color: 'var(--qt-dark-navy)' }}>
                 <FileCheck2 size={21} />
               </div>
@@ -206,7 +307,7 @@ function LandingPage() {
               </p>
             </div>
             <div className="qt-card p-8">
-              <StatusBadge status="preview" />
+              <StatusBadge status="in-development" />
               <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: 'var(--qt-teal-tint)', color: 'var(--qt-deep-teal)' }}>
                 <FlaskConical size={19} />
               </div>
@@ -286,10 +387,10 @@ function LandingPage() {
         <Reveal className="mx-auto max-w-[1280px] px-5 text-center lg:px-8">
           <SectionHeader align="center" light eyebrow="Start the conversation" title="Let's make quality easier to see." />
           <p className="mx-auto mt-5 max-w-[440px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            We're building toward launch with a small first group of laboratories. Join the waitlist, or talk to the team if you're evaluating for an institution or partnership.
+            QualiTracker is pre-revenue and not available for purchase. Register your interest for a future beta cohort, or talk to the team about research, institutional evaluation, or the Quality Excellence Challenge.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Button href="/waitlist" variant="gold">Join the waitlist</Button>
+            <Button href="/waitlist" variant="gold">Register beta interest</Button>
             <Button href="/talk-to-team" variant="reversed">Talk to the team</Button>
           </div>
         </Reveal>

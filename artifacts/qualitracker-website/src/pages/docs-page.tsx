@@ -78,7 +78,7 @@ const ALL_ITEMS = DOC_GROUPS.flatMap((g) => g.items.map((i) => ({ ...i, group: g
 function IntroductionContent() {
   return (
     <div className="qt-reveal max-w-[640px]">
-      <StatusBadge status="early-access" />
+      <StatusBadge status="private-beta" />
       <h1 className="font-brand mt-4 text-3xl font-bold" style={{ color: 'var(--qt-near-black)' }}>Introduction</h1>
       <p className="mt-4 text-sm leading-7" style={{ color: 'var(--qt-body-grey)' }}>
         QualiTracker is a digital quality-management system for laboratories, made of two connected parts:
@@ -94,6 +94,12 @@ function IntroductionContent() {
       <p className="mt-4 text-sm leading-7" style={{ color: 'var(--qt-body-grey)' }}>
         The rest of this documentation — quickstart steps, the full QMS module reference, API and MCP integration guides — is being written alongside the product itself. Sections not yet ready are marked clearly rather than left to look finished before they are.
       </p>
+      <div className="mt-6 rounded-lg border p-5" style={{ borderColor: 'var(--qt-border-grey)', background: 'var(--qt-lab-grey)' }}>
+        <p className="qt-technical-label">Current stage · 30 October 2026</p>
+        <p className="mt-2 text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+          QualiTracker is pre-revenue. Controlled eQMS beta testing is planned to begin with a small laboratory cohort in mid-November 2026. QualiBOT is being developed and evaluated separately. Neither is currently available for general purchase.
+        </p>
+      </div>
       <div className="mt-6">
         <Button href="/talk-to-team" variant="secondary">Ask the team a question</Button>
       </div>

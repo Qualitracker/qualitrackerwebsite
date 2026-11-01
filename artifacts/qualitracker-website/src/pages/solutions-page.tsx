@@ -9,7 +9,7 @@ import { useDocumentMeta } from '@/lib/use-document-meta';
 // Medical laboratories get the featured slot deliberately — it's the
 // segment every other real page (product/security/company) is written
 // against; the rest are real segments too, just not yet the primary focus.
-const FEATURED_SEGMENT = { label: 'Medical laboratories', copy: 'Clinical diagnostics labs working toward ISO 15189, WHO LQMS, or SLIPTA readiness — the segment the current product is built and verified against.' };
+const FEATURED_SEGMENT = { label: 'Medical laboratories', copy: 'Clinical diagnostics labs working toward ISO 15189, WHO LQMS, or SLIPTA readiness — the primary segment the private beta is designed to learn from.' };
 const OTHER_SEGMENTS = [
   { label: 'Testing laboratories', copy: 'Non-clinical testing labs with their own document-control and quality-record needs.' },
   { label: 'Research laboratories', copy: 'Research settings that need traceable documentation without a clinical QMS.' },
@@ -42,7 +42,7 @@ function SolutionsPage() {
               <div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="qt-eyebrow qt-eyebrow-light">Primary segment</p>
-                  <StatusBadge status="in-development" />
+                  <StatusBadge status="private-beta" />
                 </div>
                 <h3 className="font-brand text-2xl font-bold" style={{ color: '#FFFFFF' }}>{FEATURED_SEGMENT.label}</h3>
                 <p className="mt-3 max-w-[420px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>{FEATURED_SEGMENT.copy}</p>

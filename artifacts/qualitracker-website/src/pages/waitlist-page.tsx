@@ -6,7 +6,7 @@ import { HONEYPOT_FIELD_NAME, submitLead } from '@/lib/leads';
 import { useDocumentMeta } from '@/lib/use-document-meta';
 
 function WaitlistPage() {
-  useDocumentMeta('Join the waitlist — QualiTracker', 'Join the QualiTracker early-access waitlist for laboratories.', '/waitlist');
+  useDocumentMeta('Register beta interest — QualiTracker', 'Tell QualiTracker which laboratory workflow you would want to test in a future private-beta cohort.', '/waitlist');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,12 +58,12 @@ function WaitlistPage() {
     <PageShell>
       <section className="py-16 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
-          <p className="qt-eyebrow qt-eyebrow-light">Early access</p>
+          <p className="qt-eyebrow qt-eyebrow-light">Private beta · pre-revenue</p>
           <h1 className="font-brand mt-3 max-w-[560px] text-[clamp(2rem,4vw,2.8rem)] font-bold leading-[1.1] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
-            Join the waitlist.
+            Tell us about your laboratory.
           </h1>
           <p className="mt-4 max-w-[440px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            We're building toward launch with a small first group of laboratories. Tell us about yours and we'll be in touch as access opens up.
+            Controlled eQMS testing begins with a small cohort in mid-November 2026. QualiTracker is not currently selling the product or onboarding general customers; this form records interest for future beta cohorts.
           </p>
         </div>
       </section>
@@ -75,9 +75,9 @@ function WaitlistPage() {
               <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-full" style={{ background: 'var(--qt-teal-tint)', color: 'var(--qt-deep-teal)' }}>
                 <Check size={23} />
               </span>
-              <h2 className="font-brand text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>You're on the list.</h2>
+              <h2 className="font-brand text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>Your interest is recorded.</h2>
               <p className="mt-3 max-w-[360px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                Thank you for sharing a little about your lab. We'll follow up as early access opens.
+                Thank you for sharing your laboratory's needs. This is not a purchase or a confirmed beta place; the team will follow up if a future cohort is a fit.
               </p>
             </div>
           ) : (
@@ -90,7 +90,7 @@ function WaitlistPage() {
                 <TextField label="Country" name="country" required placeholder="e.g. Tanzania" data-testid="input-waitlist-country" />
               </div>
               <TextField label="Your role" name="role" required placeholder="e.g. Laboratory manager" data-testid="input-waitlist-role" />
-              <TextareaField label="What are your expectations for the product?" name="message" required placeholder="Tell us what you would like QualiTracker to help you achieve." data-testid="textarea-waitlist-message" />
+              <TextareaField label="Which quality workflow would you want to test?" name="message" required placeholder="For example: document control, quality records, CAPA, or audit follow-up." data-testid="textarea-waitlist-message" />
               <label className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
                 Leave this field empty
                 <input tabIndex={-1} autoComplete="off" name={HONEYPOT_FIELD_NAME} />
@@ -103,9 +103,9 @@ function WaitlistPage() {
                 style={{ height: 44, background: 'var(--qt-quality-gold)', color: 'var(--qt-dark-navy)', opacity: submitting ? 0.6 : 1, cursor: submitting ? 'not-allowed' : 'pointer' }}
                 data-testid="button-submit-waitlist"
               >
-                {submitting ? 'Submitting…' : 'Join the waitlist'}
+                {submitting ? 'Submitting…' : 'Submit beta interest'}
               </button>
-              <p className="text-center text-[11px] leading-4" style={{ color: 'var(--qt-body-grey)' }}>We'll only use this to follow up about early access.</p>
+              <p className="text-center text-[11px] leading-4" style={{ color: 'var(--qt-body-grey)' }}>We'll only use this to assess and follow up on beta interest. Submission does not guarantee access.</p>
             </form>
           )}
         </div>

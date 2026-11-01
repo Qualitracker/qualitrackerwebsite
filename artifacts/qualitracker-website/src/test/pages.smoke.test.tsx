@@ -22,8 +22,8 @@ const PAGES: Array<{ name: string; Component: () => React.JSX.Element; heading: 
   { name: 'Solutions', Component: SolutionsPage, heading: /built for quality-intensive laboratory work/i },
   { name: 'Docs', Component: DocsPage, heading: /introduction/i },
   { name: 'Company', Component: CompanyPage, heading: /built in east africa, for east africa/i },
-  { name: 'Security', Component: SecurityPage, heading: /your lab's data never leaves its own boundary/i },
-  { name: 'Waitlist', Component: WaitlistPage, heading: /join the waitlist\./i },
+  { name: 'Security', Component: SecurityPage, heading: /security boundaries are part of the beta/i },
+  { name: 'Waitlist', Component: WaitlistPage, heading: /tell us about your laboratory\./i },
   { name: 'Talk to the team', Component: TalkToTeamPage, heading: /talk to the team\./i },
   { name: 'Not found', Component: NotFound, heading: /page not found/i },
 ];

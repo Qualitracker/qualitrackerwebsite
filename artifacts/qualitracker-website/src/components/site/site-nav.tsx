@@ -40,7 +40,7 @@ export function SiteNav() {
         </nav>
         <div className="ml-auto hidden items-center gap-3 md:flex">
           <Button href="/talk-to-team" variant="ghost" size="sm">Talk to the team</Button>
-          <Button href="/waitlist" size="sm" data-testid="link-nav-waitlist">Join the waitlist</Button>
+          <Button href="/waitlist" size="sm" data-testid="link-nav-waitlist">Beta interest</Button>
         </div>
         <button
           type="button"
@@ -63,7 +63,7 @@ export function SiteNav() {
           ))}
           <div className="mt-2 flex flex-col gap-2 border-t pt-3" style={{ borderColor: 'var(--qt-border-grey)' }}>
             <Button href="/talk-to-team" variant="secondary" onClick={() => setMenuOpen(false)} fullWidth>Talk to the team</Button>
-            <Button href="/waitlist" onClick={() => setMenuOpen(false)} fullWidth>Join the waitlist</Button>
+            <Button href="/waitlist" onClick={() => setMenuOpen(false)} fullWidth>Beta interest</Button>
           </div>
         </nav>
       )}

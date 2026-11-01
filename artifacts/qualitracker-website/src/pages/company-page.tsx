@@ -124,7 +124,7 @@ function CompanyPage() {
         <div className="mx-auto flex max-w-[1280px] flex-col items-center px-5 text-center lg:px-8">
           <h2 className="font-brand text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>Want to build with us, or learn more?</h2>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <Button href="/waitlist" variant="gold">Join the waitlist</Button>
+            <Button href="/waitlist" variant="gold">Register beta interest</Button>
             <Button href="/talk-to-team" variant="secondary">Talk to the team</Button>
           </div>
         </div>
