@@ -4,17 +4,20 @@ import { Menu, Search, X } from 'lucide-react';
 import { Logo } from '@/components/brand/logo';
 import { Button } from '@/components/site/button';
 import { CommandPalette } from '@/components/site/command-palette';
+import { useI18n, type DictKey } from '@/lib/i18n';
 
-const NAV_LINKS = [
-  { label: 'Product', href: '/product' },
-  { label: 'Solutions', href: '/solutions' },
-  { label: 'Docs', href: '/docs' },
-  { label: 'Company', href: '/company' },
+const NAV_LINKS: Array<{ id: string; key: DictKey; href: string }> = [
+  { id: 'product', key: 'nav.product', href: '/product' },
+  { id: 'solutions', key: 'nav.solutions', href: '/solutions' },
+  { id: 'docs', key: 'nav.docs', href: '/docs' },
+  { id: 'company', key: 'nav.company', href: '/company' },
 ];
 
 /** Sticky white nav bar: dual-tone lockup, teal active underline, teal CTA — matches the real brand kit's SiteNav. */
 export function SiteNav() {
   const [location] = useLocation();
+  const { lang, setLang, t } = useI18n();
+  const toggleLang = () => setLang(lang === 'en' ? 'sw' : 'en');
   const [menuOpen, setMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -42,11 +45,11 @@ export function SiteNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="pb-4 -mb-4 text-[13px] font-medium"
-                style={{ color: active ? 'var(--qt-deep-teal)' : 'var(--qt-near-black)', borderBottom: active ? '2px solid var(--qt-deep-teal)' : '2px solid transparent' }}
-                data-testid={`link-nav-${item.label.toLowerCase()}`}
+                className="qt-dashed rounded px-3 py-1 text-[13px] font-medium"
+                style={{ color: active ? 'var(--qt-deep-teal)' : 'var(--qt-near-black)', borderColor: active ? 'var(--qt-deep-teal)' : 'transparent' }}
+                data-testid={`link-nav-${item.id}`}
               >
-                {item.label}
+                {t(item.key)}
               </Link>
             );
           })}
@@ -64,8 +67,19 @@ export function SiteNav() {
             <span>Jump to</span>
             <kbd className="font-mono-ui text-[10px]">⌘K</kbd>
           </button>
-          <Button href="/talk-to-team" variant="ghost" size="sm">Talk to the team</Button>
-          <Button href="/waitlist" size="sm" data-testid="link-nav-waitlist">Beta interest</Button>
+          <button
+            type="button"
+            onClick={toggleLang}
+            lang={lang === 'en' ? 'sw' : 'en'}
+            className="qt-focus qt-dashed h-8 rounded-md px-2.5 text-[12px] font-medium"
+            style={{ color: 'var(--qt-near-black)' }}
+            aria-label={t('lang.switchLabel')}
+            data-testid="button-lang-toggle"
+          >
+            {t('lang.switch')}
+          </button>
+          <Button href="/talk-to-team" variant="ghost" size="sm">{t('nav.talk')}</Button>
+          <Button href="/waitlist" size="sm" data-testid="link-nav-waitlist">{t('nav.beta')}</Button>
         </div>
         <button
           type="button"
@@ -83,12 +97,15 @@ export function SiteNav() {
         <nav className="border-t px-5 py-3 md:hidden" style={{ borderColor: 'var(--qt-border-grey)' }} aria-label="Mobile navigation">
           {NAV_LINKS.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-sm font-medium" style={{ color: 'var(--qt-near-black)' }}>
-              {item.label}
+              {t(item.key)}
             </Link>
           ))}
           <div className="mt-2 flex flex-col gap-2 border-t pt-3" style={{ borderColor: 'var(--qt-border-grey)' }}>
-            <Button href="/talk-to-team" variant="secondary" onClick={() => setMenuOpen(false)} fullWidth>Talk to the team</Button>
-            <Button href="/waitlist" onClick={() => setMenuOpen(false)} fullWidth>Beta interest</Button>
+            <button type="button" onClick={toggleLang} lang={lang === 'en' ? 'sw' : 'en'} className="qt-focus qt-dashed rounded-md py-2 text-sm font-medium" aria-label={t('lang.switchLabel')}>
+              {t('lang.switch')}
+            </button>
+            <Button href="/talk-to-team" variant="secondary" onClick={() => setMenuOpen(false)} fullWidth>{t('nav.talk')}</Button>
+            <Button href="/waitlist" onClick={() => setMenuOpen(false)} fullWidth>{t('nav.beta')}</Button>
           </div>
         </nav>
       )}

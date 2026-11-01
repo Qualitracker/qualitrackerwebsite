@@ -13,6 +13,9 @@ import { LifecycleTimeline } from '@/components/product/lifecycle-timeline';
 import { ComparisonTable } from '@/components/site/comparison-table';
 import { useDocumentMeta, useStructuredData } from '@/lib/use-document-meta';
 import { SOFTWARE_APPLICATION_SCHEMA } from '@/lib/structured-data';
+import { useI18n } from '@/lib/i18n';
+import { HowItWorks } from '@/components/product/how-it-works';
+import { RecordTicker } from '@/components/product/record-ticker';
 import { PaperToProof } from '@/components/product/paper-to-proof';
 import { RoadmapBuildLog } from '@/components/product/roadmap-build-log';
 import { Reveal } from '@/components/site/reveal';
@@ -88,6 +91,7 @@ function RealitySequence() {
 }
 
 function LandingPage() {
+  const { t, lang } = useI18n();
   useDocumentMeta(
     'QualiTracker — Quality that works for every lab',
     "QualiTracker is a pre-revenue digital quality-management system entering private beta with laboratories in November 2026.",
@@ -104,29 +108,41 @@ function LandingPage() {
               splitting it with the widget (as before) capped how large it
               could go before crowding. */}
           <Reveal>
-            <p className="qt-eyebrow qt-eyebrow-light">Private beta · Testing begins mid-November 2026</p>
+            <p className="qt-eyebrow qt-eyebrow-light">{t('hero.eyebrow')}</p>
             <h1 className="font-brand mt-5 max-w-[960px] text-[clamp(3.5rem,9vw,8rem)] font-bold leading-[0.94] tracking-[-.03em]" style={{ color: '#FFFFFF' }}>
-              Quality that <span style={{ color: 'var(--qt-quality-gold)' }}>works</span> for every lab.
+              {lang === 'sw' ? (<>Ubora <span style={{ color: 'var(--qt-quality-gold)' }}>unaofanya kazi</span> kwa kila maabara.</>) : (<>Quality that <span style={{ color: 'var(--qt-quality-gold)' }}>works</span> for every lab.</>)}
             </h1>
           </Reveal>
           <div className="mt-10 grid items-center gap-14 lg:grid-cols-[1.05fr_.95fr] lg:gap-10">
             <Reveal delay={0.08}>
               <p className="max-w-[420px] text-[15px] leading-7" style={{ color: 'var(--qt-mint-light)' }}>
-                Document control, corrective actions, and an AI assistant that only answers from your lab's own records — with the source shown, or a plain "not found" instead of a guess.
+                {t('hero.lead')}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Button href="/waitlist" variant="gold" data-testid="button-hero-waitlist">Register beta interest</Button>
-                <Button href="/talk-to-team" variant="reversed" data-testid="button-hero-talk">Talk to the team</Button>
+                <Button href="/waitlist" variant="gold" data-testid="button-hero-waitlist">{t('hero.cta')}</Button>
+                <Button href="/talk-to-team" variant="reversed" data-testid="button-hero-talk">{t('hero.cta2')}</Button>
               </div>
               <div className="mt-8 flex items-center gap-2">
                 <StatusBadge status="private-beta" />
-                <span className="text-xs" style={{ color: 'var(--qt-light-teal)' }}>Pre-revenue. The eQMS is being tested with a small cohort of laboratories, not sold.</span>
+                <span className="text-xs" style={{ color: 'var(--qt-light-teal)' }}>{t('hero.status')}</span>
               </div>
             </Reveal>
             <Reveal delay={0.15}>
               <AccreditationReadinessWidget />
             </Reveal>
           </div>
+          <div className="mt-14">
+            <p className="font-mono-ui mb-3 text-[10px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-light-teal)' }}>Illustrative record activity</p>
+            <RecordTicker />
+          </div>
+        </div>
+      </section>
+
+      {/* How it works: blueprint-style list that drives a wireframe and a mono log. */}
+      <section className="py-20 lg:py-28" style={{ background: 'var(--qt-clinical-white)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <p className="font-mono-ui mb-8 inline-block rounded border border-dashed px-3 py-1.5 text-[11px]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>{t('hiw.label')}</p>
+          <HowItWorks />
         </div>
       </section>
 
