@@ -342,6 +342,22 @@
 /* Colour-shift only. No scale, no translate — the brand kit's motion ceiling. */
 .qt-button { transition: background-color .18s cubic-bezier(.2,0,.2,1), color .18s cubic-bezier(.2,0,.2,1), border-color .18s cubic-bezier(.2,0,.2,1); }
 
+/* Blueprint language: dashed chrome, corner-bracket frames, marker highlight. */
+.qt-dashed { border: 1px dashed var(--qt-border-grey); }
+.qt-dashed:hover { border-color: var(--qt-deep-teal); }
+.qt-brackets { position: relative; }
+.qt-brackets::before, .qt-brackets::after,
+.qt-brackets > .qt-bracket-b::before, .qt-brackets > .qt-bracket-b::after {
+  content: ''; position: absolute; width: 14px; height: 14px; border: 0 solid var(--qt-light-teal); pointer-events: none;
+}
+.qt-brackets::before { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+.qt-brackets::after { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+.qt-brackets > .qt-bracket-b::before { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+.qt-brackets > .qt-bracket-b::after { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+.qt-mark { background: var(--qt-quality-gold); color: var(--qt-dark-navy); padding: 0 .2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+@keyframes qt-spin-slow { to { transform: rotate(360deg); } }
+@keyframes qt-marquee { to { transform: translateX(-50%); } }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }

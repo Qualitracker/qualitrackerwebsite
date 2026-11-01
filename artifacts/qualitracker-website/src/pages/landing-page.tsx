@@ -13,6 +13,8 @@ import { LifecycleTimeline } from '@/components/product/lifecycle-timeline';
 import { ComparisonTable } from '@/components/site/comparison-table';
 import { useDocumentMeta, useStructuredData } from '@/lib/use-document-meta';
 import { SOFTWARE_APPLICATION_SCHEMA } from '@/lib/structured-data';
+import { HowItWorks } from '@/components/product/how-it-works';
+import { RecordTicker } from '@/components/product/record-ticker';
 import { PaperToProof } from '@/components/product/paper-to-proof';
 import { RoadmapBuildLog } from '@/components/product/roadmap-build-log';
 import { Reveal } from '@/components/site/reveal';
@@ -127,6 +129,18 @@ function LandingPage() {
               <AccreditationReadinessWidget />
             </Reveal>
           </div>
+          <div className="mt-14">
+            <p className="font-mono-ui mb-3 text-[10px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-light-teal)' }}>Illustrative record activity</p>
+            <RecordTicker />
+          </div>
+        </div>
+      </section>
+
+      {/* How it works: blueprint-style list that drives a wireframe and a mono log. */}
+      <section className="py-20 lg:py-28" style={{ background: 'var(--qt-clinical-white)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <p className="font-mono-ui mb-8 inline-block rounded border border-dashed px-3 py-1.5 text-[11px]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>How it works</p>
+          <HowItWorks />
         </div>
       </section>
 

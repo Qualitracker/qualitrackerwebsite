@@ -42,8 +42,8 @@ export function SiteNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="pb-4 -mb-4 text-[13px] font-medium"
-                style={{ color: active ? 'var(--qt-deep-teal)' : 'var(--qt-near-black)', borderBottom: active ? '2px solid var(--qt-deep-teal)' : '2px solid transparent' }}
+                className="qt-dashed rounded px-3 py-1 text-[13px] font-medium"
+                style={{ color: active ? 'var(--qt-deep-teal)' : 'var(--qt-near-black)', borderColor: active ? 'var(--qt-deep-teal)' : 'transparent' }}
                 data-testid={`link-nav-${item.label.toLowerCase()}`}
               >
                 {item.label}
