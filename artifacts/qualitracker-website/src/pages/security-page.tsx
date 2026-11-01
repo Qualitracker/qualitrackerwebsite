@@ -45,10 +45,10 @@ function SecurityPage() {
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="qt-eyebrow qt-eyebrow-light">Security</p>
           <h1 className="font-brand mt-3 max-w-[640px] text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.08] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
-            Your lab's data never leaves its own boundary.
+            Security boundaries are part of the beta.
           </h1>
           <p className="mt-5 max-w-[480px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            Not a compliance claim — a description of how the system is actually built.
+            A description of the current architecture under evaluation — not a certification or a finished assurance report.
           </p>
         </div>
       </section>
@@ -56,6 +56,7 @@ function SecurityPage() {
       <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="How it's actually built" title="Four things, verified in the codebase, not asserted in a copy deck." />
+          <div className="mt-5"><StatusBadge status="private-beta" /></div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {PRACTICES.map((p) => (
               <div key={p.title} className="qt-card p-6" data-testid={`security-practice-${p.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
@@ -72,7 +73,7 @@ function SecurityPage() {
             <StatusBadge status="in-development" />
             <h2 className="font-brand mt-4 text-xl font-bold" style={{ color: 'var(--qt-near-black)' }}>What's not here yet</h2>
             <p className="mt-3 text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              No compliance certification (SOC 2, ISO 27001, or similar) is claimed — none has been pursued yet. This page describes real architecture decisions, not an audited compliance posture. If you need a formal security review for an evaluation, talk to the team directly rather than relying on this page alone.
+              No compliance certification (SOC 2, ISO 27001, or similar) is claimed — none has been pursued yet. The architecture described above still requires beta validation, security testing, and formal review before broader use. If you need a security assessment for an evaluation, talk to the team directly rather than relying on this page alone.
             </p>
             <div className="mt-6">
               <Button href="/talk-to-team" variant="secondary">Talk to the team</Button>

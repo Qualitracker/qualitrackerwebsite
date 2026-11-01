@@ -16,7 +16,7 @@ export function AccreditationVisionSection() {
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           <div className="qt-card p-7">
             <div className="mb-4 flex items-center gap-2">
-              <StatusBadge status="early-access" />
+              <StatusBadge status="private-beta" />
               <span className="font-mono-ui text-[10px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-body-grey)' }}>Current product</span>
             </div>
             <h3 className="font-brand text-xl font-bold" style={{ color: 'var(--qt-near-black)' }}>Quality-management software</h3>

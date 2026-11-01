@@ -41,7 +41,7 @@ const ROWS: ComparisonRow[] = [
   },
   {
     label: 'Status',
-    qualitracker: 'Early access — honestly staged',
+    qualitracker: 'Private beta — pre-revenue',
     statusQuo: 'Already what most labs use',
     genericQms: 'Established, but often not region-specific',
   },

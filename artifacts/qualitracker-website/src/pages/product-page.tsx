@@ -28,8 +28,8 @@ const TRACE_STEPS: Array<{ id: NodeId; label: string; relation?: string }> = [
 ];
 
 const CAPABILITIES: Array<{ label: string; status: ProductStatus }> = [
-  { label: 'Document & SOP control', status: 'early-access' },
-  { label: 'Quality records (temperature, QC, PT)', status: 'early-access' },
+  { label: 'Document & SOP control', status: 'private-beta' },
+  { label: 'Quality records (temperature, QC, PT)', status: 'private-beta' },
   { label: 'AI assistant (QualiBOT)', status: 'preview' },
   { label: 'Corrective actions (CAPA)', status: 'in-development' },
   { label: 'Non-conformances', status: 'in-development' },
@@ -59,6 +59,10 @@ function ProductPage() {
           <p className="mt-5 max-w-[480px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
             Two connected layers — a QMS Module for document and record control, and QualiBOT, an AI assistant grounded in your lab's own documents.
           </p>
+          <div className="mt-6 flex items-center gap-3">
+            <StatusBadge status="private-beta" />
+            <span className="text-xs" style={{ color: 'var(--qt-light-teal)' }}>Pre-revenue · not commercially available</span>
+          </div>
         </div>
       </section>
 

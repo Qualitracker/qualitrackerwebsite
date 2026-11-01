@@ -4,12 +4,13 @@ import { SectionHeader } from '@/components/site/section-header';
 import { Button } from '@/components/site/button';
 import { StatusBadge } from '@/components/site/status-badge';
 import { TechnicalRecordBlock } from '@/components/site/technical-block';
+import { BetaJourney } from '@/components/product/beta-journey';
 import { useDocumentMeta } from '@/lib/use-document-meta';
 
 // Medical laboratories get the featured slot deliberately — it's the
 // segment every other real page (product/security/company) is written
 // against; the rest are real segments too, just not yet the primary focus.
-const FEATURED_SEGMENT = { label: 'Medical laboratories', copy: 'Clinical diagnostics labs working toward ISO 15189, WHO LQMS, or SLIPTA readiness — the segment the current product is built and verified against.' };
+const FEATURED_SEGMENT = { label: 'Medical laboratories', copy: 'Clinical diagnostics labs working toward ISO 15189, WHO LQMS, or SLIPTA readiness — the primary segment the private beta is designed to learn from.' };
 const OTHER_SEGMENTS = [
   { label: 'Testing laboratories', copy: 'Non-clinical testing labs with their own document-control and quality-record needs.' },
   { label: 'Research laboratories', copy: 'Research settings that need traceable documentation without a clinical QMS.' },
@@ -42,7 +43,7 @@ function SolutionsPage() {
               <div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="qt-eyebrow qt-eyebrow-light">Primary segment</p>
-                  <StatusBadge status="in-development" />
+                  <StatusBadge status="private-beta" />
                 </div>
                 <h3 className="font-brand text-2xl font-bold" style={{ color: '#FFFFFF' }}>{FEATURED_SEGMENT.label}</h3>
                 <p className="mt-3 max-w-[420px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>{FEATURED_SEGMENT.copy}</p>
@@ -64,6 +65,20 @@ function SolutionsPage() {
       </section>
 
       <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+            <div>
+              <SectionHeader eyebrow="Taking part in the beta" title="What a laboratory actually does, step by step." />
+              <p className="mt-5 max-w-[400px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+                The beta is a controlled test, not a rollout. Laboratories learn first, commit second, and the outcome is a written decision rather than an assumption.
+              </p>
+            </div>
+            <BetaJourney />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="What every segment shares" title="One core system, whatever the setting." />
           <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_1fr]">

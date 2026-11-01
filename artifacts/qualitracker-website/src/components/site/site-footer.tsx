@@ -12,8 +12,8 @@ const COLUMNS: Array<[string, Array<{ label: string; href: string }>]> = [
     { label: 'Team', href: '/company#team' },
     { label: 'Vision', href: '/company#vision' },
   ]],
-  ['Get started', [
-    { label: 'Join the waitlist', href: '/waitlist' },
+  ['Connect', [
+    { label: 'Register beta interest', href: '/waitlist' },
     { label: 'Talk to the team', href: '/talk-to-team' },
     { label: 'Security', href: '/security' },
   ]],
