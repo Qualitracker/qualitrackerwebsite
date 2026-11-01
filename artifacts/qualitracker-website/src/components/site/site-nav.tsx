@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X } from 'lucide-react';
+import { Menu, Search, X } from 'lucide-react';
 import { Logo } from '@/components/brand/logo';
 import { Button } from '@/components/site/button';
+import { CommandPalette } from '@/components/site/command-palette';
 
 const NAV_LINKS = [
   { label: 'Product', href: '/product' },
@@ -15,6 +16,18 @@ const NAV_LINKS = [
 export function SiteNav() {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <header className="sticky top-0 z-40" style={{ background: '#FFFFFF', borderBottom: '1px solid var(--qt-border-grey)' }}>
@@ -39,6 +52,18 @@ export function SiteNav() {
           })}
         </nav>
         <div className="ml-auto hidden items-center gap-3 md:flex">
+          <button
+            type="button"
+            onClick={() => setPaletteOpen(true)}
+            className="qt-focus flex h-8 items-center gap-2 rounded-md border px-2.5 text-[12px]"
+            style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}
+            aria-label="Open site navigation (Command K)"
+            data-testid="button-command-palette"
+          >
+            <Search size={13} aria-hidden="true" />
+            <span>Jump to</span>
+            <kbd className="font-mono-ui text-[10px]">⌘K</kbd>
+          </button>
           <Button href="/talk-to-team" variant="ghost" size="sm">Talk to the team</Button>
           <Button href="/waitlist" size="sm" data-testid="link-nav-waitlist">Beta interest</Button>
         </div>
@@ -67,6 +92,7 @@ export function SiteNav() {
           </div>
         </nav>
       )}
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </header>
   );
 }
