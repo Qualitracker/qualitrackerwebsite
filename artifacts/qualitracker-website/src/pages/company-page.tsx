@@ -2,6 +2,7 @@ import { PageShell } from '@/components/site/page-shell';
 import { SectionHeader } from '@/components/site/section-header';
 import { Button } from '@/components/site/button';
 import { AccreditationVisionSection } from '@/components/site/accreditation-vision';
+import { HorizonMap } from '@/components/product/horizon-map';
 import { useDocumentMeta, useStructuredData } from '@/lib/use-document-meta';
 
 const MISSION = { eyebrow: 'Mission', title: 'Replace the binder.', copy: 'Empower every medical laboratory in East Africa with affordable, intelligent, standards-aligned quality-management tools.' };
@@ -87,6 +88,24 @@ function CompanyPage() {
         </div>
       </section>
 
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-dark-navy)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <SectionHeader light eyebrow="Our story" title="This is not a technology gap. It is a relevance gap." />
+          <div className="mt-10 grid gap-px overflow-hidden rounded-lg md:grid-cols-3" style={{ background: 'rgba(255,255,255,.14)' }}>
+            {[
+              { k: 'The problem', v: 'East African laboratories have invested in ISO 15189, SLIPTA and WHO LQMS for years, yet quality records still often live on paper: charts, binders and folders. Existing digital tools were built for hospitals with IT staff, reliable internet and large budgets.' },
+              { k: 'How we began', v: 'QualiTracker started as a chatbot for asking questions of laboratory SOPs in plain language. The deeper need became clear: a complete digital quality system, with AI retrieval as one layer of it.' },
+              { k: 'What we are doing now', v: 'We are preparing a controlled beta of the eQMS with a small cohort of laboratories, and testing the assistant separately before it reaches users.' },
+            ].map((item) => (
+              <div key={item.k} className="p-6" style={{ background: 'var(--qt-dark-navy)' }}>
+                <p className="font-mono-ui text-[11px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-quality-gold)' }}>{item.k}</p>
+                <p className="mt-3 text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>{item.v}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="team" className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="Founding team" title="The people building QualiTracker." />
@@ -119,6 +138,15 @@ function CompanyPage() {
       </section>
 
       <AccreditationVisionSection />
+
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <SectionHeader eyebrow="Where we're headed" title="From Tanzania, outward." />
+          <div className="mt-10 max-w-[760px]">
+            <HorizonMap />
+          </div>
+        </div>
+      </section>
 
       <section className="py-16 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto flex max-w-[1280px] flex-col items-center px-5 text-center lg:px-8">
