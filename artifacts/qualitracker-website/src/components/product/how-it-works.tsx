@@ -1,20 +1,24 @@
 import { useState } from 'react';
+import { useI18n, type DictKey } from '@/lib/i18n';
 import { DashedLattice, type LatticeShape } from '@/components/product/dashed-lattice';
 
-const ITEMS: Array<{ title: string; copy: string; shape: LatticeShape; log: string[] }> = [
+const ITEMS: Array<{ n: 1 | 2 | 3; title: string; copy: string; shape: LatticeShape; log: string[] }> = [
   {
+    n: 1,
     title: 'One map of the lab',
     shape: 'record',
     copy: 'Documents, records, and actions live in one place, versioned and findable, so nobody has to remember which binder holds the answer.',
     log: ['$ find "freezer temperature SOP"', '→ SOP-017 · v3 · Approved', '→ 2 linked records, 1 open action'],
   },
   {
+    n: 2,
     title: 'A trail for every change',
     shape: 'trail',
     copy: 'Every edit, review, and sign-off is recorded with who did it and when, which is the evidence an accreditation audit asks to see.',
     log: ['$ trail SOP-017', '→ v2 → v3 · reviewed by quality manager', '→ approved · version locked'],
   },
   {
+    n: 3,
     title: 'Findings that close',
     shape: 'loop',
     copy: 'A finding becomes an assigned action with two independent reviews, so problems are closed with a trail instead of quietly dropped.',
@@ -24,6 +28,7 @@ const ITEMS: Array<{ title: string; copy: string; shape: LatticeShape; log: stri
 
 /** Left: a list where one statement is highlighted. Right: a bracket-framed lattice and a mono log that follow it. */
 export function HowItWorks() {
+  const { t } = useI18n();
   const [active, setActive] = useState(0);
   const item = ITEMS[active];
 
@@ -46,10 +51,10 @@ export function HowItWorks() {
                 className="qt-focus text-left"
               >
                 <span className={`font-mono-ui text-[clamp(1.25rem,2.4vw,1.75rem)] font-bold leading-tight ${on ? 'qt-mark' : ''}`} style={{ color: on ? undefined : 'var(--qt-body-grey)', opacity: on ? 1 : 0.6 }}>
-                  {it.title}
+                  {t(`hiw.${it.n}.title` as DictKey)}
                 </span>
               </button>
-              {on && <p className="mt-3 max-w-[420px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>{it.copy}</p>}
+              {on && <p className="mt-3 max-w-[420px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>{t(`hiw.${it.n}.copy` as DictKey)}</p>}
             </div>
           );
         })}
