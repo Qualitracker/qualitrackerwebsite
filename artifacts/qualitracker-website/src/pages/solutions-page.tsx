@@ -5,6 +5,7 @@ import { Button } from '@/components/site/button';
 import { StatusBadge } from '@/components/site/status-badge';
 import { TechnicalRecordBlock } from '@/components/site/technical-block';
 import { BetaJourney } from '@/components/product/beta-journey';
+import { ShiftHandover } from '@/components/product/shift-handover';
 import { useDocumentMeta } from '@/lib/use-document-meta';
 
 // Medical laboratories get the featured slot deliberately — it's the
@@ -79,6 +80,20 @@ function SolutionsPage() {
       </section>
 
       <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
+            <div>
+              <SectionHeader eyebrow="A day in the lab" title="What gets lost between shifts." />
+              <p className="mt-5 max-w-[400px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+                Shift handover is where small things disappear. Try the same four notes on paper and in a shared record.
+              </p>
+            </div>
+            <ShiftHandover />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="What every segment shares" title="One core system, whatever the setting." />
           <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_1fr]">
