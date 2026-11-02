@@ -21,7 +21,7 @@ export function PaperToProof() {
   return (
     <div className="rounded-xl border p-5 sm:p-6" style={{ background: '#FFFFFF', borderColor: 'var(--qt-border-grey)' }} data-testid="paper-to-proof">
       <div role="tablist" aria-label="Record keeping method" className="inline-flex rounded-lg p-1" style={{ background: 'var(--qt-lab-grey)' }}>
-        {([['paper', 'Paper today'], ['digital', 'With QualiTracker']] as const).map(([id, label]) => (
+        {([['paper', 'Paper today'], ['digital', 'With QualiTracker eQMS']] as const).map(([id, label]) => (
           <button
             key={id}
             role="tab"
@@ -57,7 +57,7 @@ export function PaperToProof() {
             >
               <p className="font-mono-ui text-[10px] uppercase" style={{ color: 'var(--qt-body-grey)' }}>{day}</p>
               {mode === 'paper' ? (
-                <p className="mt-2 text-sm italic" style={{ color: 'var(--qt-near-black)', fontFamily: 'cursive' }}>{missing ? '—' : paperValue}</p>
+                <p className="mt-2 text-sm italic" style={{ color: 'var(--qt-near-black)', fontFamily: 'cursive' }}>{missing ? ', ' : paperValue}</p>
               ) : (
                 <>
                   <p className="mt-2 text-xs font-bold" style={{ color: d.ok ? 'var(--qt-near-black)' : 'var(--qt-gold-text, #9D833B)' }}>{d.v}</p>
@@ -82,7 +82,7 @@ export function PaperToProof() {
           </ul>
         )}
       </div>
-      <p className="mt-4 font-mono-ui text-[10px]" style={{ color: 'var(--qt-body-grey)' }}>Illustrative example — not a real laboratory's data. Names are placeholders.</p>
+      <p className="mt-4 font-mono-ui text-[10px]" style={{ color: 'var(--qt-body-grey)' }}>Illustrative example, not a real laboratory's data. Names are placeholders.</p>
     </div>
   );
 }

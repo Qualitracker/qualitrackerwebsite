@@ -23,7 +23,10 @@ export function useDocumentMeta(title: string, description: string, path: string
     const previousDescription = descTag?.getAttribute('content') ?? '';
     descTag?.setAttribute('content', description);
 
-    const canonicalUrl = `${SITE_ORIGIN}${path === '/' ? '/' : path}`;
+    // Firebase Hosting serves every route with a trailing slash (firebase.json
+    // trailingSlash: true) and redirects the bare form, so the canonical must
+    // be the slash form or search engines see a redirect and a duplicate.
+    const canonicalUrl = `${SITE_ORIGIN}${path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`}`;
     const canonicalTag = document.querySelector('link[rel="canonical"]');
     const previousCanonical = canonicalTag?.getAttribute('href') ?? '';
     canonicalTag?.setAttribute('href', canonicalUrl);

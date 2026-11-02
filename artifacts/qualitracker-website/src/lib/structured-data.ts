@@ -7,7 +7,7 @@
 export const SOFTWARE_APPLICATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'QualiTracker',
+  name: 'QualiTracker eQMS',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   description: 'A digital quality-management system for laboratories: document control, quality records, and QualiBOT, an AI assistant grounded in a lab’s own documents.',

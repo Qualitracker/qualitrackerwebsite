@@ -43,8 +43,8 @@ export function AskQualiTrackerDemo() {
             <QtSymbol color="#FFFFFF" size={16} />
           </span>
           <div>
-            <p className="text-sm font-semibold" style={{ color: 'var(--qt-near-black)' }}>Ask QualiTracker</p>
-            <p className="font-mono-ui text-[10px] uppercase tracking-[.08em]" style={{ color: 'var(--qt-body-grey)' }}>Illustrative demo — not a real laboratory's data</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--qt-near-black)' }}>Ask QualiBOT</p>
+            <p className="font-mono-ui text-[10px] uppercase tracking-[.08em]" style={{ color: 'var(--qt-body-grey)' }}>Illustrative demo, not a real laboratory's data</p>
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@ export function AskQualiTrackerDemo() {
             {/* Real fields only: retrieval is gated by a threshold internally
                 (see docs/website/17_WEBSITE_IMPLEMENTATION_PLAN.md's Wave 2
                 note) but the system doesn't expose a labeled confidence
-                percentage — so this shows the gate result, not an invented
+                percentage, so this shows the gate result, not an invented
                 number. */}
             <TechnicalRecordBlock
               eyebrow="QUALIBOT / RESPONSE"
@@ -84,7 +84,7 @@ export function AskQualiTrackerDemo() {
           <div className="max-w-[94%] space-y-3">
             <div className="rounded-2xl rounded-bl-sm border border-dashed px-4 py-3.5" style={{ borderColor: 'var(--qt-quality-gold)', background: 'var(--qt-lab-grey)' }}>
               <p className="text-sm leading-6" style={{ color: 'var(--qt-near-black)' }}>I couldn't find a relevant record in this lab's quality system for that question.</p>
-              <p className="mt-2 text-[11px] leading-5" style={{ color: 'var(--qt-body-grey)' }}>QualiTracker only answers from your lab's own uploaded documents — it doesn't guess or compare against other laboratories.</p>
+              <p className="mt-2 text-[11px] leading-5" style={{ color: 'var(--qt-body-grey)' }}>QualiBOT only answers from your lab's own uploaded documents, it doesn't guess or compare against other laboratories.</p>
             </div>
             <TechnicalRecordBlock
               eyebrow="QUALIBOT / RESPONSE"
@@ -97,7 +97,7 @@ export function AskQualiTrackerDemo() {
         )}
 
         <p className="text-[10px] leading-4" style={{ color: 'var(--qt-body-grey)' }}>
-          AI-generated — verify critical decisions with your lab supervisor. Not a diagnostic tool.
+          AI-generated, verify critical decisions with your lab supervisor. Not a diagnostic tool.
         </p>
 
         <div className="border-t pt-4" style={{ borderColor: 'var(--qt-border-grey)' }}>
@@ -119,7 +119,7 @@ export function AskQualiTrackerDemo() {
             onChange={(event) => setQuestion(event.target.value)}
             className="min-w-0 flex-1 bg-transparent px-2 text-xs outline-none"
             style={{ color: 'var(--qt-near-black)' }}
-            aria-label="Ask QualiTracker a question"
+            aria-label="Ask QualiBOT a question"
             data-testid="input-ask-question"
           />
           <button

@@ -21,34 +21,42 @@ export function LifecycleTimeline({
   stages: LifecycleStage[];
   accent?: string;
   /** Text color for the active pill. White fails contrast on the gold accent
-      (~2.3:1) — pass 'var(--qt-dark-navy)' when accent is gold. */
+      (~2.3:1), pass 'var(--qt-dark-navy)' when accent is gold. */
   accentText?: string;
 }) {
   const [active, setActive] = useState(0);
 
   return (
     <div className="qt-card p-5 sm:p-7">
-      <div className="flex flex-wrap gap-1 sm:flex-nowrap sm:overflow-x-auto">
+      <div className="flex items-center justify-between gap-3">
+        <p className="font-mono-ui text-[11px] uppercase tracking-[.08em]" style={{ color: 'var(--qt-body-grey)' }}>Step {active + 1} of {stages.length}</p>
+        <div className="flex gap-2">
+          <button type="button" onClick={() => setActive((i) => Math.max(0, i - 1))} disabled={active === 0} className="qt-focus qt-dashed rounded-md px-3 py-1.5 text-[11px] font-semibold disabled:opacity-40" style={{ color: 'var(--qt-near-black)' }}>Back</button>
+          <button type="button" onClick={() => setActive((i) => Math.min(stages.length - 1, i + 1))} disabled={active === stages.length - 1} className="qt-focus rounded-md px-3 py-1.5 text-[11px] font-semibold disabled:opacity-40" style={{ background: accent, color: accentText }}>Next</button>
+        </div>
+      </div>
+      <div className="mt-3 flex gap-1" aria-hidden="true">
         {stages.map((stage, i) => (
-          <div key={stage.label} className="flex items-center">
-            <button
-              type="button"
-              onClick={() => setActive(i)}
-              onFocus={() => setActive(i)}
-              className="qt-button qt-focus whitespace-nowrap rounded-full border px-3 py-2 text-left text-[11px] font-semibold"
-              style={
-                active === i
-                  ? { borderColor: accent, background: accent, color: accentText }
-                  : { borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }
-              }
-              data-testid={`lifecycle-stage-${i}`}
-            >
-              {stage.label}
-            </button>
-            {i < stages.length - 1 && (
-              <span className="mx-1 hidden h-px w-4 shrink-0 sm:block" style={{ background: 'var(--qt-border-grey)' }} />
-            )}
-          </div>
+          <span key={stage.label} className="h-1 flex-1 rounded-full transition-colors" style={{ background: i <= active ? accent : 'var(--qt-border-grey)' }} />
+        ))}
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {stages.map((stage, i) => (
+          <button
+            key={stage.label}
+            type="button"
+            onClick={() => setActive(i)}
+            onFocus={() => setActive(i)}
+            className="qt-button qt-focus rounded-full border px-3 py-1.5 text-left text-[11px] font-semibold"
+            style={
+              active === i
+                ? { borderColor: accent, background: accent, color: accentText }
+                : { borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }
+            }
+            data-testid={`lifecycle-stage-${i}`}
+          >
+            {stage.label}
+          </button>
         ))}
       </div>
       <p className="mt-5 text-sm leading-6" style={{ color: 'var(--qt-near-black)' }}>{stages[active].detail}</p>

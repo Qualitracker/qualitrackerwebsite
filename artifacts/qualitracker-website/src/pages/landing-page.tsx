@@ -71,8 +71,8 @@ function RealitySequence() {
 function LandingPage() {
   const { t, lang } = useI18n();
   useDocumentMeta(
-    'QualiTracker — Quality that works for every lab',
-    "QualiTracker is a pre-revenue digital quality-management system entering private beta with laboratories in November 2026.",
+    'QualiTracker | Quality that works for every lab',
+    "QualiTracker eQMS is a pre-revenue digital quality-management system entering private beta with laboratories in November 2026.",
     '/',
   );
   useStructuredData(SOFTWARE_APPLICATION_SCHEMA);
@@ -82,7 +82,7 @@ function LandingPage() {
       <section className="relative overflow-hidden pb-16 pt-16 lg:pt-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           {/* The headline gets its own full-width row so it can command the
-              viewport the way the brand kit's upper type range calls for —
+              viewport the way the brand kit's upper type range calls for , 
               splitting it with the widget (as before) capped how large it
               could go before crowding. */}
           <Reveal>
@@ -125,7 +125,7 @@ function LandingPage() {
       </section>
 
       {/* Pilot truth: current stage, scope, and claim boundary. */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
             <SectionHeader eyebrow="Private beta" title="The next milestone is evidence, not a sales launch." />
@@ -150,12 +150,12 @@ function LandingPage() {
       </section>
 
       {/* Verified event evidence, explicitly separated from product adoption. */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-dark-navy)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
             <SectionHeader light eyebrow="Quality Excellence Challenge · September 2026" title="The laboratory community showed up." />
             <p className="mt-5 max-w-[660px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-              At the 39th MeLSAT Scientific Conference, QualiTracker delivered a timed laboratory-QMS knowledge challenge. These are event participation and feedback results—not evidence of eQMS adoption, recurring product use, or revenue.
+              At the 39th MeLSAT Scientific Conference, QualiTracker delivered a timed laboratory-QMS knowledge challenge. These are event participation and feedback results, not evidence of eQMS adoption, recurring product use, or revenue.
             </p>
           </Reveal>
           <div className="mt-10 grid gap-px overflow-hidden rounded-lg sm:grid-cols-2 lg:grid-cols-4" style={{ background: 'rgba(255,255,255,.14)' }}>
@@ -178,7 +178,7 @@ function LandingPage() {
       </section>
 
       {/* Paper vs digital: the problem laboratories describe, shown as an illustrative example. */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
             <Reveal>
@@ -195,7 +195,7 @@ function LandingPage() {
       </section>
 
       {/* Roadmap: sourced from the Oct 2026 strategy, product, and technology plans. */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
             <Reveal>
@@ -224,12 +224,12 @@ function LandingPage() {
       </section>
 
       {/* Thesis */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
             <SectionHeader eyebrow="The reality" title="Your quality system already exists. It's just hiding." />
             <p className="mt-5 max-w-[480px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              In a shared drive. In a WhatsApp thread. In a folder only one person knows how to find. QualiTracker gives the work a home your whole lab can trust.
+              In a shared drive. In a WhatsApp thread. In a folder only one person knows how to find. QualiTracker eQMS gives the work a home your whole lab can trust.
             </p>
           </Reveal>
           <div className="mt-10">
@@ -241,7 +241,7 @@ function LandingPage() {
       {/* Comparison — every QualiTracker cell restates a fact already
           established elsewhere on this page/site; "generic QMS" cells are
           deliberately hedged, never a specific competitor claim. */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="Why it's different" title="Not a bigger binder. A different kind of system." />
           <div className="mt-10">
@@ -251,13 +251,13 @@ function LandingPage() {
       </section>
 
       {/* Product proof: the real dashboard shape */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
             <Reveal>
               <SectionHeader eyebrow="See it, not just read about it" title="This is what your dashboard actually looks like." />
               <p className="mt-5 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                Your labs, departments, roles, and people — scoped to who you are and where you work, the moment you log in.
+                Your labs, departments, roles, and people, scoped to who you are and where you work, the moment you log in.
               </p>
             </Reveal>
             <Reveal delay={0.1}>
@@ -268,25 +268,29 @@ function LandingPage() {
       </section>
 
       {/* Quality Intelligence Graph — the product thesis, shown not told */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-16">
+          <div>
           <Reveal>
             <SectionHeader eyebrow="The quality intelligence graph" title="Quality management isn't a pile of disconnected documents. It's a connected system." />
-            <p className="mt-5 max-w-[620px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              A standard implies a document. A document describes a process. A process produces evidence. Evidence is what an audit checks — and what a finding, a non-conformance, or a CAPA all trace back to. Hover a node to follow the connection.
+            <p className="mt-5 max-w-[520px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+              A standard implies a document. A document describes a process. A process produces evidence. Evidence is what an audit checks, and what a finding, a non-conformance, or a CAPA all trace back to. Hover a node to follow the connection.
             </p>
-          </Reveal>
-          <Reveal delay={0.1} className="mt-10 max-w-[720px]">
-            <QualityIntelligenceGraph />
           </Reveal>
           <Reveal delay={0.15} className="mt-6">
             <Button href="/product#quality-intelligence" variant="secondary" arrow="arrow">Explore the full system</Button>
           </Reveal>
+          </div>
+          <Reveal delay={0.1}>
+            <QualityIntelligenceGraph />
+          </Reveal>
+          </div>
         </div>
       </section>
 
       {/* Two-layer system */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="The system" title="Two connected layers, one system of record." />
           <Reveal className="mt-10 grid gap-5 lg:grid-cols-2">
@@ -295,10 +299,15 @@ function LandingPage() {
               <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: 'var(--qt-quality-gold)', color: 'var(--qt-dark-navy)' }}>
                 <FileCheck2 size={21} />
               </div>
-              <h3 className="font-brand mt-5 text-2xl font-bold" style={{ color: '#FFFFFF' }}>QMS Module</h3>
+              <h3 className="font-brand mt-5 text-2xl font-bold" style={{ color: '#FFFFFF' }}>QualiTracker eQMS</h3>
               <p className="mt-3 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-                A versioned document and record repository — SOPs, policies, quality records, and audit logs — for lab directors, quality managers, and accreditors.
+                A versioned document and record repository for SOPs, policies, quality records, and audit logs, built for lab directors, quality managers, and accreditors.
               </p>
+              <ul className="font-mono-ui mt-7 space-y-2 border-t border-dashed pt-5 text-[11px]" style={{ borderColor: 'rgba(255,255,255,.2)', color: 'var(--qt-mint-light)' }}>
+                {['Document control: draft, review, approve', 'Quality records: temperature, QC, proficiency', 'Findings and corrective actions with two reviews', 'An audit trail of who changed what, and when'].map((row) => (
+                  <li key={row} className="flex gap-2"><span style={{ color: 'var(--qt-quality-gold)' }} aria-hidden="true">+</span>{row}</li>
+                ))}
+              </ul>
             </div>
             <div className="qt-card p-8">
               <StatusBadge status="in-development" />
@@ -307,38 +316,44 @@ function LandingPage() {
               </div>
               <h3 className="font-brand mt-5 text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>QualiBOT</h3>
               <p className="mt-3 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                A conversational assistant grounded in your lab's own uploaded documents, for frontline technologists asking everyday questions in plain language — in English or Swahili.
+                A conversational assistant grounded in your lab's own uploaded documents, for frontline technologists asking everyday questions in plain language, in English or Swahili.
               </p>
+              <div className="font-mono-ui mt-7 rounded-md border border-dashed p-4 text-[11px] leading-5" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-near-black)', background: '#FFFFFF' }}>
+                <p style={{ color: 'var(--qt-body-grey)' }}>Illustrative question</p>
+                <p className="mt-1">Q: What do I do if the freezer alarm sounds?</p>
+                <p className="mt-1" style={{ color: 'var(--qt-deep-teal)' }}>A: Follow SOP-017, section 4.2.</p>
+                <p className="mt-1" style={{ color: 'var(--qt-body-grey)' }}>No matching document? It says "not found" instead of guessing.</p>
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* Document & Evidence Intelligence */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
             <SectionHeader eyebrow="Document & evidence intelligence" title="Every document moves through the same real workflow." />
             <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              No status is invented for this page — these are the actual states a controlled document moves through, end to end.
+              No status is invented for this page, these are the actual states a controlled document moves through, end to end.
             </p>
           </Reveal>
-          <Reveal delay={0.1} className="mt-10 max-w-[720px]">
+          <Reveal delay={0.1} className="mt-10">
             <LifecycleTimeline stages={DOCUMENT_STAGES} />
           </Reveal>
         </div>
       </section>
 
       {/* CAPA / Non-Conformance lifecycle */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
             <SectionHeader eyebrow="Corrective action lifecycle" title="Two independent reviewers, not one rubber stamp." />
             <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              Every finding is classified Major or Minor, auto-numbered, and closed only after two separate people have signed off — the same rigor an accreditor expects.
+              Every finding is classified Major or Minor, auto-numbered, and closed only after two separate people have signed off, the same rigor an accreditor expects.
             </p>
           </Reveal>
-          <Reveal delay={0.1} className="mt-10 max-w-[720px]">
+          <Reveal delay={0.1} className="mt-10">
             {/* Teal, not gold — gold is reserved for the hero and waitlist/
                 talk-to-team CTAs only, per the brand kit's own rule. */}
             <LifecycleTimeline stages={CAPA_STAGES} />
@@ -347,11 +362,11 @@ function LandingPage() {
       </section>
 
       {/* AI & RAG */}
-      <section id="ai-rag" className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section id="ai-rag" className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="Ask the record" title="An assistant that knows when it doesn't know." />
           <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-            Ask in plain language. Get an answer grounded in your lab's own records, with the source beside it — and if there's no relevant record, QualiTracker says so rather than guessing.
+            Ask in plain language. Get an answer grounded in your lab's own records, with the source beside it, and if there's no relevant record, QualiBOT says so rather than guessing.
           </p>
           <Reveal className="mt-10 mx-auto max-w-[560px]">
             <AskQualiTrackerDemo />
@@ -360,7 +375,7 @@ function LandingPage() {
       </section>
 
       {/* Signature moment: how that answer actually got built */}
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
             <p className="qt-eyebrow">Keep scrolling</p>
@@ -368,7 +383,7 @@ function LandingPage() {
               That answer above didn't come from nowhere. Here's the path it walked.
             </h2>
           </Reveal>
-          <div className="mt-10 max-w-[620px]">
+          <div className="mt-10">
             <RagPipelineScroll />
           </div>
         </div>
@@ -377,7 +392,7 @@ function LandingPage() {
       <AccreditationVisionSection />
 
       {/* Final CTA */}
-      <section className="py-20 lg:py-24 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
+      <section className="py-14 lg:py-24 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <Reveal className="mx-auto max-w-[1280px] px-5 text-center lg:px-8">
           <SectionHeader align="center" light eyebrow="Start the conversation" title="Let's make quality easier to see." />
           <p className="mx-auto mt-5 max-w-[440px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>

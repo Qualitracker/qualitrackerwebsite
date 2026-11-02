@@ -31,32 +31,32 @@ const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Qualitracker Limited',
-  url: 'https://qualitracker.com/company',
+  url: 'https://qualitracker.com/company/',
   founder: TEAM.map((person) => ({ '@type': 'Person', name: person.name, jobTitle: person.role })),
 };
 
 function CompanyPage() {
   useDocumentMeta(
-    'Company — QualiTracker',
+    'Company | QualiTracker',
     'Qualitracker Limited is building digital quality infrastructure for laboratories, built in East Africa for East Africa.',
     '/company',
   );
   useStructuredData(ORGANIZATION_SCHEMA);
   return (
     <PageShell>
-      <section className="py-16 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
+      <section className="py-12 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="qt-eyebrow qt-eyebrow-light">Company</p>
           <h1 className="font-brand mt-3 max-w-[640px] text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.08] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
             Built in East Africa, for East Africa.
           </h1>
           <p className="mt-5 max-w-[480px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            Qualitracker Limited is building digital quality infrastructure for laboratories — starting with the everyday reality of running a quality system on paper.
+            Qualitracker Limited is building digital quality infrastructure for laboratories, starting with the everyday reality of running a quality system on paper.
           </p>
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
             {/* Mission gets the editorial, large-type treatment — the one
@@ -88,7 +88,7 @@ function CompanyPage() {
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-dark-navy)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader light eyebrow="Our story" title="This is not a technology gap. It is a relevance gap." />
           <div className="mt-10 grid gap-px overflow-hidden rounded-lg md:grid-cols-3" style={{ background: 'rgba(255,255,255,.14)' }}>
@@ -106,7 +106,7 @@ function CompanyPage() {
         </div>
       </section>
 
-      <section id="team" className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section id="team" className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="Founding team" title="The people building QualiTracker." />
           {/* A directory list, not a grid of identical avatar cards — every
@@ -117,7 +117,7 @@ function CompanyPage() {
             {TEAM.map((person) => (
               <div
                 key={person.initials}
-                className="flex flex-wrap items-center justify-between gap-3 border-t py-4 first:border-t-0"
+                className="flex flex-col items-start gap-1 border-t py-4 first:border-t-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
                 style={{ borderColor: 'var(--qt-border-grey)' }}
                 data-testid={`card-team-${person.initials.toLowerCase()}`}
               >
@@ -130,7 +130,7 @@ function CompanyPage() {
                   </span>
                   <h3 className="font-brand text-base font-bold" style={{ color: 'var(--qt-near-black)' }}>{person.name}</h3>
                 </div>
-                <p className="qt-technical-label">{person.role}</p>
+                <p className="qt-technical-label pl-14 sm:pl-0">{person.role}</p>
               </div>
             ))}
           </div>
@@ -139,7 +139,7 @@ function CompanyPage() {
 
       <AccreditationVisionSection />
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="Where we're headed" title="From Tanzania, outward." />
           <div className="mt-10 max-w-[760px]">
@@ -148,7 +148,7 @@ function CompanyPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-12 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto flex max-w-[1280px] flex-col items-center px-5 text-center lg:px-8">
           <h2 className="font-brand text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>Want to build with us, or learn more?</h2>
           <div className="mt-6 flex flex-wrap justify-center gap-4">

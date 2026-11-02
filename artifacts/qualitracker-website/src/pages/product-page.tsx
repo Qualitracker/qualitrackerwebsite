@@ -32,21 +32,21 @@ const TRACE_STEPS: Array<{ id: NodeId; label: string; relation?: string }> = [
 function ProductPage() {
   const [activeGraphNode, setActiveGraphNode] = useState<NodeId | null>(null);
   useDocumentMeta(
-    'Product — QualiTracker',
+    'Product | QualiTracker',
     'The QMS Module and QualiBOT: document control, quality records, and an AI assistant grounded in your lab’s own documents.',
     '/product',
   );
   useStructuredData(SOFTWARE_APPLICATION_SCHEMA);
   return (
     <PageShell>
-      <section className="py-16 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
+      <section className="py-12 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="qt-eyebrow qt-eyebrow-light">Product</p>
           <h1 className="font-brand mt-3 max-w-[640px] text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.08] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
             The platform, module by module.
           </h1>
           <p className="mt-5 max-w-[480px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            Two connected layers — a QMS Module for document and record control, and QualiBOT, an AI assistant grounded in your lab's own documents.
+            Two connected layers, a QMS Module for document and record control, and QualiBOT, an AI assistant grounded in your lab's own documents.
           </p>
           <div className="mt-6 flex items-center gap-3">
             <StatusBadge status="private-beta" />
@@ -55,11 +55,11 @@ function ProductPage() {
         </div>
       </section>
 
-      <section id="quality-intelligence" className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section id="quality-intelligence" className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="Quality intelligence" title="One record, traced from standard to verification." />
           <p className="mt-5 max-w-[520px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-            Every finding in QualiTracker stays linked to the requirement it came from, and the corrective action that closed it — so nothing gets separated from the work it proves. Hover a node — or a step in the trace path — to see how it connects.
+            Every finding in QualiTracker eQMS stays linked to the requirement it came from, and the corrective action that closed it, so nothing gets separated from the work it proves. Hover a node, or a step in the trace path, to see how it connects.
           </p>
           <div className="mt-10">
             <ExplorerFrame
@@ -83,7 +83,7 @@ function ProductPage() {
         </div>
       </section>
 
-      <section id="ai-rag" className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section id="ai-rag" className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="AI & RAG" title="QualiBOT: grounded, cited, honest when it doesn't know." />
           <div className="mt-10 mx-auto max-w-[560px]">
@@ -92,7 +92,7 @@ function ProductPage() {
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="What we're building" title="The full platform, honestly staged." />
           <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>

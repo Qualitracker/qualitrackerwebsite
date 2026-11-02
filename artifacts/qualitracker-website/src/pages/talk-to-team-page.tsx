@@ -11,14 +11,14 @@ const ROUTES = [
   { label: 'Laboratory interest', by: 'Product', covers: 'Which workflows to test, and whether your laboratory fits a future beta cohort.' },
   { label: 'Institutional partnership', by: 'CEO and Strategy', covers: 'Professional bodies, ministries, funders, and partner organisations.' },
   { label: 'Regulatory / accreditation discussion', by: 'Product', covers: 'How the system maps to ISO 15189, SLIPTA, and WHO LQMS expectations.' },
-  { label: 'Technical integration', by: 'Technology', covers: 'Data, security questions, and how QualiTracker would fit your systems.' },
+  { label: 'Technical integration', by: 'Technology', covers: 'Data, security questions, and how QualiTracker eQMS would fit your systems.' },
   { label: 'Research collaboration', by: 'Strategy and Product', covers: 'Studies, evaluations, and shared learning from the beta.' },
   { label: 'General inquiry', by: 'The team', covers: 'Anything else. We will route it to the right person.' },
 ];
 const CATEGORIES = ROUTES.map((r) => r.label);
 
 function TalkToTeamPage() {
-  useDocumentMeta('Talk to the team — QualiTracker', 'Reach the QualiTracker team for institutional, regulatory, or partnership inquiries.', '/talk-to-team');
+  useDocumentMeta('Talk to the team | QualiTracker', 'Reach the QualiTracker team for institutional, regulatory, or partnership inquiries.', '/talk-to-team');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,19 +66,19 @@ function TalkToTeamPage() {
 
   return (
     <PageShell>
-      <section className="py-16 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
+      <section className="py-12 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="qt-eyebrow qt-eyebrow-light">Institutional inquiries</p>
           <h1 className="font-brand mt-3 max-w-[560px] text-[clamp(2rem,4vw,2.8rem)] font-bold leading-[1.1] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
             Talk to the team.
           </h1>
           <p className="mt-4 max-w-[440px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            For laboratories, institutions, regulators, partners, and researchers evaluating QualiTracker directly.
+            For laboratories, institutions, regulators, partners, and researchers evaluating QualiTracker eQMS directly.
           </p>
         </div>
       </section>
 
-      <section className="py-16 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-12 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto grid max-w-[1080px] gap-10 px-5 lg:grid-cols-[1fr_560px] lg:items-start lg:gap-14 lg:px-8">
           <div>
             <p className="font-mono-ui inline-block rounded border border-dashed px-3 py-1.5 text-[11px]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>Pick a route</p>
@@ -129,7 +129,7 @@ function TalkToTeamPage() {
               </span>
               <h2 className="font-brand text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>Message received.</h2>
               <p className="mt-3 max-w-[360px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                Thank you for reaching out — we'll route this to the right person on the team and follow up.
+                Thank you for reaching out, we'll route this to the right person on the team and follow up.
               </p>
             </div>
           ) : (

@@ -31,7 +31,7 @@ export function ShiftHandover() {
   return (
     <div className="rounded-xl border p-5 sm:p-6" style={{ background: '#FFFFFF', borderColor: 'var(--qt-border-grey)' }} data-testid="shift-handover">
       <div role="tablist" aria-label="Handover method" className="inline-flex rounded-lg p-1" style={{ background: 'var(--qt-lab-grey)' }}>
-        {([['paper', 'Paper notes'], ['digital', 'With QualiTracker']] as const).map(([id, label]) => (
+        {([['paper', 'Paper notes'], ['digital', 'With QualiTracker eQMS']] as const).map(([id, label]) => (
           <button
             key={id}
             role="tab"
@@ -96,7 +96,7 @@ export function ShiftHandover() {
           </p>
         )}
       </div>
-      <p className="mt-4 font-mono-ui text-[10px]" style={{ color: 'var(--qt-body-grey)' }}>Illustrative example — not a real laboratory's data.</p>
+      <p className="mt-4 font-mono-ui text-[10px]" style={{ color: 'var(--qt-body-grey)' }}>Illustrative example, not a real laboratory's data.</p>
     </div>
   );
 }

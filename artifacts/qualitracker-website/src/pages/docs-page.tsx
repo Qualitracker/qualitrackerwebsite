@@ -27,7 +27,7 @@ const DOC_GROUPS: DocGroup[] = [
     { id: 'platform-overview', label: 'Platform overview' },
     { id: 'core-concepts', label: 'Core concepts' },
   ] },
-  { label: 'QualiTracker QMS', items: [
+  { label: 'QualiTracker eQMS', items: [
     { id: 'dashboard', label: 'Dashboard' },
     { id: 'documents', label: 'Documents' },
     { id: 'sops', label: 'SOPs' },
@@ -57,7 +57,7 @@ const DOC_GROUPS: DocGroup[] = [
   ] },
   { label: 'MCP', items: [
     { id: 'mcp-introduction', label: 'Introduction' },
-    { id: 'mcp-connecting', label: 'Connecting QualiTracker' },
+    { id: 'mcp-connecting', label: 'Connecting QualiTracker eQMS' },
     { id: 'mcp-server-setup', label: 'MCP server setup' },
     { id: 'mcp-authentication', label: 'Authentication' },
     { id: 'mcp-tools', label: 'Tools' },
@@ -83,18 +83,18 @@ function IntroductionContent() {
       <StatusBadge status="private-beta" />
       <h1 className="font-brand mt-4 text-3xl font-bold" style={{ color: 'var(--qt-near-black)' }}>Introduction</h1>
       <p className="mt-4 text-sm leading-7" style={{ color: 'var(--qt-body-grey)' }}>
-        QualiTracker is a digital quality-management system for laboratories, made of two connected parts:
+        QualiTracker eQMS is a digital quality-management system for laboratories, made of two connected parts:
       </p>
       <ul className="mt-4 space-y-3">
         <li className="text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-          <strong style={{ color: 'var(--qt-near-black)' }}>The QMS Module</strong> — a versioned document and record repository: SOPs, policies, quality records, and audit logs, kept in one governed, searchable place.
+          <strong style={{ color: 'var(--qt-near-black)' }}>The QMS Module</strong>, a versioned document and record repository: SOPs, policies, quality records, and audit logs, kept in one governed, searchable place.
         </li>
         <li className="text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-          <strong style={{ color: 'var(--qt-near-black)' }}>QualiBOT</strong> — a conversational AI assistant grounded in your lab's own uploaded documents. It answers in plain language, cites its source, and says so plainly when it can't find one — see <Link href="/product#ai-rag" style={{ color: 'var(--qt-deep-teal)' }}>how it works</Link>.
+          <strong style={{ color: 'var(--qt-near-black)' }}>QualiBOT</strong>, a conversational AI assistant grounded in your lab's own uploaded documents. It answers in plain language, cites its source, and says so plainly when it can't find one, see <Link href="/product#ai-rag" style={{ color: 'var(--qt-deep-teal)' }}>how it works</Link>.
         </li>
       </ul>
       <p className="mt-4 text-sm leading-7" style={{ color: 'var(--qt-body-grey)' }}>
-        The rest of this documentation — quickstart steps, the full QMS module reference, API and MCP integration guides — is being written alongside the product itself. Sections not yet ready are marked clearly rather than left to look finished before they are.
+        The rest of this documentation, quickstart steps, the full QMS module reference, API and MCP integration guides, is being written alongside the product itself. Sections not yet ready are marked clearly rather than left to look finished before they are.
       </p>
       <div className="mt-6 rounded-lg border p-5" style={{ borderColor: 'var(--qt-border-grey)', background: 'var(--qt-lab-grey)' }}>
         <p className="qt-technical-label">Current stage · 30 October 2026</p>
@@ -148,7 +148,7 @@ function ComingSoon({ label, group }: { label: string; group: string }) {
 }
 
 function DocsPage() {
-  useDocumentMeta('Docs — QualiTracker', 'QualiTracker documentation: platform overview, QMS modules, AI & RAG, integrations, and MCP.', '/docs');
+  useDocumentMeta('Docs | QualiTracker', 'QualiTracker eQMS documentation: platform overview, QMS modules, AI & RAG, integrations, and MCP.', '/docs');
   const [active, setActive] = useState('introduction');
   const activeItem = ALL_ITEMS.find((i) => i.id === active);
 
@@ -183,9 +183,9 @@ function DocsPage() {
             {active === 'introduction' ? (
               <IntroductionContent />
             ) : active === 'documents' ? (
-              <LifecyclePage group="QualiTracker QMS" label="Documents" intro="Every controlled document moves through the same states, from a draft to an approved, version-locked record. These are the actual states used by the QMS." stages={DOCUMENT_STAGES} />
+              <LifecyclePage group="QualiTracker eQMS" label="Documents" intro="Every controlled document moves through the same states, from a draft to an approved, version-locked record. These are the actual states used by the QMS." stages={DOCUMENT_STAGES} />
             ) : active === 'capa' ? (
-              <LifecyclePage group="QualiTracker QMS" label="CAPA" intro="A finding closes only after two independent reviews and a final sign-off. These are the actual states a corrective action moves through." stages={CAPA_STAGES} accent="var(--qt-deep-teal)" />
+              <LifecyclePage group="QualiTracker eQMS" label="CAPA" intro="A finding closes only after two independent reviews and a final sign-off. These are the actual states a corrective action moves through." stages={CAPA_STAGES} accent="var(--qt-deep-teal)" />
             ) : (
               <ComingSoon label={activeItem?.label ?? ''} group={activeItem?.group ?? ''} />
             )}
