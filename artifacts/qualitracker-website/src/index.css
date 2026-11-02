@@ -306,26 +306,16 @@
  * to dark-navy sections; pure CSS, no image request, no bytes to load.
  */
 .qt-texture-grid {
-  /* A tiled 200x120 SVG tile carrying the REAL QualiTracker brand mark
-     (the same two path shapes as QtSymbol, src/assets/qt-symbol.tsx —
-     never redrawn), scattered at two offset positions per tile so the
-     repeat doesn't read as a rigid grid. Swapped in for the earlier
-     abstract dot/node-graph pattern, which — while it referenced the
-     product's own graph concept — didn't actually read as QualiTracker
-     to anyone unfamiliar with that internal metaphor, and leaned toward
-     a generic "connected dots" SaaS cliché. This is unambiguously ours.
-     A tiled bitmap, not a computed gradient — cheap for the browser to
-     composite/repeat (see the FCP-regression note this class's history
-     already carries in git). */
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27200%27%20height%3D%27120%27%20fill%3D%27white%27%20fill-opacity%3D%27.09%27%3E%3Cg%20transform%3D%27translate(24%2C10)%20scale(0.06433)%27%3E%3Cpath%20d%3D%27M105.66,67.31c-32.28,17.97-50.84,50.99-51.62,87.12-1.27,59.04,46.39,106.86,106.24,104.6l.24,53.79C67.41,316.66-4.41,239.8.21,148.81,4.56,63.16,74.94-1.77,161.15.04c75.44,1.58,139.55,56.59,148.69,133.86l-54.07.49c-6.79-31.64-27.69-56.96-53.92-69.84-31.67-15.56-66.11-13.98-96.19,2.76Z%27/%3E%3Cpath%20d%3D%27M285.79,312.94l.22,51.59c-30.47-.44-56.91-14.24-76.21-36.53-20.32-23.46-26.28-52.51-25.99-83.31l.36-36.81-70.3.02.1-49.69h196.87s.05,49.67.05,49.67l-75.1.1.16,48.55c.1,28.45,20.87,52.24,49.84,56.42Z%27/%3E%3C/g%3E%3Cg%20transform%3D%27translate(128%2C64)%20scale(0.06433)%27%3E%3Cpath%20d%3D%27M105.66,67.31c-32.28,17.97-50.84,50.99-51.62,87.12-1.27,59.04,46.39,106.86,106.24,104.6l.24,53.79C67.41,316.66-4.41,239.8.21,148.81,4.56,63.16,74.94-1.77,161.15.04c75.44,1.58,139.55,56.59,148.69,133.86l-54.07.49c-6.79-31.64-27.69-56.96-53.92-69.84-31.67-15.56-66.11-13.98-96.19,2.76Z%27/%3E%3Cpath%20d%3D%27M285.79,312.94l.22,51.59c-30.47-.44-56.91-14.24-76.21-36.53-20.32-23.46-26.28-52.51-25.99-83.31l.36-36.81-70.3.02.1-49.69h196.87s.05,49.67.05,49.67l-75.1.1.16,48.55c.1,28.45,20.87,52.24,49.84,56.42Z%27/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: repeat;
-  /* Tiling defaults to the element's top-left corner, so a section whose
-     width isn't an exact multiple of the tile ends up with a full mark
-     flush against the left edge and an inconsistent partial mark cropped
-     at the right — asymmetric, and much more noticeable on a wide laptop
-     screen (more tiles = more visible imbalance) than on a narrow phone
-     screen. Centering the tile makes any partial-tile cropping happen
-     symmetrically on both edges instead. */
+  /* Blueprint backdrop: a fine technical grid under two soft glows (teal
+     top-right, gold bottom-left). Pure CSS gradients, no image request.
+     Replaced the tiled brand-mark pattern, which read as busy behind
+     large type. */
+  background-image:
+    radial-gradient(ellipse 60% 55% at 80% 8%, rgba(2, 85, 97, .6), transparent 70%),
+    radial-gradient(ellipse 45% 45% at 6% 96%, rgba(201, 168, 76, .12), transparent 70%),
+    linear-gradient(to right, rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: auto, auto, 56px 56px, 56px 56px;
   background-position: center;
 }
 @media (max-width: 640px) {
@@ -333,7 +323,7 @@
      phone screen — the marks end up directly behind headline letters
      instead of sitting as background texture. Scale the tile down so
      the pattern density feels the same as it does on desktop. */
-  .qt-texture-grid { background-size: 100px 60px; }
+  .qt-texture-grid { background-size: auto, auto, 40px 40px, 40px 40px; }
 }
 .qt-focus:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--qt-deep-teal); outline-offset: 2px;
