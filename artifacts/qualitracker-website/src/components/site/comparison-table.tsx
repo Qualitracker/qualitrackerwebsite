@@ -71,9 +71,9 @@ export function ComparisonTable() {
         <tbody>
           {ROWS.map((row) => (
             <tr key={row.label} data-testid={`comparison-row-${row.label.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
-              <td className="border-b py-4 pr-4 align-top text-xs font-semibold uppercase tracking-[.04em]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>
+              <th scope="row" className="border-b py-4 pr-4 text-left align-top text-xs font-semibold uppercase tracking-[.04em]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>
                 {row.label}
-              </td>
+              </th>
               <td className="border-b px-4 py-4 align-top font-semibold" style={{ borderColor: 'var(--qt-border-grey)', background: 'var(--qt-teal-tint)', color: 'var(--qt-deep-teal)' }}>
                 {row.qualitracker}
               </td>
