@@ -11,6 +11,7 @@ import CompanyPage from '@/pages/company-page';
 import SecurityPage from '@/pages/security-page';
 import WaitlistPage from '@/pages/waitlist-page';
 import TalkToTeamPage from '@/pages/talk-to-team-page';
+import PrivacyPage from '@/pages/privacy-page';
 import NotFound from '@/pages/not-found';
 import { QualityCommandCenter } from '@/components/product/quality-command-center';
 import { LifecycleTimeline } from '@/components/product/lifecycle-timeline';
@@ -25,6 +26,7 @@ const PAGES: Array<[string, () => React.JSX.Element]> = [
   ['security', SecurityPage],
   ['waitlist', WaitlistPage],
   ['talk to the team', TalkToTeamPage],
+  ['privacy', PrivacyPage],
   ['not found', NotFound],
 ];
 
