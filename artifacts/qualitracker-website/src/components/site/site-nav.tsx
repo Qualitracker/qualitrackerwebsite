@@ -60,7 +60,6 @@ export function SiteNav() {
             onClick={() => setPaletteOpen(true)}
             className="qt-focus flex h-8 items-center gap-2 rounded-md border px-2.5 text-[12px]"
             style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}
-            aria-label="Open site navigation (Command K)"
             data-testid="button-command-palette"
           >
             <Search size={13} aria-hidden="true" />
@@ -73,7 +72,6 @@ export function SiteNav() {
             lang={lang === 'en' ? 'sw' : 'en'}
             className="qt-focus qt-dashed h-8 rounded-md px-2.5 text-[12px] font-medium"
             style={{ color: 'var(--qt-near-black)' }}
-            aria-label={t('lang.switchLabel')}
             data-testid="button-lang-toggle"
           >
             {t('lang.switch')}
@@ -101,7 +99,7 @@ export function SiteNav() {
             </Link>
           ))}
           <div className="mt-2 flex flex-col gap-2 border-t pt-3" style={{ borderColor: 'var(--qt-border-grey)' }}>
-            <button type="button" onClick={toggleLang} lang={lang === 'en' ? 'sw' : 'en'} className="qt-focus qt-dashed rounded-md py-2 text-sm font-medium" aria-label={t('lang.switchLabel')}>
+            <button type="button" onClick={toggleLang} lang={lang === 'en' ? 'sw' : 'en'} className="qt-focus qt-dashed rounded-md py-2 text-sm font-medium" >
               {t('lang.switch')}
             </button>
             <Button href="/talk-to-team" variant="secondary" onClick={() => setMenuOpen(false)} fullWidth>{t('nav.talk')}</Button>
