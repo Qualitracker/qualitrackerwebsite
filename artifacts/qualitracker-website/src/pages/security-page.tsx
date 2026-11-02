@@ -3,6 +3,7 @@ import { PageShell } from '@/components/site/page-shell';
 import { SectionHeader } from '@/components/site/section-header';
 import { Button } from '@/components/site/button';
 import { StatusBadge } from '@/components/site/status-badge';
+import { DataPath, type DataPathStep } from '@/components/product/data-path';
 import { useDocumentMeta } from '@/lib/use-document-meta';
 
 /**
@@ -37,6 +38,14 @@ const PRACTICES = [
   },
 ];
 
+// Same four practices, ordered as data moves: redact, isolate, gate, generate.
+const PATH_STEPS: DataPathStep[] = [
+  { key: 'pii-redaction-before-indexing', label: 'Redact', icon: PRACTICES[1].icon, title: PRACTICES[1].title, copy: PRACTICES[1].copy },
+  { key: 'per-tenant-data-isolation', label: 'Isolate', icon: PRACTICES[0].icon, title: PRACTICES[0].title, copy: PRACTICES[0].copy },
+  { key: 'answers-are-gated-not-guessed', label: 'Gate', icon: PRACTICES[3].icon, title: PRACTICES[3].title, copy: PRACTICES[3].copy },
+  { key: 'self-hosted-inference', label: 'Generate', icon: PRACTICES[2].icon, title: PRACTICES[2].title, copy: PRACTICES[2].copy },
+];
+
 function SecurityPage() {
   useDocumentMeta('Security — QualiTracker', "How QualiTracker isolates lab data, redacts PII, and hosts its own AI inference.", '/security');
   return (
@@ -57,16 +66,11 @@ function SecurityPage() {
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="How it's actually built" title="Four things, verified in the codebase, not asserted in a copy deck." />
           <div className="mt-5"><StatusBadge status="private-beta" /></div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {PRACTICES.map((p) => (
-              <div key={p.title} className="qt-card p-6" data-testid={`security-practice-${p.title.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl" style={{ background: 'var(--qt-teal-tint)', color: 'var(--qt-deep-teal)' }}>
-                  {p.icon}
-                </div>
-                <h3 className="font-brand text-lg font-bold" style={{ color: 'var(--qt-near-black)' }}>{p.title}</h3>
-                <p className="mt-2 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{p.copy}</p>
-              </div>
-            ))}
+          <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+            Follow a document and a question through the system. Select each step to see what happens there.
+          </p>
+          <div className="mt-10">
+            <DataPath steps={PATH_STEPS} />
           </div>
 
           <div className="qt-card mt-10 max-w-[680px] p-8">

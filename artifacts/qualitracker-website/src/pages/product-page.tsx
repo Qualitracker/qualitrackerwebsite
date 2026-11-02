@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { PageShell } from '@/components/site/page-shell';
 import { SectionHeader } from '@/components/site/section-header';
 import { Button } from '@/components/site/button';
-import { StatusBadge, type ProductStatus } from '@/components/site/status-badge';
+import { StatusBadge } from '@/components/site/status-badge';
+import { ModuleMap } from '@/components/product/module-map';
 import { QualityIntelligenceGraph, type NodeId } from '@/components/product/quality-intelligence-graph';
 import { AskQualiTrackerDemo } from '@/components/product/ask-qualitracker-demo';
 import { TraceBlock, ExplorerFrame, StatusIndicator } from '@/components/site/technical-block';
@@ -27,18 +28,6 @@ const TRACE_STEPS: Array<{ id: NodeId; label: string; relation?: string }> = [
   { id: 'verification', label: 'VERIFICATION', relation: 'confirmed_by' },
 ];
 
-const CAPABILITIES: Array<{ label: string; status: ProductStatus }> = [
-  { label: 'Document & SOP control', status: 'private-beta' },
-  { label: 'Quality records (temperature, QC, PT)', status: 'private-beta' },
-  { label: 'AI assistant (QualiBOT)', status: 'preview' },
-  { label: 'Corrective actions (CAPA)', status: 'in-development' },
-  { label: 'Non-conformances', status: 'in-development' },
-  { label: 'Internal audits', status: 'in-development' },
-  { label: 'Equipment & calibration', status: 'planned' },
-  { label: 'Personnel competency & training', status: 'planned' },
-  { label: 'Risk management', status: 'planned' },
-  { label: 'Analytics & reporting', status: 'planned' },
-];
 
 function ProductPage() {
   const [activeGraphNode, setActiveGraphNode] = useState<NodeId | null>(null);
@@ -106,13 +95,11 @@ function ProductPage() {
       <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="What we're building" title="The full platform, honestly staged." />
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {CAPABILITIES.map((cap) => (
-              <div key={cap.label} className="qt-card flex items-center justify-between gap-3 px-5 py-4" data-testid={`row-capability-${cap.label.toLowerCase().replace(/[^a-z]+/g, '-')}`}>
-                <span className="text-sm" style={{ color: 'var(--qt-near-black)' }}>{cap.label}</span>
-                <StatusBadge status={cap.status} />
-              </div>
-            ))}
+          <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
+            Every module sits in the stage it has actually reached. Select one to see what it is for.
+          </p>
+          <div className="mt-10">
+            <ModuleMap />
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
             <Button href="/docs" variant="secondary" arrow="arrow">Read the docs</Button>
