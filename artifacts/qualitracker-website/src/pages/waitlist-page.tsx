@@ -48,7 +48,7 @@ function WaitlistPage() {
       });
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error && err.message === 'ALREADY_SUBSCRIBED' ? "You're already on the waitlist." : 'Something went wrong. Please try again.');
+      setError(err instanceof Error && err.message === 'ALREADY_SUBSCRIBED' ? "Your interest is already recorded." : 'Something went wrong. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -108,6 +108,24 @@ function WaitlistPage() {
               <p className="text-center text-[11px] leading-4" style={{ color: 'var(--qt-body-grey)' }}>We'll only use this to assess and follow up on beta interest. Submission does not guarantee access.</p>
             </form>
           )}
+        </div>
+      </section>
+      <section className="py-16 lg:py-20" style={{ background: 'var(--qt-lab-grey)' }}>
+        <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
+          <p className="font-mono-ui inline-block rounded border border-dashed px-3 py-1.5 text-[11px]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>After you submit</p>
+          <ol className="mt-6 grid gap-4 md:grid-cols-3">
+            {[
+              { n: '01', t: 'We read it', c: 'The team reads every submission to understand which workflows laboratories want to test.' },
+              { n: '02', t: 'We may follow up', c: 'If a future cohort fits your laboratory, we will contact you. Not every submission leads to a place.' },
+              { n: '03', t: 'Nothing is charged', c: 'This is not a purchase or a commitment. QualiTracker is pre-revenue and is not selling during the beta.' },
+            ].map((s) => (
+              <li key={s.n} className="border-l-2 pl-4" style={{ borderColor: 'var(--qt-quality-gold)' }}>
+                <p className="font-mono-ui text-[11px]" style={{ color: 'var(--qt-body-grey)' }}>{s.n}</p>
+                <h2 className="font-brand mt-1 text-base font-bold" style={{ color: 'var(--qt-near-black)' }}>{s.t}</h2>
+                <p className="mt-1 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{s.c}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
     </PageShell>
