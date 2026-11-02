@@ -16,8 +16,8 @@ const DICT = {
   'nav.beta': { en: 'Beta interest', sw: 'Nia ya beta' },
   'hero.eyebrow': { en: 'Private beta · Testing begins mid-November 2026', sw: 'Beta ya faragha · Majaribio yanaanza katikati ya Novemba 2026' },
   'hero.lead': {
-    en: 'Document control, corrective actions, and an AI assistant that only answers from your lab\'s own records — with the source shown, or a plain "not found" instead of a guess.',
-    sw: 'Udhibiti wa nyaraka, hatua za kurekebisha, na msaidizi wa AI anayejibu kutoka kwenye rekodi za maabara yako pekee — akionyesha chanzo, au kusema wazi "haipatikani" badala ya kubahatisha.',
+    en: 'Document control, corrective actions, and an AI assistant that only answers from your lab\'s own records, with the source shown, or a plain "not found" instead of a guess.',
+    sw: 'Udhibiti wa nyaraka, hatua za kurekebisha, na msaidizi wa AI anayejibu kutoka kwenye rekodi za maabara yako pekee, akionyesha chanzo, au kusema wazi "haipatikani" badala ya kubahatisha.',
   },
   'hero.cta': { en: 'Register beta interest', sw: 'Onyesha nia ya beta' },
   'hero.cta2': { en: 'Talk to the team', sw: 'Ongea na timu' },

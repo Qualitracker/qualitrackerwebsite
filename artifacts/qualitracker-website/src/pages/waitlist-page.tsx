@@ -6,7 +6,7 @@ import { HONEYPOT_FIELD_NAME, submitLead } from '@/lib/leads';
 import { useDocumentMeta } from '@/lib/use-document-meta';
 
 function WaitlistPage() {
-  useDocumentMeta('Register beta interest — QualiTracker', 'Tell QualiTracker which laboratory workflow you would want to test in a future private-beta cohort.', '/waitlist');
+  useDocumentMeta('Register beta interest | QualiTracker', 'Tell QualiTracker which laboratory workflow you would want to test in a future private-beta cohort.', '/waitlist');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +56,7 @@ function WaitlistPage() {
 
   return (
     <PageShell>
-      <section className="py-16 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
+      <section className="py-12 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="qt-eyebrow qt-eyebrow-light">Private beta · pre-revenue</p>
           <h1 className="font-brand mt-3 max-w-[560px] text-[clamp(2rem,4vw,2.8rem)] font-bold leading-[1.1] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
@@ -68,7 +68,7 @@ function WaitlistPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-12 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[560px] px-5 lg:px-8">
           {submitted ? (
             <div className="qt-card flex flex-col items-center p-10 text-center">
@@ -110,7 +110,7 @@ function WaitlistPage() {
           )}
         </div>
       </section>
-      <section className="py-16 lg:py-20" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-12 lg:py-20" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="font-mono-ui inline-block rounded border border-dashed px-3 py-1.5 text-[11px]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>After you submit</p>
           <ol className="mt-6 grid gap-4 md:grid-cols-3">

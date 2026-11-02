@@ -19,22 +19,22 @@ const PRACTICES = [
   {
     icon: <Lock size={20} />,
     title: 'Per-tenant data isolation',
-    copy: "Each laboratory's documents are indexed into a separate vector store — QualiBOT can only retrieve from your lab's own uploaded records, never another tenant's.",
+    copy: "Each laboratory's documents are indexed into a separate vector store, QualiBOT can only retrieve from your lab's own uploaded records, never another tenant's.",
   },
   {
     icon: <EyeOff size={20} />,
     title: 'PII redaction before indexing',
-    copy: 'Documents pass through a redaction step before they\'re indexed, including recognizers built for regional identifiers — Tanzanian phone numbers, NIDA national ID format, and TIN numbers — not just generic patterns.',
+    copy: 'Documents pass through a redaction step before they\'re indexed, including recognizers built for regional identifiers, Tanzanian phone numbers, NIDA national ID format, and TIN numbers, not just generic patterns.',
   },
   {
     icon: <Server size={20} />,
     title: 'Self-hosted inference',
-    copy: "QualiBOT's language model runs on infrastructure we control, not a third-party AI API call for every question — consistent with keeping lab data inside a system you can audit.",
+    copy: "QualiBOT's language model runs on infrastructure we control, not a third-party AI API call for every question, consistent with keeping lab data inside a system you can audit.",
   },
   {
     icon: <ShieldCheck size={20} />,
     title: 'Answers are gated, not guessed',
-    copy: 'Retrieval is scored against a confidence threshold before any answer is generated — below it, QualiBOT says it doesn\'t have the information, rather than filling the gap.',
+    copy: 'Retrieval is scored against a confidence threshold before any answer is generated, below it, QualiBOT says it doesn\'t have the information, rather than filling the gap.',
   },
 ];
 
@@ -47,22 +47,22 @@ const PATH_STEPS: DataPathStep[] = [
 ];
 
 function SecurityPage() {
-  useDocumentMeta('Security — QualiTracker', "How QualiTracker isolates lab data, redacts PII, and hosts its own AI inference.", '/security');
+  useDocumentMeta('Security | QualiTracker', "How QualiTracker isolates lab data, redacts PII, and hosts its own AI inference.", '/security');
   return (
     <PageShell>
-      <section className="py-16 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
+      <section className="py-12 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="qt-eyebrow qt-eyebrow-light">Security</p>
           <h1 className="font-brand mt-3 max-w-[640px] text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.08] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
             Security boundaries are part of the beta.
           </h1>
           <p className="mt-5 max-w-[480px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            A description of the current architecture under evaluation — not a certification or a finished assurance report.
+            A description of the current architecture under evaluation, not a certification or a finished assurance report.
           </p>
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="How it's actually built" title="Four things, verified in the codebase, not asserted in a copy deck." />
           <div className="mt-5"><StatusBadge status="private-beta" /></div>
@@ -77,7 +77,7 @@ function SecurityPage() {
             <StatusBadge status="in-development" />
             <h2 className="font-brand mt-4 text-xl font-bold" style={{ color: 'var(--qt-near-black)' }}>What's not here yet</h2>
             <p className="mt-3 text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              No compliance certification (SOC 2, ISO 27001, or similar) is claimed — none has been pursued yet. The architecture described above still requires beta validation, security testing, and formal review before broader use. If you need a security assessment for an evaluation, talk to the team directly rather than relying on this page alone.
+              No compliance certification (SOC 2, ISO 27001, or similar) is claimed, none has been pursued yet. The architecture described above still requires beta validation, security testing, and formal review before broader use. If you need a security assessment for an evaluation, talk to the team directly rather than relying on this page alone.
             </p>
             <div className="mt-6">
               <Button href="/talk-to-team" variant="secondary">Talk to the team</Button>

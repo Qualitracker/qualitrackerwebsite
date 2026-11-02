@@ -18,7 +18,7 @@ const ROWS: ComparisonRow[] = [
   {
     label: 'Traceability',
     qualitracker: 'Every record traced, standard to verification',
-    statusQuo: 'No structured trace — tribal knowledge',
+    statusQuo: 'No structured trace, tribal knowledge',
     genericQms: 'Varies by vendor',
   },
   {
@@ -41,7 +41,7 @@ const ROWS: ComparisonRow[] = [
   },
   {
     label: 'Status',
-    qualitracker: 'Private beta — pre-revenue',
+    qualitracker: 'Private beta, pre-revenue',
     statusQuo: 'Already what most labs use',
     genericQms: 'Established, but often not region-specific',
   },
@@ -58,7 +58,7 @@ export function ComparisonTable() {
               className="border-b px-4 py-3"
               style={{ borderColor: 'var(--qt-deep-teal)', borderBottomWidth: 2, background: 'var(--qt-teal-tint)' }}
             >
-              <span className="qt-technical-eyebrow">QualiTracker</span>
+              <span className="qt-technical-eyebrow">QualiTracker eQMS</span>
             </th>
             <th className="border-b px-4 py-3" style={{ borderColor: 'var(--qt-border-grey)' }}>
               <span className="qt-technical-label">Shared drive / paper</span>

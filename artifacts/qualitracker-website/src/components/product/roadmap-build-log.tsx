@@ -88,7 +88,7 @@ export function RoadmapBuildLog() {
       </div>
 
       <div role="tabpanel" id="roadmap-panel" aria-labelledby={`roadmap-tab-${active}`} className="p-5 sm:p-6">
-        <p className="font-mono-ui text-[11px]" style={{ color: 'var(--qt-light-teal)' }}>$ roadmap --horizon {current.id} <span style={{ opacity: 0.6 }}># {current.caption}</span></p>
+        <p className="font-mono-ui text-[11px]" style={{ color: 'var(--qt-light-teal)' }}>$ roadmap --horizon {current.id} <span># {current.caption}</span></p>
         <ol className="mt-5 space-y-5">
           {current.entries.map((entry, i) => (
             <motion.li

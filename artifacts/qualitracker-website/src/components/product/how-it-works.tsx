@@ -34,7 +34,7 @@ export function HowItWorks() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16" data-testid="how-it-works">
-      <div role="tablist" aria-label="How QualiTracker works" aria-orientation="vertical" className="divide-y" style={{ borderColor: 'var(--qt-border-grey)' }}>
+      <div role="tablist" aria-label="How QualiTracker eQMS works" aria-orientation="vertical" className="divide-y" style={{ borderColor: 'var(--qt-border-grey)' }}>
         {ITEMS.map((it, i) => {
           const on = i === active;
           return (
@@ -50,7 +50,7 @@ export function HowItWorks() {
                 onClick={() => setActive(i)}
                 className="qt-focus text-left"
               >
-                <span className={`font-mono-ui text-[clamp(1.25rem,2.4vw,1.75rem)] font-bold leading-tight ${on ? 'qt-mark' : ''}`} style={{ color: on ? undefined : 'var(--qt-body-grey)', opacity: on ? 1 : 0.6 }}>
+                <span className={`font-mono-ui text-[clamp(1.25rem,2.4vw,1.75rem)] font-bold leading-tight ${on ? 'qt-mark' : ''}`} style={{ color: on ? undefined : 'var(--qt-body-grey)' }}>
                   {t(`hiw.${it.n}.title` as DictKey)}
                 </span>
               </button>

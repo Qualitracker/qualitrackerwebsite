@@ -48,16 +48,16 @@ interface GraphNode {
 }
 
 const NODES: GraphNode[] = [
-  { id: 'standard', label: 'Standard', x: 320, y: 30, icon: ShieldCheck, detail: 'ISO 15189, WHO LQMS, SLIPTA — the requirement a lab is working against.' },
+  { id: 'standard', label: 'Standard', x: 320, y: 30, icon: ShieldCheck, detail: 'ISO 15189, WHO LQMS, SLIPTA, the requirement a lab is working against.' },
   { id: 'document', label: 'Document', x: 150, y: 130, icon: FileText, detail: 'The SOP or policy that implements a standard’s requirement.' },
   { id: 'audit', label: 'Audit', x: 490, y: 130, icon: Search, detail: 'Reviews evidence against the standard.' },
   { id: 'process', label: 'Process', x: 150, y: 230, icon: Workflow, detail: 'The workflow a document describes.' },
   { id: 'finding', label: 'Finding', x: 490, y: 230, icon: AlertTriangle, detail: 'What an audit surfaces when something doesn’t conform.' },
-  { id: 'evidence', label: 'Evidence', x: 320, y: 300, icon: FileCheck2, detail: 'Records proving a process was followed — logs, QC runs, signatures.' },
+  { id: 'evidence', label: 'Evidence', x: 320, y: 300, icon: FileCheck2, detail: 'Records proving a process was followed, logs, QC runs, signatures.' },
   { id: 'nonconformance', label: 'Non-Conformance', x: 490, y: 320, icon: XCircle, detail: 'A finding, formalized and tracked to closure.' },
   { id: 'capa', label: 'CAPA', x: 400, y: 400, icon: Wrench, detail: 'The corrective action assigned to resolve a non-conformance.' },
   { id: 'risk', label: 'Risk', x: 560, y: 400, planned: true, icon: AlertOctagon, detail: 'Planned: surfacing risk patterns across repeated non-conformances.' },
-  { id: 'verification', label: 'Verification', x: 270, y: 400, icon: CheckCircle2, detail: 'Confirms the CAPA actually closed the gap — and becomes new evidence.' },
+  { id: 'verification', label: 'Verification', x: 270, y: 400, icon: CheckCircle2, detail: 'Confirms the CAPA actually closed the gap, and becomes new evidence.' },
 ];
 
 const EDGES: Array<{ from: NodeId; to: NodeId; loop?: boolean }> = [
@@ -79,7 +79,7 @@ function nodeById(id: NodeId) {
 }
 
 /** A gentle quadratic-bezier control point offset perpendicular to the
-    straight line — turns the flat, undirected-looking <line> edges into
+    straight line, turns the flat, undirected-looking <line> edges into
     a more deliberate, "designed" curve without changing what they connect. */
 function controlPoint(x1: number, y1: number, x2: number, y2: number, bend: number) {
   const mx = (x1 + x2) / 2;
@@ -121,7 +121,7 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
 
   return (
     <div className="qt-card p-4 sm:p-6">
-      <svg viewBox="0 0 640 440" className="w-full" role="img" aria-label="QualiTracker quality intelligence graph">
+      <svg viewBox="0 0 640 440" className="w-full" role="img" aria-label="QualiTracker eQMS quality intelligence graph">
         <defs>
           <marker id="qig-arrow-lit" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto-start-reverse">
             <path d="M0,0 L7,3.5 L0,7 Z" fill="var(--qt-deep-teal)" />
@@ -152,7 +152,7 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
                 style={{ transition: 'stroke .2s, opacity .2s' }}
               />
               {/* A small pulse traveling the real, directional edge out of
-                  the active node — shown only for that node's own outgoing
+                  the active node, shown only for that node's own outgoing
                   relationships, and only when motion is allowed. */}
               {samples && (
                 <motion.circle
@@ -200,7 +200,7 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
               <g transform="translate(-6, -6)" opacity={isDimmed ? 0.6 : 1} style={{ pointerEvents: 'none' }}>
                 <Icon size={12} color="#FFFFFF" strokeWidth={2.5} />
               </g>
-              <text x={0} y={-20} textAnchor="middle" className="font-brand" fontSize={13} fontWeight={700} fill="var(--qt-near-black)">
+              <text x={0} y={-20} textAnchor="middle" className="font-brand" fontSize={13} fontWeight={700} fill="var(--qt-near-black)" stroke="#FFFFFF" strokeWidth={5} strokeLinejoin="round" paintOrder="stroke">
                 {node.label}
               </text>
               {node.planned && (

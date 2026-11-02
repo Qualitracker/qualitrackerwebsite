@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 /**
- * The technical typography layer's one reusable container — QualiTracker's
+ * The technical typography layer's one reusable container | QualiTracker's
  * equivalent to the terminal/IDE blocks in the Graphify reference, built to
  * feel like a quality-system record rather than a literal macOS terminal.
  * Three variants cover every real use on this site (see

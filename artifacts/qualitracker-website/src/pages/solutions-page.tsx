@@ -11,7 +11,7 @@ import { useDocumentMeta } from '@/lib/use-document-meta';
 // Medical laboratories get the featured slot deliberately — it's the
 // segment every other real page (product/security/company) is written
 // against; the rest are real segments too, just not yet the primary focus.
-const FEATURED_SEGMENT = { label: 'Medical laboratories', copy: 'Clinical diagnostics labs working toward ISO 15189, WHO LQMS, or SLIPTA readiness — the primary segment the private beta is designed to learn from.' };
+const FEATURED_SEGMENT = { label: 'Medical laboratories', copy: 'Clinical diagnostics labs working toward ISO 15189, WHO LQMS, or SLIPTA readiness, the primary segment the private beta is designed to learn from.' };
 const OTHER_SEGMENTS = [
   { label: 'Testing laboratories', copy: 'Non-clinical testing labs with their own document-control and quality-record needs.' },
   { label: 'Research laboratories', copy: 'Research settings that need traceable documentation without a clinical QMS.' },
@@ -21,13 +21,13 @@ const OTHER_SEGMENTS = [
 /** Segment-specific positioning is still being written — honest stub, not fabricated depth. */
 function SolutionsPage() {
   useDocumentMeta(
-    'Solutions — QualiTracker',
-    'QualiTracker for medical, testing, and research laboratories, and multi-site organizations.',
+    'Solutions | QualiTracker',
+    'QualiTracker eQMS for medical, testing, and research laboratories, and multi-site organizations.',
     '/solutions',
   );
   return (
     <PageShell>
-      <section className="py-16 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
+      <section className="py-12 lg:py-20 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <p className="qt-eyebrow qt-eyebrow-light">Solutions</p>
           <h1 className="font-brand mt-3 max-w-[640px] text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.08] tracking-[-.02em]" style={{ color: '#FFFFFF' }}>
@@ -36,7 +36,7 @@ function SolutionsPage() {
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="Who we're building for" title="Segment-specific pages are in progress." />
           <div className="mt-10 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
@@ -65,7 +65,7 @@ function SolutionsPage() {
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
             <div>
@@ -79,7 +79,7 @@ function SolutionsPage() {
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
             <div>
@@ -93,12 +93,12 @@ function SolutionsPage() {
         </div>
       </section>
 
-      <section className="py-20 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
+      <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="What every segment shares" title="One core system, whatever the setting." />
           <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_1fr]">
             <p className="max-w-[440px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              The segment pages above are about positioning, not a different product — every laboratory type runs on the same QMS Module and QualiBOT stack described on <Link href="/product" style={{ color: 'var(--qt-deep-teal)' }}>the product page</Link>. What changes by segment is which standards and workflows matter most, not the underlying system.
+              The segment pages above are about positioning, not a different product, every laboratory type runs on the same QMS Module and QualiBOT stack described on <Link href="/product" style={{ color: 'var(--qt-deep-teal)' }}>the product page</Link>. What changes by segment is which standards and workflows matter most, not the underlying system.
             </p>
             <TechnicalRecordBlock
               eyebrow="SYSTEM / ALL SEGMENTS"

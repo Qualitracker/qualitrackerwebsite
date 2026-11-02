@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 const STEPS = [
-  { label: 'Question', copy: 'A staff member asks in plain language — no query syntax to learn.' },
+  { label: 'Question', copy: 'A staff member asks in plain language, no query syntax to learn.' },
   { label: 'Permission layer', copy: "Checked against what that person's role is allowed to see, first." },
-  { label: 'Authorized knowledge', copy: "Only this lab's own uploaded SOPs, records, and audit logs — never another lab's data." },
+  { label: 'Authorized knowledge', copy: "Only this lab's own uploaded SOPs, records, and audit logs, never another lab's data." },
   { label: 'Retrieval', copy: 'The relevant passage is located, not guessed at.' },
   { label: 'Evidence', copy: 'The exact document and section the answer will cite.' },
   { label: 'AI reasoning', copy: 'A plain-language answer is drafted from the evidence, not from general knowledge.' },
-  { label: 'Traceable response', copy: 'Delivered with its citation and a confidence level attached — or a clear "not found."' },
+  { label: 'Traceable response', copy: 'Delivered with its citation and a confidence level attached, or a clear "not found."' },
 ] as const;
 
 /** How QualiBOT actually answers a question — the honest version of the brief's own RAG diagram. */

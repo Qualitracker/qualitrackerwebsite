@@ -10,7 +10,7 @@ interface Command {
 
 const COMMANDS: Command[] = [
   { label: 'Product', hint: 'The eQMS and QualiBOT', href: '/product' },
-  { label: 'Solutions', hint: 'Who QualiTracker is for', href: '/solutions' },
+  { label: 'Solutions', hint: 'Who QualiTracker eQMS is for', href: '/solutions' },
   { label: 'Docs', hint: 'Guides and how it works', href: '/docs' },
   { label: 'Security', hint: 'Architecture and what is not claimed', href: '/security' },
   { label: 'Company', hint: 'Story, values, and roadmap', href: '/company' },

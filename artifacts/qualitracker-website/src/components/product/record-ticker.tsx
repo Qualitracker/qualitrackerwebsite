@@ -18,7 +18,7 @@ export function RecordTicker() {
       <div className="flex w-max gap-3" style={{ animation: 'qt-marquee 40s linear infinite' }}>
         {row.map(([id, what, state], i) => (
           <div key={`${id}-${i}`} className="font-mono-ui shrink-0 rounded-md border border-dashed px-3 py-2 text-[11px]" style={{ borderColor: 'rgba(255,255,255,.28)', color: 'var(--qt-mint-light)' }}>
-            <span style={{ color: 'var(--qt-quality-gold)' }}>{id}</span> {what} <span style={{ opacity: 0.6 }}>· {state}</span>
+            <span style={{ color: 'var(--qt-quality-gold)' }}>{id}</span> {what} <span style={{ color: 'var(--qt-light-teal)' }}>· {state}</span>
           </div>
         ))}
       </div>
