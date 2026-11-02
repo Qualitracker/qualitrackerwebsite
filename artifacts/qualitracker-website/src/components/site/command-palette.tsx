@@ -1,41 +1,48 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'wouter';
 import { Search } from 'lucide-react';
+import { useI18n } from '@/lib/i18n';
 
+type Text = { en: string; sw: string };
 interface Command {
-  label: string;
-  hint: string;
+  label: Text;
+  hint: Text;
   href: string;
 }
 
 const COMMANDS: Command[] = [
-  { label: 'Product', hint: 'The eQMS and QualiBOT', href: '/product' },
-  { label: 'Solutions', hint: 'Who QualiTracker eQMS is for', href: '/solutions' },
-  { label: 'Docs', hint: 'Guides and how it works', href: '/docs' },
-  { label: 'Security', hint: 'Architecture and what is not claimed', href: '/security' },
-  { label: 'Company', hint: 'Story, values, and roadmap', href: '/company' },
-  { label: 'Register beta interest', hint: 'Tell us which workflow you would test', href: '/waitlist' },
-  { label: 'Talk to the team', hint: 'Partnerships, research, evaluation', href: '/talk-to-team' },
+  { label: { en: 'Product', sw: 'Bidhaa' }, hint: { en: 'The eQMS and QualiBOT', sw: 'eQMS na QualiBOT' }, href: '/product' },
+  { label: { en: 'Solutions', sw: 'Suluhisho' }, hint: { en: 'Who QualiTracker eQMS is for', sw: 'QualiTracker eQMS ni ya nani' }, href: '/solutions' },
+  { label: { en: 'Docs', sw: 'Nyaraka' }, hint: { en: 'Guides and how it works', sw: 'Miongozo na jinsi inavyofanya kazi' }, href: '/docs' },
+  { label: { en: 'Security', sw: 'Usalama' }, hint: { en: 'Architecture and what is not claimed', sw: 'Muundo na tusichodai' }, href: '/security' },
+  { label: { en: 'Company', sw: 'Kampuni' }, hint: { en: 'Story, values, and roadmap', sw: 'Hadithi, maadili, na ramani ya safari' }, href: '/company' },
+  { label: { en: 'Register beta interest', sw: 'Onyesha nia ya beta' }, hint: { en: 'Tell us which workflow you would test', sw: 'Tuambie mtiririko wa kazi ungependa kujaribu' }, href: '/waitlist' },
+  { label: { en: 'Talk to the team', sw: 'Ongea na timu' }, hint: { en: 'Partnerships, research, evaluation', sw: 'Ushirikiano, utafiti, tathmini' }, href: '/talk-to-team' },
 ];
 
 /** ⌘K / Ctrl+K site navigation. Opens from the nav button or the keyboard. */
 export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [, navigate] = useLocation();
+  const { lang, tr } = useI18n();
+  const text = (c: Command) => ({ label: c.label[lang], hint: c.hint[lang] });
   const [query, setQuery] = useState('');
   const [index, setIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? COMMANDS.filter((c) => `${c.label} ${c.hint}`.toLowerCase().includes(q)) : COMMANDS;
-  }, [query]);
+    return q ? COMMANDS.filter((c) => { const x = text(c); return `${x.label} ${x.hint}`.toLowerCase().includes(q); }) : COMMANDS;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, lang]);
 
   useEffect(() => {
-    if (open) {
+    if (!open) return undefined;
+    const frame = window.requestAnimationFrame(() => {
       setQuery('');
       setIndex(0);
       inputRef.current?.focus();
-    }
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [open]);
 
   if (!open) return null;
@@ -53,7 +60,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
       data-testid="command-palette"
     >
-      <div role="dialog" aria-modal="true" aria-label="Site navigation" className="w-full max-w-[520px] overflow-hidden rounded-xl border shadow-2xl" style={{ background: '#FFFFFF', borderColor: 'var(--qt-border-grey)' }}>
+      <div role="dialog" aria-modal="true" aria-label={tr('Site navigation', 'Urambazaji wa tovuti')} className="w-full max-w-[520px] overflow-hidden rounded-xl border shadow-2xl" style={{ background: '#FFFFFF', borderColor: 'var(--qt-border-grey)' }}>
         <div className="flex items-center gap-3 border-b px-4" style={{ borderColor: 'var(--qt-border-grey)' }}>
           <Search size={16} aria-hidden="true" style={{ color: 'var(--qt-body-grey)' }} />
           <input
@@ -66,8 +73,8 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
               else if (e.key === 'Enter') { e.preventDefault(); go(results[index]); }
               else if (e.key === 'Escape') { e.preventDefault(); onClose(); }
             }}
-            placeholder="Go to a page…"
-            aria-label="Search pages"
+            placeholder={tr('Go to a page…', 'Nenda kwenye ukurasa…')}
+            aria-label={tr('Search pages', 'Tafuta kurasa')}
             role="combobox"
             aria-expanded="true"
             aria-controls="command-results"
@@ -78,7 +85,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
           <kbd className="font-mono-ui rounded border px-1.5 py-0.5 text-[10px]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>esc</kbd>
         </div>
         <ul id="command-results" role="listbox" className="max-h-[320px] overflow-auto p-2">
-          {results.length === 0 && <li className="px-3 py-6 text-center text-xs" style={{ color: 'var(--qt-body-grey)' }}>No matching page.</li>}
+          {results.length === 0 && <li className="px-3 py-6 text-center text-xs" style={{ color: 'var(--qt-body-grey)' }}>{tr('No matching page.', 'Hakuna ukurasa unaolingana.')}</li>}
           {results.map((c, i) => (
             <li
               key={c.href}
@@ -90,8 +97,8 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
               className="flex cursor-pointer items-baseline justify-between gap-4 rounded-md px-3 py-2.5"
               style={{ background: i === index ? 'var(--qt-teal-tint)' : 'transparent' }}
             >
-              <span className="text-[13px] font-semibold" style={{ color: 'var(--qt-near-black)' }}>{c.label}</span>
-              <span className="truncate text-[11px]" style={{ color: 'var(--qt-body-grey)' }}>{c.hint}</span>
+              <span className="text-[13px] font-semibold" style={{ color: 'var(--qt-near-black)' }}>{text(c).label}</span>
+              <span className="truncate text-[11px]" style={{ color: 'var(--qt-body-grey)' }}>{text(c).hint}</span>
             </li>
           ))}
         </ul>

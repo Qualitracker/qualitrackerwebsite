@@ -47,29 +47,38 @@ const DICT = {
 
 export type DictKey = keyof typeof DICT;
 
+/** A string in both languages. Build one with `L('English', 'Kiswahili')`, render it with `tx(text)`. */
+export type Text = { en: string; sw: string };
+export const L = (en: string, sw: string): Text => ({ en, sw });
+
 interface I18nValue {
   lang: Lang;
   setLang: (lang: Lang) => void;
   t: (key: DictKey) => string;
+  /** Inline translation: `tr('English text', 'Kiswahili text')`. The Swahili sits next to the English it replaces. */
+  tr: (en: string, sw: string) => string;
+  /** Picks the current language from a `L(...)` value. */
+  tx: (text: Text) => string;
 }
 
 const I18nContext = createContext<I18nValue>({
   lang: 'en',
   setLang: () => undefined,
   t: (key) => DICT[key].en,
+  tr: (en) => en,
+  tx: (text) => text.en,
 });
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('en');
-
-  useEffect(() => {
+  const [lang, setLangState] = useState<Lang>(() => {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved === 'sw' || saved === 'en') setLangState(saved);
+      if (saved === 'sw' || saved === 'en') return saved;
     } catch {
-      // Storage can be blocked; English remains the default.
+      // Storage can be blocked.
     }
-  }, []);
+    return 'en';
+  });
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -84,7 +93,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const value = useMemo<I18nValue>(() => ({ lang, setLang, t: (key) => DICT[key][lang] }), [lang, setLang]);
+  const value = useMemo<I18nValue>(() => ({ lang, setLang, t: (key) => DICT[key][lang], tr: (en, sw) => (lang === 'sw' ? sw : en), tx: (text) => text[lang] }), [lang, setLang]);
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 

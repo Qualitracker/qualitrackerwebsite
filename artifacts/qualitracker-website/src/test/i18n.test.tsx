@@ -37,4 +37,17 @@ describe('language toggle', () => {
     expect(document.documentElement.lang).toBe('sw');
     expect(window.localStorage.getItem('qt-lang')).toBe('sw');
   });
+
+  it('switches the shared interactive sections to Swahili too', async () => {
+    const user = userEvent.setup();
+    renderLanding();
+
+    await user.click(screen.getAllByTestId('button-lang-toggle')[0]);
+
+    expect(screen.getByText('Karibu tena kwenye dashibodi')).toBeInTheDocument();
+    expect(screen.getByText('Hifadhi ya pamoja / karatasi')).toBeInTheDocument();
+    expect(screen.getByText('Beta ya faragha ya eQMS inaanza')).toBeInTheDocument();
+    expect(screen.getByText('Uliza QualiBOT')).toBeInTheDocument();
+    expect(screen.getByText('Weka kielekezi au lenga nodi ili uone jinsi inavyounganishwa.')).toBeInTheDocument();
+  });
 });

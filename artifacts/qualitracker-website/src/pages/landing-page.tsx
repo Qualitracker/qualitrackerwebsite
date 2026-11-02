@@ -13,7 +13,7 @@ import { LifecycleTimeline } from '@/components/product/lifecycle-timeline';
 import { ComparisonTable } from '@/components/site/comparison-table';
 import { useDocumentMeta, useStructuredData } from '@/lib/use-document-meta';
 import { SOFTWARE_APPLICATION_SCHEMA } from '@/lib/structured-data';
-import { useI18n } from '@/lib/i18n';
+import { useI18n, L } from '@/lib/i18n';
 import { CAPA_STAGES, DOCUMENT_STAGES } from '@/lib/lifecycles';
 import { HowItWorks } from '@/components/product/how-it-works';
 import { RecordTicker } from '@/components/product/record-ticker';
@@ -23,10 +23,10 @@ import { Reveal } from '@/components/site/reveal';
 import { motion, useReducedMotion } from 'framer-motion';
 
 const REALITY_ITEMS = [
-  { icon: <Search size={20} />, title: 'Find the record', copy: 'Search quality documents, actions, and evidence from one place.' },
-  { icon: <Network size={20} />, title: 'See the trail', copy: 'Know what changed, who reviewed it, and what still needs attention.' },
-  { icon: <ClipboardCheck size={20} />, title: 'Close the loop', copy: 'Turn findings into assigned, visible actions with a clear next step.' },
-  { icon: <FlaskConical size={20} />, title: 'Keep the context', copy: "Make your lab's own SOPs the source of truth for everyday questions." },
+  { icon: <Search size={20} />, title: L('Find the record', 'Pata rekodi'), copy: L('Search quality documents, actions, and evidence from one place.', 'Tafuta nyaraka za ubora, hatua, na ushahidi kutoka sehemu moja.') },
+  { icon: <Network size={20} />, title: L('See the trail', 'Ona alama za mabadiliko'), copy: L('Know what changed, who reviewed it, and what still needs attention.', 'Jua kilichobadilika, nani alikipitia, na kipi bado kinahitaji umakini.') },
+  { icon: <ClipboardCheck size={20} />, title: L('Close the loop', 'Funga mzunguko'), copy: L('Turn findings into assigned, visible actions with a clear next step.', 'Geuza matatizo yaliyobainika kuwa hatua zilizokabidhiwa na zinazoonekana, zenye hatua inayofuata iliyo wazi.') },
+  { icon: <FlaskConical size={20} />, title: L('Keep the context', 'Hifadhi muktadha'), copy: L("Make your lab's own SOPs the source of truth for everyday questions.", 'Fanya SOP za maabara yako ziwe chanzo cha ukweli kwa maswali ya kila siku.') },
 ];
 
 const staggerContainer = {
@@ -40,6 +40,7 @@ const staggerItem = {
 
 function RealitySequence() {
   const reduceMotion = useReducedMotion();
+  const { tx } = useI18n();
   return (
     <motion.div
       className="grid gap-0 sm:grid-cols-2 lg:grid-cols-4"
@@ -50,18 +51,18 @@ function RealitySequence() {
     >
       {REALITY_ITEMS.map((item, i) => (
         <motion.div
-          key={item.title}
+          key={item.title.en}
           variants={reduceMotion ? undefined : staggerItem}
           className="border-t-2 py-5 pr-6"
           style={{ borderColor: 'var(--qt-quality-gold)' }}
-          data-testid={`step-reality-${item.title.toLowerCase().replace(/\s+/g, '-')}`}
+          data-testid={`step-reality-${item.title.en.toLowerCase().replace(/\s+/g, '-')}`}
         >
           <div className="flex items-center gap-2">
             <span className="font-mono-ui text-[11px]" style={{ color: 'var(--qt-body-grey)' }}>{String(i + 1).padStart(2, '0')}</span>
             <span style={{ color: 'var(--qt-deep-teal)' }}>{item.icon}</span>
           </div>
-          <h3 className="font-brand mt-3 text-base font-bold" style={{ color: 'var(--qt-near-black)' }}>{item.title}</h3>
-          <p className="mt-2 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{item.copy}</p>
+          <h3 className="font-brand mt-3 text-base font-bold" style={{ color: 'var(--qt-near-black)' }}>{tx(item.title)}</h3>
+          <p className="mt-2 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{tx(item.copy)}</p>
         </motion.div>
       ))}
     </motion.div>
@@ -69,7 +70,7 @@ function RealitySequence() {
 }
 
 function LandingPage() {
-  const { t, lang } = useI18n();
+  const { t, lang, tr, tx } = useI18n();
   useDocumentMeta(
     'QualiTracker | Quality that works for every lab',
     "QualiTracker eQMS is a pre-revenue digital quality-management system entering private beta with laboratories in November 2026.",
@@ -110,7 +111,7 @@ function LandingPage() {
             </Reveal>
           </div>
           <div className="mt-14">
-            <p className="font-mono-ui mb-3 text-[10px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-light-teal)' }}>Illustrative record activity</p>
+            <p className="font-mono-ui mb-3 text-[10px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-light-teal)' }}>{tr("Illustrative record activity", "Mfano wa shughuli za rekodi")}</p>
             <RecordTicker />
           </div>
         </div>
@@ -128,21 +129,21 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
-            <SectionHeader eyebrow="Private beta" title="The next milestone is evidence, not a sales launch." />
+            <SectionHeader eyebrow={tr("Private beta", "Beta ya faragha")} title={tr("The next milestone is evidence, not a sales launch.", "Hatua inayofuata ni ushahidi, si uzinduzi wa mauzo.")} />
             <p className="mt-5 max-w-[620px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              Mid-November testing will put the eQMS in front of laboratory teams so we can observe real workflows, collect structured feedback, and decide what is ready for a wider pilot. QualiBOT is being developed and tested separately as an educational, source-grounded assistant.
+              {tr("Mid-November testing will put the eQMS in front of laboratory teams so we can observe real workflows, collect structured feedback, and decide what is ready for a wider pilot. QualiBOT is being developed and tested separately as an educational, source-grounded assistant.", "Majaribio ya katikati ya Novemba yatafikisha eQMS kwa timu za maabara ili tuangalie mtiririko halisi wa kazi, tukusanye maoni yaliyopangwa, na tuamue kipi kiko tayari kwa majaribio mapana zaidi. QualiBOT inatengenezwa na kujaribiwa kando kama msaidizi wa kielimu anayetegemea vyanzo.")}
             </p>
           </Reveal>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {[
-              { label: 'Testing now', title: 'eQMS workflows', copy: 'Document control, quality records, and day-to-day usability with a small laboratory cohort.' },
-              { label: 'Learning', title: 'What works in practice', copy: 'Training needs, workflow gaps, connectivity constraints, and the changes users need before a wider pilot.' },
-              { label: 'Not claiming', title: 'Sales or proven outcomes', copy: 'QualiTracker is pre-revenue. Beta participation is not a customer sale, accreditation result, or performance guarantee.' },
+              { label: L('Testing now', 'Tunajaribu sasa'), title: L('eQMS workflows', 'Mtiririko wa kazi wa eQMS'), copy: L('Document control, quality records, and day-to-day usability with a small laboratory cohort.', 'Udhibiti wa nyaraka, rekodi za ubora, na urahisi wa matumizi ya kila siku kwa kundi dogo la maabara.') },
+              { label: L('Learning', 'Tunajifunza'), title: L('What works in practice', 'Kinachofanya kazi kwa vitendo'), copy: L('Training needs, workflow gaps, connectivity constraints, and the changes users need before a wider pilot.', 'Mahitaji ya mafunzo, mapengo ya mtiririko wa kazi, changamoto za mtandao, na mabadiliko ambayo watumiaji wanahitaji kabla ya majaribio mapana.') },
+              { label: L('Not claiming', 'Hatudai'), title: L('Sales or proven outcomes', 'Mauzo au matokeo yaliyothibitishwa'), copy: L('QualiTracker is pre-revenue. Beta participation is not a customer sale, accreditation result, or performance guarantee.', 'QualiTracker bado haijaanza kuuza. Kushiriki beta si mauzo kwa mteja, matokeo ya ithibati, wala hakikisho la utendaji.') },
             ].map((item) => (
-              <div key={item.label} className="qt-card p-6">
-                <p className="qt-technical-label">{item.label}</p>
-                <h3 className="font-brand mt-3 text-lg font-bold" style={{ color: 'var(--qt-near-black)' }}>{item.title}</h3>
-                <p className="mt-2 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{item.copy}</p>
+              <div key={item.label.en} className="qt-card p-6">
+                <p className="qt-technical-label">{tx(item.label)}</p>
+                <h3 className="font-brand mt-3 text-lg font-bold" style={{ color: 'var(--qt-near-black)' }}>{tx(item.title)}</h3>
+                <p className="mt-2 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{tx(item.copy)}</p>
               </div>
             ))}
           </div>
@@ -153,26 +154,26 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-dark-navy)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
-            <SectionHeader light eyebrow="Quality Excellence Challenge · September 2026" title="The laboratory community showed up." />
+            <SectionHeader light eyebrow={tr("Quality Excellence Challenge · September 2026", "Quality Excellence Challenge · Septemba 2026")} title={tr("The laboratory community showed up.", "Jamii ya maabara ilijitokeza.")} />
             <p className="mt-5 max-w-[660px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-              At the 39th MeLSAT Scientific Conference, QualiTracker delivered a timed laboratory-QMS knowledge challenge. These are event participation and feedback results, not evidence of eQMS adoption, recurring product use, or revenue.
+              {tr("At the 39th MeLSAT Scientific Conference, QualiTracker delivered a timed laboratory-QMS knowledge challenge. These are event participation and feedback results, not evidence of eQMS adoption, recurring product use, or revenue.", "Kwenye Kongamano la 39 la Kisayansi la MeLSAT, QualiTracker iliendesha changamoto yenye muda ya maarifa ya QMS ya maabara. Haya ni matokeo ya ushiriki na maoni kwenye tukio, si ushahidi wa matumizi ya eQMS, matumizi ya mara kwa mara ya bidhaa, wala mapato.")}
             </p>
           </Reveal>
           <div className="mt-10 grid gap-px overflow-hidden rounded-lg sm:grid-cols-2 lg:grid-cols-4" style={{ background: 'rgba(255,255,255,.14)' }}>
             {[
-              { value: '276', label: 'registrations' },
-              { value: '154', label: 'completed attempts' },
-              { value: '27', label: 'regions represented' },
-              { value: '4.35 / 5', label: 'average rating · 57 responses' },
+              { value: '276', label: L('registrations', 'usajili') },
+              { value: '154', label: L('completed attempts', 'majaribio yaliyokamilika') },
+              { value: '27', label: L('regions represented', 'mikoa iliyowakilishwa') },
+              { value: '4.35 / 5', label: L('average rating · 57 responses', 'wastani wa alama · majibu 57') },
             ].map((metric) => (
-              <div key={metric.label} className="p-6" style={{ background: 'var(--qt-dark-navy)' }}>
+              <div key={metric.label.en} className="p-6" style={{ background: 'var(--qt-dark-navy)' }}>
                 <p className="font-brand text-3xl font-bold" style={{ color: 'var(--qt-quality-gold)' }}>{metric.value}</p>
-                <p className="mt-2 text-xs" style={{ color: 'var(--qt-mint-light)' }}>{metric.label}</p>
+                <p className="mt-2 text-xs" style={{ color: 'var(--qt-mint-light)' }}>{tx(metric.label)}</p>
               </div>
             ))}
           </div>
           <p className="mt-5 max-w-[700px] text-[11px] leading-5" style={{ color: 'var(--qt-light-teal)' }}>
-            Source: challenge platform records and post-challenge survey summarized in the October 2026 detailed report. Registration records may include duplicates; the rating reflects survey respondents, not all registrants.
+            {tr("Source: challenge platform records and post-challenge survey summarized in the October 2026 detailed report. Registration records may include duplicates; the rating reflects survey respondents, not all registrants.", "Chanzo: kumbukumbu za jukwaa la changamoto na utafiti baada ya changamoto zilizofupishwa kwenye ripoti ya kina ya Oktoba 2026. Kumbukumbu za usajili zinaweza kujumuisha marudio; alama zinaakisi waliojibu utafiti, si wote waliojisajili.")}
           </p>
         </div>
       </section>
@@ -181,10 +182,10 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
-            <Reveal>
-              <SectionHeader eyebrow="Why we're building this" title="Most laboratory quality records still live on paper." />
+            <Reveal className="min-w-0">
+              <SectionHeader eyebrow={tr("Why we're building this", "Kwa nini tunajenga hili")} title={tr("Most laboratory quality records still live on paper.", "Rekodi nyingi za ubora wa maabara bado ziko kwenye karatasi.")} />
               <p className="mt-5 max-w-[420px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                Laboratories tell us entries get forgotten, misread or misrecorded, and the cost shows up later as repeated work, delayed results, or lost samples. Toggle the example to see what we are testing in the beta.
+                {tr("Laboratories tell us entries get forgotten, misread or misrecorded, and the cost shows up later as repeated work, delayed results, or lost samples. Toggle the example to see what we are testing in the beta.", "Maabara zinatuambia kuwa kumbukumbu husahaulika, husomwa vibaya au kuandikwa vibaya, na gharama huonekana baadaye kama kazi kurudiwa, matokeo kuchelewa, au sampuli kupotea. Badilisha mfano ili uone tunachojaribu kwenye beta.")}
               </p>
             </Reveal>
             <Reveal delay={0.1}>
@@ -198,25 +199,25 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
-            <Reveal>
-              <SectionHeader eyebrow="Where we're going" title="Built in the open, one gate at a time." />
+            <Reveal className="min-w-0">
+              <SectionHeader eyebrow={tr("Where we're going", "Tunakokwenda")} title={tr("Built in the open, one gate at a time.", "Tunajenga wazi, hatua moja baada ya nyingine.")} />
               <p className="mt-5 max-w-[400px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                We would rather show you the plan, and what it depends on, than promise a launch date. Switch between horizons to see what is happening now, next, and later.
+                {tr("We would rather show you the plan, and what it depends on, than promise a launch date. Switch between horizons to see what is happening now, next, and later.", "Tunapendelea kukuonyesha mpango, na unachotegemea, kuliko kuahidi tarehe ya uzinduzi. Badilisha kati ya vipindi uone kinachoendelea sasa, kinachofuata, na baadaye.")}
               </p>
               <ul className="mt-8 space-y-4">
                 {[
-                  { k: 'Ownership first', v: 'No agreement is signed until the company demonstrably owns what it builds.' },
-                  { k: 'Evidence before scale', v: 'Beta and event data come before any claim about outcomes.' },
-                  { k: 'Safe by default', v: 'The assistant answers only from your documents, cites its source, and says so when it cannot find an answer.' },
+                  { k: L('Ownership first', 'Umiliki kwanza'), v: L('No agreement is signed until the company demonstrably owns what it builds.', 'Hakuna makubaliano yanayosainiwa hadi kampuni imeonyesha wazi kuwa inamiliki inachojenga.') },
+                  { k: L('Evidence before scale', 'Ushahidi kabla ya kupanua'), v: L('Beta and event data come before any claim about outcomes.', 'Data ya beta na matukio hutangulia dai lolote kuhusu matokeo.') },
+                  { k: L('Safe by default', 'Salama kwa chaguo-msingi'), v: L('The assistant answers only from your documents, cites its source, and says so when it cannot find an answer.', 'Msaidizi hujibu kutoka kwenye nyaraka zako pekee, hutaja chanzo, na husema wazi asipopata jibu.') },
                 ].map((p) => (
-                  <li key={p.k} className="border-l-2 pl-4" style={{ borderColor: 'var(--qt-quality-gold)' }}>
-                    <p className="font-mono-ui text-[11px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-deep-teal)' }}>{p.k}</p>
-                    <p className="mt-1 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{p.v}</p>
+                  <li key={p.k.en} className="border-l-2 pl-4" style={{ borderColor: 'var(--qt-quality-gold)' }}>
+                    <p className="font-mono-ui text-[11px] uppercase tracking-[.1em]" style={{ color: 'var(--qt-deep-teal)' }}>{tx(p.k)}</p>
+                    <p className="mt-1 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{tx(p.v)}</p>
                   </li>
                 ))}
               </ul>
             </Reveal>
-            <Reveal delay={0.1}>
+            <Reveal delay={0.1} className="min-w-0">
               <RoadmapBuildLog />
             </Reveal>
           </div>
@@ -227,9 +228,9 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
-            <SectionHeader eyebrow="The reality" title="Your quality system already exists. It's just hiding." />
+            <SectionHeader eyebrow={tr("The reality", "Hali halisi")} title={tr("Your quality system already exists. It's just hiding.", "Mfumo wako wa ubora tayari upo. Umejificha tu.")} />
             <p className="mt-5 max-w-[480px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              In a shared drive. In a WhatsApp thread. In a folder only one person knows how to find. QualiTracker eQMS gives the work a home your whole lab can trust.
+              {tr("In a shared drive. In a WhatsApp thread. In a folder only one person knows how to find. QualiTracker eQMS gives the work a home your whole lab can trust.", "Kwenye hifadhi ya pamoja. Kwenye mazungumzo ya WhatsApp. Kwenye faili ambalo mtu mmoja tu anajua pa kulipata. QualiTracker eQMS inaipa kazi hiyo makazi ambayo maabara yako yote inaweza kuyaamini.")}
             </p>
           </Reveal>
           <div className="mt-10">
@@ -243,7 +244,7 @@ function LandingPage() {
           deliberately hedged, never a specific competitor claim. */}
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
-          <SectionHeader eyebrow="Why it's different" title="Not a bigger binder. A different kind of system." />
+          <SectionHeader eyebrow={tr("Why it's different", "Kwa nini ni tofauti")} title={tr("Not a bigger binder. A different kind of system.", "Si faili kubwa zaidi. Ni aina tofauti ya mfumo.")} />
           <div className="mt-10">
             <ComparisonTable />
           </div>
@@ -255,9 +256,9 @@ function LandingPage() {
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
             <Reveal>
-              <SectionHeader eyebrow="See it, not just read about it" title="This is what your dashboard actually looks like." />
+              <SectionHeader eyebrow={tr("See it, not just read about it", "Ione, usisome tu")} title={tr("This is what your dashboard actually looks like.", "Hivi ndivyo dashibodi yako inavyoonekana.")} />
               <p className="mt-5 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                Your labs, departments, roles, and people, scoped to who you are and where you work, the moment you log in.
+                {tr("Your labs, departments, roles, and people, scoped to who you are and where you work, the moment you log in.", "Maabara, idara, majukumu, na watu wako, vilivyopangwa kulingana na wewe ni nani na unafanya kazi wapi, mara tu unapoingia.")}
               </p>
             </Reveal>
             <Reveal delay={0.1}>
@@ -273,13 +274,13 @@ function LandingPage() {
           <div className="grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-16">
           <div>
           <Reveal>
-            <SectionHeader eyebrow="The quality intelligence graph" title="Quality management isn't a pile of disconnected documents. It's a connected system." />
+            <SectionHeader eyebrow={tr("The quality intelligence graph", "Ramani ya akili ya ubora")} title={tr("Quality management isn't a pile of disconnected documents. It's a connected system.", "Usimamizi wa ubora si rundo la nyaraka zisizounganishwa. Ni mfumo uliounganishwa.")} />
             <p className="mt-5 max-w-[520px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              A standard implies a document. A document describes a process. A process produces evidence. Evidence is what an audit checks, and what a finding, a non-conformance, or a CAPA all trace back to. Hover a node to follow the connection.
+              {tr("A standard implies a document. A document describes a process. A process produces evidence. Evidence is what an audit checks, and what a finding, a non-conformance, or a CAPA all trace back to. Hover a node to follow the connection.", "Kiwango kinaleta hati. Hati inaeleza mchakato. Mchakato unazalisha ushahidi. Ushahidi ndio ukaguzi unaokagua, na ndio tatizo lililobainika, kutokidhi kiwango, au CAPA vyote hurejea. Weka kielekezi juu ya nodi ili ufuate muunganiko.")}
             </p>
           </Reveal>
           <Reveal delay={0.15} className="mt-6">
-            <Button href="/product#quality-intelligence" variant="secondary" arrow="arrow">Explore the full system</Button>
+            <Button href="/product#quality-intelligence" variant="secondary" arrow="arrow">{tr("Explore the full system", "Chunguza mfumo mzima")}</Button>
           </Reveal>
           </div>
           <Reveal delay={0.1}>
@@ -292,7 +293,7 @@ function LandingPage() {
       {/* Two-layer system */}
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
-          <SectionHeader eyebrow="The system" title="Two connected layers, one system of record." />
+          <SectionHeader eyebrow={tr("The system", "Mfumo")} title={tr("Two connected layers, one system of record.", "Tabaka mbili zilizounganishwa, mfumo mmoja wa kumbukumbu.")} />
           <Reveal className="mt-10 grid gap-5 lg:grid-cols-2">
             <div className="qt-card-dark p-8">
               <StatusBadge status="private-beta" />
@@ -301,11 +302,11 @@ function LandingPage() {
               </div>
               <h3 className="font-brand mt-5 text-2xl font-bold" style={{ color: '#FFFFFF' }}>QualiTracker eQMS</h3>
               <p className="mt-3 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-                A versioned document and record repository for SOPs, policies, quality records, and audit logs, built for lab directors, quality managers, and accreditors.
+                {tr("A versioned document and record repository for SOPs, policies, quality records, and audit logs, built for lab directors, quality managers, and accreditors.", "Hifadhi ya nyaraka na rekodi zenye matoleo kwa SOP, sera, rekodi za ubora, na kumbukumbu za ukaguzi, iliyojengwa kwa wakurugenzi wa maabara, mameneja wa ubora, na watoa ithibati.")}
               </p>
               <ul className="font-mono-ui mt-7 space-y-2 border-t border-dashed pt-5 text-[11px]" style={{ borderColor: 'rgba(255,255,255,.2)', color: 'var(--qt-mint-light)' }}>
-                {['Document control: draft, review, approve', 'Quality records: temperature, QC, proficiency', 'Findings and corrective actions with two reviews', 'An audit trail of who changed what, and when'].map((row) => (
-                  <li key={row} className="flex gap-2"><span style={{ color: 'var(--qt-quality-gold)' }} aria-hidden="true">+</span>{row}</li>
+                {[L('Document control: draft, review, approve', 'Udhibiti wa nyaraka: rasimu, mapitio, idhini'), L('Quality records: temperature, QC, proficiency', 'Rekodi za ubora: joto, QC, ustadi'), L('Findings and corrective actions with two reviews', 'Matatizo yaliyobainika na hatua za kurekebisha zenye mapitio mawili'), L('An audit trail of who changed what, and when', 'Alama ya ukaguzi ya nani alibadilisha nini, na lini')].map((row) => (
+                  <li key={row.en} className="flex gap-2"><span style={{ color: 'var(--qt-quality-gold)' }} aria-hidden="true">+</span>{tx(row)}</li>
                 ))}
               </ul>
             </div>
@@ -316,13 +317,13 @@ function LandingPage() {
               </div>
               <h3 className="font-brand mt-5 text-2xl font-bold" style={{ color: 'var(--qt-near-black)' }}>QualiBOT</h3>
               <p className="mt-3 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                A conversational assistant grounded in your lab's own uploaded documents, for frontline technologists asking everyday questions in plain language, in English or Swahili.
+                {tr("A conversational assistant grounded in your lab's own uploaded documents, for frontline technologists asking everyday questions in plain language, in English or Swahili.", "Msaidizi wa mazungumzo anayetegemea nyaraka ulizopakia za maabara yako, kwa wataalamu wa maabara wanaouliza maswali ya kila siku kwa lugha rahisi, kwa Kiingereza au Kiswahili.")}
               </p>
               <div className="font-mono-ui mt-7 rounded-md border border-dashed p-4 text-[11px] leading-5" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-near-black)', background: '#FFFFFF' }}>
-                <p style={{ color: 'var(--qt-body-grey)' }}>Illustrative question</p>
-                <p className="mt-1">Q: What do I do if the freezer alarm sounds?</p>
-                <p className="mt-1" style={{ color: 'var(--qt-deep-teal)' }}>A: Follow SOP-017, section 4.2.</p>
-                <p className="mt-1" style={{ color: 'var(--qt-body-grey)' }}>No matching document? It says "not found" instead of guessing.</p>
+                <p style={{ color: 'var(--qt-body-grey)' }}>{tr("Illustrative question", "Mfano wa swali")}</p>
+                <p className="mt-1">{tr("Q: What do I do if the freezer alarm sounds?", "S: Nifanye nini kengele ya friza ikilia?")}</p>
+                <p className="mt-1" style={{ color: 'var(--qt-deep-teal)' }}>{tr("A: Follow SOP-017, section 4.2.", "J: Fuata SOP-017, sehemu ya 4.2.")}</p>
+                <p className="mt-1" style={{ color: 'var(--qt-body-grey)' }}>{tr('No matching document? It says "not found" instead of guessing.', 'Hakuna hati inayolingana? Husema "haijapatikana" badala ya kubahatisha.')}</p>
               </div>
             </div>
           </Reveal>
@@ -333,9 +334,9 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
-            <SectionHeader eyebrow="Document & evidence intelligence" title="Every document moves through the same real workflow." />
+            <SectionHeader eyebrow={tr("Document & evidence intelligence", "Akili ya nyaraka na ushahidi")} title={tr("Every document moves through the same real workflow.", "Kila hati hupitia mtiririko ule ule halisi wa kazi.")} />
             <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              No status is invented for this page, these are the actual states a controlled document moves through, end to end.
+              {tr("No status is invented for this page, these are the actual states a controlled document moves through, end to end.", "Hakuna hali iliyobuniwa kwa ukurasa huu, hizi ni hali halisi ambazo hati iliyodhibitiwa hupitia, kuanzia mwanzo hadi mwisho.")}
             </p>
           </Reveal>
           <Reveal delay={0.1} className="mt-10">
@@ -348,9 +349,9 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
-            <SectionHeader eyebrow="Corrective action lifecycle" title="Two independent reviewers, not one rubber stamp." />
+            <SectionHeader eyebrow={tr("Corrective action lifecycle", "Mzunguko wa hatua ya kurekebisha")} title={tr("Two independent reviewers, not one rubber stamp.", "Wakaguzi wawili huru, si muhuri mmoja wa kuidhinisha tu.")} />
             <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              Every finding is classified Major or Minor, auto-numbered, and closed only after two separate people have signed off, the same rigor an accreditor expects.
+              {tr("Every finding is classified Major or Minor, auto-numbered, and closed only after two separate people have signed off, the same rigor an accreditor expects.", "Kila tatizo lililobainika huainishwa Kuu au Dogo, hupewa namba kiotomatiki, na hufungwa baada ya watu wawili tofauti kuidhinisha, ukali ule ule anaotarajia mtoa ithibati.")}
             </p>
           </Reveal>
           <Reveal delay={0.1} className="mt-10">
@@ -364,9 +365,9 @@ function LandingPage() {
       {/* AI & RAG */}
       <section id="ai-rag" className="py-14 lg:py-24" style={{ background: 'var(--qt-clinical-white)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
-          <SectionHeader eyebrow="Ask the record" title="An assistant that knows when it doesn't know." />
+          <SectionHeader eyebrow={tr("Ask the record", "Uliza rekodi")} title={tr("An assistant that knows when it doesn't know.", "Msaidizi anayejua anapokuwa hajui.")} />
           <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-            Ask in plain language. Get an answer grounded in your lab's own records, with the source beside it, and if there's no relevant record, QualiBOT says so rather than guessing.
+            {tr("Ask in plain language. Get an answer grounded in your lab's own records, with the source beside it, and if there's no relevant record, QualiBOT says so rather than guessing.", "Uliza kwa lugha rahisi. Pata jibu linalotegemea rekodi za maabara yako, na chanzo pembeni yake, na kama hakuna rekodi inayohusika, QualiBOT husema hivyo badala ya kubahatisha.")}
           </p>
           <Reveal className="mt-10 mx-auto max-w-[560px]">
             <AskQualiTrackerDemo />
@@ -378,9 +379,9 @@ function LandingPage() {
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <Reveal>
-            <p className="qt-eyebrow">Keep scrolling</p>
+            <p className="qt-eyebrow">{tr("Keep scrolling", "Endelea kusogeza")}</p>
             <h2 className="font-brand mt-2.5 max-w-[560px] font-bold leading-[1.1] tracking-[-.02em]" style={{ color: 'var(--qt-near-black)', fontSize: 'clamp(1.75rem, 3.4vw, 2.5rem)' }}>
-              That answer above didn't come from nowhere. Here's the path it walked.
+              {tr("That answer above didn't come from nowhere. Here's the path it walked.", "Jibu lile hapo juu halikutoka hewani. Hii ndiyo njia lililopita.")}
             </h2>
           </Reveal>
           <div className="mt-10">
@@ -394,13 +395,13 @@ function LandingPage() {
       {/* Final CTA */}
       <section className="py-14 lg:py-24 qt-texture-grid" style={{ backgroundColor: 'var(--qt-dark-navy)' }}>
         <Reveal className="mx-auto max-w-[1280px] px-5 text-center lg:px-8">
-          <SectionHeader align="center" light eyebrow="Start the conversation" title="Let's make quality easier to see." />
+          <SectionHeader align="center" light eyebrow={tr("Start the conversation", "Anza mazungumzo")} title={tr("Let's make quality easier to see.", "Tufanye ubora uonekane kwa urahisi.")} />
           <p className="mx-auto mt-5 max-w-[440px] text-sm leading-6" style={{ color: 'var(--qt-mint-light)' }}>
-            QualiTracker is pre-revenue and not available for purchase. Register your interest for a future beta cohort, or talk to the team about research, institutional evaluation, or the Quality Excellence Challenge.
+            {tr("QualiTracker is pre-revenue and not available for purchase. Register your interest for a future beta cohort, or talk to the team about research, institutional evaluation, or the Quality Excellence Challenge.", "QualiTracker bado haijaanza kuuza na haipatikani kwa ununuzi. Onyesha nia yako kwa kundi la beta la baadaye, au ongea na timu kuhusu utafiti, tathmini ya kitaasisi, au Quality Excellence Challenge.")}
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Button href="/waitlist" variant="gold">Register beta interest</Button>
-            <Button href="/talk-to-team" variant="reversed">Talk to the team</Button>
+            <Button href="/waitlist" variant="gold">{tr("Register beta interest", "Onyesha nia ya beta")}</Button>
+            <Button href="/talk-to-team" variant="reversed">{tr("Talk to the team", "Ongea na timu")}</Button>
           </div>
         </Reveal>
       </section>

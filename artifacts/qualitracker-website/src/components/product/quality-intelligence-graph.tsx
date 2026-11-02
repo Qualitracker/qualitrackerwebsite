@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   AlertOctagon,
 } from 'lucide-react';
+import { L, type Text, useI18n } from '@/lib/i18n';
 
 /**
  * The "Quality Intelligence Graph" — QualiTracker's own equivalent to
@@ -39,25 +40,25 @@ export type NodeId = 'standard' | 'document' | 'audit' | 'process' | 'finding' |
 
 interface GraphNode {
   id: NodeId;
-  label: string;
+  label: Text;
   x: number;
   y: number;
   planned?: boolean;
-  detail: string;
+  detail: Text;
   icon: typeof ShieldCheck;
 }
 
 const NODES: GraphNode[] = [
-  { id: 'standard', label: 'Standard', x: 320, y: 30, icon: ShieldCheck, detail: 'ISO 15189, WHO LQMS, SLIPTA, the requirement a lab is working against.' },
-  { id: 'document', label: 'Document', x: 150, y: 130, icon: FileText, detail: 'The SOP or policy that implements a standard’s requirement.' },
-  { id: 'audit', label: 'Audit', x: 490, y: 130, icon: Search, detail: 'Reviews evidence against the standard.' },
-  { id: 'process', label: 'Process', x: 150, y: 230, icon: Workflow, detail: 'The workflow a document describes.' },
-  { id: 'finding', label: 'Finding', x: 490, y: 230, icon: AlertTriangle, detail: 'What an audit surfaces when something doesn’t conform.' },
-  { id: 'evidence', label: 'Evidence', x: 320, y: 300, icon: FileCheck2, detail: 'Records proving a process was followed, logs, QC runs, signatures.' },
-  { id: 'nonconformance', label: 'Non-Conformance', x: 490, y: 320, icon: XCircle, detail: 'A finding, formalized and tracked to closure.' },
-  { id: 'capa', label: 'CAPA', x: 400, y: 400, icon: Wrench, detail: 'The corrective action assigned to resolve a non-conformance.' },
-  { id: 'risk', label: 'Risk', x: 560, y: 400, planned: true, icon: AlertOctagon, detail: 'Planned: surfacing risk patterns across repeated non-conformances.' },
-  { id: 'verification', label: 'Verification', x: 270, y: 400, icon: CheckCircle2, detail: 'Confirms the CAPA actually closed the gap, and becomes new evidence.' },
+  { id: 'standard', label: L('Standard', 'Kiwango'), x: 320, y: 30, icon: ShieldCheck, detail: L('ISO 15189, WHO LQMS, SLIPTA, the requirement a lab is working against.', 'ISO 15189, WHO LQMS, SLIPTA, hitaji ambalo maabara inalifanyia kazi.') },
+  { id: 'document', label: L('Document', 'Hati'), x: 150, y: 130, icon: FileText, detail: L('The SOP or policy that implements a standard’s requirement.', 'SOP au sera inayotekeleza hitaji la kiwango.') },
+  { id: 'audit', label: L('Audit', 'Ukaguzi'), x: 490, y: 130, icon: Search, detail: L('Reviews evidence against the standard.', 'Hupitia ushahidi dhidi ya kiwango.') },
+  { id: 'process', label: L('Process', 'Mchakato'), x: 150, y: 230, icon: Workflow, detail: L('The workflow a document describes.', 'Mtiririko wa kazi unaoelezwa na hati.') },
+  { id: 'finding', label: L('Finding', 'Tatizo'), x: 490, y: 230, icon: AlertTriangle, detail: L('What an audit surfaces when something doesn’t conform.', 'Kile ambacho ukaguzi hubaini wakati jambo halikidhi kiwango.') },
+  { id: 'evidence', label: L('Evidence', 'Ushahidi'), x: 320, y: 300, icon: FileCheck2, detail: L('Records proving a process was followed, logs, QC runs, signatures.', 'Rekodi zinazothibitisha mchakato ulifuatwa, kumbukumbu, ukaguzi wa QC, na sahihi.') },
+  { id: 'nonconformance', label: L('Non-Conformance', 'Kutokidhi kiwango'), x: 490, y: 320, icon: XCircle, detail: L('A finding, formalized and tracked to closure.', 'Tatizo lililobainika, lililorasimishwa na kufuatiliwa hadi kufungwa.') },
+  { id: 'capa', label: L('CAPA', 'CAPA'), x: 400, y: 400, icon: Wrench, detail: L('The corrective action assigned to resolve a non-conformance.', 'Hatua ya kurekebisha iliyokabidhiwa kutatua kutokidhi kiwango.') },
+  { id: 'risk', label: L('Risk', 'Hatari'), x: 560, y: 400, planned: true, icon: AlertOctagon, detail: L('Planned: surfacing risk patterns across repeated non-conformances.', 'Imepangwa: kubaini mifumo ya hatari katika kutokidhi kiwango kunakojirudia.') },
+  { id: 'verification', label: L('Verification', 'Uthibitishaji'), x: 270, y: 400, icon: CheckCircle2, detail: L('Confirms the CAPA actually closed the gap, and becomes new evidence.', 'Huthibitisha kuwa CAPA ilifunga pengo na huwa ushahidi mpya.') },
 ];
 
 const EDGES: Array<{ from: NodeId; to: NodeId; loop?: boolean }> = [
@@ -106,6 +107,7 @@ interface QualityIntelligenceGraphProps {
 }
 
 export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIntelligenceGraphProps = {}) {
+  const { tr, tx } = useI18n();
   const [internalActive, setInternalActive] = useState<NodeId | null>(null);
   const isControlled = activeId !== undefined;
   const active = isControlled ? activeId : internalActive;
@@ -121,7 +123,7 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
 
   return (
     <div className="qt-card p-4 sm:p-6">
-      <svg viewBox="0 0 640 440" className="w-full" role="img" aria-label="QualiTracker eQMS quality intelligence graph">
+      <svg viewBox="0 0 640 440" className="w-full" role="img" aria-label={tr('QualiTracker eQMS quality intelligence graph', 'Ramani ya akili ya ubora ya QualiTracker eQMS')}>
         <defs>
           <marker id="qig-arrow-lit" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto-start-reverse">
             <path d="M0,0 L7,3.5 L0,7 Z" fill="var(--qt-deep-teal)" />
@@ -201,11 +203,11 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
                 <Icon size={12} color="#FFFFFF" strokeWidth={2.5} />
               </g>
               <text x={0} y={-20} textAnchor="middle" className="font-brand" fontSize={13} fontWeight={700} fill="var(--qt-near-black)" stroke="#FFFFFF" strokeWidth={5} strokeLinejoin="round" paintOrder="stroke">
-                {node.label}
+                {tx(node.label)}
               </text>
               {node.planned && (
                 <text x={0} y={28} textAnchor="middle" className="font-mono-ui" fontSize={9} fill="var(--qt-body-grey)">
-                  PLANNED
+                  {tr('PLANNED', 'IMEPANGWA')}
                 </text>
               )}
             </g>
@@ -213,7 +215,7 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
         })}
       </svg>
       <p className="mt-4 min-h-[20px] text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>
-        {active ? nodeById(active).detail : 'Hover or focus a node to see how it connects.'}
+        {active ? tx(nodeById(active).detail) : tr('Hover or focus a node to see how it connects.', 'Weka kielekezi au lenga nodi ili uone jinsi inavyounganishwa.')}
       </p>
     </div>
   );

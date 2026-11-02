@@ -16,7 +16,7 @@ const NAV_LINKS: Array<{ id: string; key: DictKey; href: string }> = [
 /** Sticky white nav bar: dual-tone lockup, teal active underline, teal CTA — matches the real brand kit's SiteNav. */
 export function SiteNav() {
   const [location] = useLocation();
-  const { lang, setLang, t } = useI18n();
+  const { lang, setLang, t, tr } = useI18n();
   const toggleLang = () => setLang(lang === 'en' ? 'sw' : 'en');
   const [menuOpen, setMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -35,10 +35,10 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-40" style={{ background: '#FFFFFF', borderBottom: '1px solid var(--qt-border-grey)' }}>
       <div className="mx-auto flex h-14 max-w-[1280px] items-center gap-8 px-5 lg:px-8">
-        <Link href="/" aria-label="QualiTracker home" data-testid="link-brand-home">
+        <Link href="/" aria-label={tr('QualiTracker home', 'Ukurasa wa mwanzo wa QualiTracker')} data-testid="link-brand-home">
           <Logo height={28} />
         </Link>
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-6 md:flex" aria-label={tr('Main navigation', 'Urambazaji mkuu')}>
           {NAV_LINKS.map((item) => {
             const active = location === item.href;
             return (
@@ -63,7 +63,7 @@ export function SiteNav() {
             data-testid="button-command-palette"
           >
             <Search size={13} aria-hidden="true" />
-            <span>Jump to</span>
+            <span>{tr('Jump to', 'Nenda kwenye')}</span>
             <kbd className="font-mono-ui text-[10px]">⌘K</kbd>
           </button>
           <button
@@ -85,14 +85,14 @@ export function SiteNav() {
           style={{ color: 'var(--qt-near-black)' }}
           onClick={() => setMenuOpen((v) => !v)}
           aria-expanded={menuOpen}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={menuOpen ? tr('Close menu', 'Funga menyu') : tr('Open menu', 'Fungua menyu')}
           data-testid="button-mobile-menu"
         >
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
       {menuOpen && (
-        <nav className="border-t px-5 py-3 md:hidden" style={{ borderColor: 'var(--qt-border-grey)' }} aria-label="Mobile navigation">
+        <nav className="border-t px-5 py-3 md:hidden" style={{ borderColor: 'var(--qt-border-grey)' }} aria-label={tr('Mobile navigation', 'Urambazaji wa simu')}>
           {NAV_LINKS.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-sm font-medium" style={{ color: 'var(--qt-near-black)' }}>
               {t(item.key)}
