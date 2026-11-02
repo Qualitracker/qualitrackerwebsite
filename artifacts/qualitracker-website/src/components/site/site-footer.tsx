@@ -44,7 +44,10 @@ export function SiteFooter() {
         </div>
         <div className="mt-10 flex flex-col gap-2 border-t pt-6 text-[11px] sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: 'rgba(255,255,255,.12)', color: 'var(--qt-light-teal)' }}>
           <span>© {new Date().getFullYear()} Qualitracker Limited · Dar es Salaam, Tanzania</span>
-          <span>Building quality-management infrastructure for laboratories — East Africa first.</span>
+          <span className="font-mono-ui inline-flex items-center gap-2">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: 'var(--qt-quality-gold)' }} aria-hidden="true" />
+            Private beta · pre-revenue · East Africa first
+          </span>
         </div>
       </div>
     </footer>

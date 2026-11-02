@@ -87,7 +87,7 @@ function LandingPage() {
               could go before crowding. */}
           <Reveal>
             <p className="qt-eyebrow qt-eyebrow-light">{t('hero.eyebrow')}</p>
-            <h1 className="font-brand mt-5 max-w-[960px] text-[clamp(3.5rem,9vw,8rem)] font-bold leading-[0.94] tracking-[-.03em]" style={{ color: '#FFFFFF' }}>
+            <h1 className="font-brand mt-5 max-w-[1040px] text-[clamp(3rem,7.4vw,6.5rem)] font-bold leading-[1.02] tracking-[-.03em]" style={{ color: '#FFFFFF' }}>
               {lang === 'sw' ? (<>Ubora <span style={{ color: 'var(--qt-quality-gold)' }}>unaofanya kazi</span> kwa kila maabara.</>) : (<>Quality that <span style={{ color: 'var(--qt-quality-gold)' }}>works</span> for every lab.</>)}
             </h1>
           </Reveal>
