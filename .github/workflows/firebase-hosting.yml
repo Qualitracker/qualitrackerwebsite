@@ -1,0 +1,67 @@
+name: Deploy website to Firebase Hosting
+
+# qualitracker.com is served by Firebase Hosting (project qualitracker-website-e6c53),
+# separately from the GitHub Pages copy built by static.yml. This workflow keeps the
+# two in step. The deploy step only runs once the FIREBASE_SERVICE_ACCOUNT secret
+# exists, so the workflow stays green until that is set up.
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "firebase-hosting"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+    steps:
+      - name: Check deploy credentials
+        id: creds
+        run: |
+          if [ -n "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "FIREBASE_SERVICE_ACCOUNT is not set; skipping Firebase deploy."
+          fi
+      - name: Checkout
+        if: steps.creds.outputs.present == 'true'
+        uses: actions/checkout@v4
+      - name: Set up pnpm
+        if: steps.creds.outputs.present == 'true'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set up Node.js
+        if: steps.creds.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install dependencies
+        if: steps.creds.outputs.present == 'true'
+        run: pnpm install --frozen-lockfile
+      - name: Install Chrome for prerendering
+        if: steps.creds.outputs.present == 'true'
+        run: pnpm --filter @workspace/qualitracker-website exec puppeteer browsers install chrome
+      - name: Build website
+        if: steps.creds.outputs.present == 'true'
+        env:
+          BASE_PATH: /
+        run: pnpm --filter @workspace/qualitracker-website build
+      - name: Deploy to Firebase Hosting
+        if: steps.creds.outputs.present == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: qualitracker-website-e6c53
+          channelId: live
