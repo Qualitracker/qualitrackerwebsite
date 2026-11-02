@@ -5,20 +5,25 @@ import { TextField, SelectField, TextareaField } from '@/components/site/form-fi
 import { HONEYPOT_FIELD_NAME, submitLead } from '@/lib/leads';
 import { useDocumentMeta } from '@/lib/use-document-meta';
 
-const CATEGORIES = [
-  'Laboratory interest',
-  'Institutional partnership',
-  'Regulatory / accreditation discussion',
-  'Technical integration',
-  'Research collaboration',
-  'General inquiry',
+// "Usually handled by" is role-level only, taken from the leadership split in
+// the company plan. No individual is named or promised a reply time.
+const ROUTES = [
+  { label: 'Laboratory interest', by: 'Product', covers: 'Which workflows to test, and whether your laboratory fits a future beta cohort.' },
+  { label: 'Institutional partnership', by: 'CEO and Strategy', covers: 'Professional bodies, ministries, funders, and partner organisations.' },
+  { label: 'Regulatory / accreditation discussion', by: 'Product', covers: 'How the system maps to ISO 15189, SLIPTA, and WHO LQMS expectations.' },
+  { label: 'Technical integration', by: 'Technology', covers: 'Data, security questions, and how QualiTracker would fit your systems.' },
+  { label: 'Research collaboration', by: 'Strategy and Product', covers: 'Studies, evaluations, and shared learning from the beta.' },
+  { label: 'General inquiry', by: 'The team', covers: 'Anything else. We will route it to the right person.' },
 ];
+const CATEGORIES = ROUTES.map((r) => r.label);
 
 function TalkToTeamPage() {
   useDocumentMeta('Talk to the team — QualiTracker', 'Reach the QualiTracker team for institutional, regulatory, or partnership inquiries.', '/talk-to-team');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [category, setCategoryState] = useState('');
+  const route = ROUTES.find((r) => r.label === category);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,7 +36,6 @@ function TalkToTeamPage() {
     const email = String(data.get('email') ?? '').trim();
     const institution = String(data.get('institution') ?? '').trim();
     const country = String(data.get('country') ?? '').trim();
-    const category = String(data.get('category') ?? '').trim();
     const note = String(data.get('message') ?? '').trim();
 
     if (!name || !email || !category) {
@@ -75,7 +79,49 @@ function TalkToTeamPage() {
       </section>
 
       <section className="py-16 lg:py-20" style={{ background: 'var(--qt-clinical-white)' }}>
-        <div className="mx-auto max-w-[560px] px-5 lg:px-8">
+        <div className="mx-auto grid max-w-[1080px] gap-10 px-5 lg:grid-cols-[1fr_560px] lg:items-start lg:gap-14 lg:px-8">
+          <div>
+            <p className="font-mono-ui inline-block rounded border border-dashed px-3 py-1.5 text-[11px]" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-body-grey)' }}>Pick a route</p>
+            <div role="radiogroup" aria-label="Inquiry type" className="mt-5 flex flex-wrap gap-2">
+              {ROUTES.map((r) => {
+                const on = r.label === category;
+                return (
+                  <button
+                    key={r.label}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    onClick={() => setCategoryState(r.label)}
+                    className="qt-focus rounded-full border px-3.5 py-2 text-xs font-semibold transition-colors"
+                    style={{
+                      background: on ? 'var(--qt-dark-navy)' : '#FFFFFF',
+                      color: on ? '#FFFFFF' : 'var(--qt-near-black)',
+                      borderColor: on ? 'var(--qt-dark-navy)' : 'var(--qt-border-grey)',
+                      borderStyle: on ? 'solid' : 'dashed',
+                    }}
+                    data-testid={`route-${r.label.toLowerCase().replace(/[^a-z]+/g, '-')}`}
+                  >
+                    {r.label}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="qt-brackets relative mt-6 p-5" aria-live="polite" data-testid="route-detail">
+              <span className="qt-bracket-b absolute inset-0" aria-hidden="true" />
+              {route ? (
+                <>
+                  <p className="qt-technical-label">Usually handled by · {route.by}</p>
+                  <p className="mt-2 text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>{route.covers}</p>
+                </>
+              ) : (
+                <p className="text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>Choose what your message is about and we will show who usually picks it up.</p>
+              )}
+            </div>
+            <p className="mt-5 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>
+              QualiTracker is pre-revenue and is not selling during the beta. We read every message, but we cannot promise a reply time.
+            </p>
+          </div>
+        <div className="w-full">
           {submitted ? (
             <div className="qt-card flex flex-col items-center p-10 text-center">
               <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-full" style={{ background: 'var(--qt-teal-tint)', color: 'var(--qt-deep-teal)' }}>
@@ -94,7 +140,7 @@ function TalkToTeamPage() {
                 <TextField label="Organization (optional)" name="institution" placeholder="Organization or institution" data-testid="input-talk-institution" />
                 <TextField label="Country (optional)" name="country" placeholder="Country" data-testid="input-talk-country" />
               </div>
-              <SelectField label="What's this about?" name="category" required defaultValue="" data-testid="select-talk-category">
+              <SelectField label="What's this about?" name="category" required value={category} onChange={(e) => setCategoryState(e.target.value)} data-testid="select-talk-category">
                 <option value="" disabled>Select an inquiry type</option>
                 {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
               </SelectField>
@@ -115,6 +161,7 @@ function TalkToTeamPage() {
               </button>
             </form>
           )}
+        </div>
         </div>
       </section>
     </PageShell>
