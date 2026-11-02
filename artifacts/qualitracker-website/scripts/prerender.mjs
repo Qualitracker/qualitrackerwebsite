@@ -82,7 +82,19 @@ async function main() {
         .waitForFunction((fallback) => document.title !== fallback, { timeout: 10000 }, DEFAULT_TITLE)
         .catch(() => {});
 
-      const html = await page.evaluate(() => '<!doctype html>\n' + document.documentElement.outerHTML);
+      // index.html loads Google Fonts without blocking first paint: a
+      // rel="preload" link whose onload flips it to rel="stylesheet". Running
+      // the page here fires that onload, so serializing as-is would save the
+      // flipped, render-blocking <link rel="stylesheet"> (Lighthouse measured
+      // ~800ms of render blocking). Put the preload form back before saving;
+      // the saved page flips it again when a visitor's browser loads it.
+      const html = await page.evaluate(() => {
+        document.querySelectorAll('link[rel="stylesheet"][as="style"]').forEach((link) => {
+          link.setAttribute('rel', 'preload');
+          link.setAttribute('onload', "this.onload=null;this.rel='stylesheet'");
+        });
+        return '<!doctype html>\n' + document.documentElement.outerHTML;
+      });
       const outPath = route === '/' ? join(ROOT, 'dist/public/index.html') : join(ROOT, 'dist/public', route.slice(1), 'index.html');
       mkdirSync(dirname(outPath), { recursive: true });
       writeFileSync(outPath, html);

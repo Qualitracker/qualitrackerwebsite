@@ -21,9 +21,12 @@ function AnswerBuild({ upTo }: { upTo: number }) {
         {STEPS.map((step, i) => {
           const shown = i <= upTo;
           return (
-            <li key={step.label} className="grid grid-cols-[64px_1fr] gap-3 transition-opacity duration-300" style={{ opacity: shown ? 1 : 0.28 }}>
-              <span style={{ color: shown ? 'var(--qt-deep-teal)' : 'var(--qt-body-grey)' }}>{step.trace[0]}</span>
-              <span style={{ color: 'var(--qt-near-black)' }}>{step.trace[1]}</span>
+            // Never dim text with opacity: Lighthouse measured the dimmed rows at
+            // 1.5:1 contrast. Unlit rows use the body grey (readable) and lit rows
+            // switch to full-strength text with a teal label.
+            <li key={step.label} className="grid grid-cols-[64px_1fr] gap-3">
+              <span className="transition-colors duration-300" style={{ color: shown ? 'var(--qt-deep-teal)' : 'var(--qt-body-grey)', fontWeight: shown ? 700 : 400 }}>{step.trace[0]}</span>
+              <span className="transition-colors duration-300" style={{ color: shown ? 'var(--qt-near-black)' : 'var(--qt-body-grey)' }}>{step.trace[1]}</span>
             </li>
           );
         })}
