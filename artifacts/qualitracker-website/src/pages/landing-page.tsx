@@ -254,14 +254,16 @@ function LandingPage() {
       {/* Product proof: the real dashboard shape */}
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
+          <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end lg:gap-16">
             <Reveal>
-              <SectionHeader eyebrow={tr("See it, not just read about it", "Ione, usisome tu")} title={tr("This is what your dashboard actually looks like.", "Hivi ndivyo dashibodi yako inavyoonekana.")} />
+              <SectionHeader eyebrow={tr("See it, not just read about it", "Ione, usisome tu")} title={tr("Work through the actual product surfaces.", "Tumia skrini halisi za bidhaa.")} />
+            </Reveal>
+            <Reveal delay={0.05}>
               <p className="mt-5 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                {tr("Your labs, departments, roles, and people, scoped to who you are and where you work, the moment you log in.", "Maabara, idara, majukumu, na watu wako, vilivyopangwa kulingana na wewe ni nani na unafanya kazi wapi, mara tu unapoingia.")}
+                {tr("Move between the Figma-designed command center, controlled documents, and non-conformance workflow. Every record shown is explicitly illustrative, while the screen structure follows the intended application.", "Hamisha kati ya kituo cha amri kilichoundwa Figma, nyaraka zinazodhibitiwa, na mtiririko wa kutokidhi kiwango. Kila rekodi ni mfano, huku muundo wa skrini ukifuata programu iliyokusudiwa.")}
               </p>
             </Reveal>
-            <Reveal delay={0.1}>
+            <Reveal delay={0.1} className="lg:col-span-2">
               <QualityCommandCenter />
             </Reveal>
           </div>

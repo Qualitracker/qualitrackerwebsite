@@ -77,14 +77,15 @@ describe('accessibility landmarks', () => {
   });
 });
 
-describe('dashboard role switcher', () => {
-  it('shows different numbers for each role', async () => {
+describe('Figma-aligned product screen switcher', () => {
+  it('moves between command center, documents, and non-conformance screens', async () => {
     const user = userEvent.setup();
     render(<QualityCommandCenter />);
-    expect(screen.getByText('Laboratories')).toBeInTheDocument();
-    await user.click(screen.getByRole('tab', { name: /technologist/i }));
-    expect(screen.getByText('Records to complete today')).toBeInTheDocument();
-    expect(screen.queryByText('Laboratories')).not.toBeInTheDocument();
+    expect(screen.getByText('Quality Operations Command Center')).toBeInTheDocument();
+    await user.click(screen.getByRole('tab', { name: /^documents$/i }));
+    expect(screen.getByRole('heading', { name: /controlled documents/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('tab', { name: /^non-conformance$/i }));
+    expect(screen.getByRole('heading', { name: /non-conformances & capa/i })).toBeInTheDocument();
   });
 });
 

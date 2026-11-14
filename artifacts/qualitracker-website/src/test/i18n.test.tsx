@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'wouter';
 
@@ -57,7 +57,7 @@ describe('language toggle', () => {
 
     await user.click(screen.getAllByTestId('button-lang-toggle')[0]);
 
-    expect(screen.getByText('Karibu tena kwenye dashibodi')).toBeInTheDocument();
+    expect(screen.getByText('Kituo cha Amri cha Uendeshaji wa Ubora')).toBeInTheDocument();
     expect(screen.getByText('Hifadhi ya pamoja / karatasi')).toBeInTheDocument();
     expect(screen.getByText('Beta ya faragha ya eQMS inaanza')).toBeInTheDocument();
     expect(screen.getByText('Uliza QualiBOT')).toBeInTheDocument();
@@ -78,7 +78,7 @@ describe('language toggle', () => {
     await user.click(screen.getByTestId('button-send-ask'));
 
     await waitFor(() => expect(screen.getByText(/Sikuweza kupata rekodi inayohusika/i)).toBeInTheDocument());
-    expect(screen.queryByText(/CAPA-014/)).not.toBeInTheDocument();
+    expect(within(screen.getByTestId('ask-qualitracker-demo')).queryByText(/CAPA-014/)).not.toBeInTheDocument();
   });
 
   // Value: protects=a saved Swahili choice is applied on the first render;

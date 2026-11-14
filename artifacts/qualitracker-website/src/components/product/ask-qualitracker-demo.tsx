@@ -39,7 +39,7 @@ export function AskQualiTrackerDemo() {
   }
 
   return (
-    <div className="qt-card overflow-hidden" style={{ background: 'var(--qt-clinical-white)' }}>
+    <div className="qt-card overflow-hidden" style={{ background: 'var(--qt-clinical-white)' }} data-testid="ask-qualitracker-demo">
       <div className="flex items-center justify-between border-b px-5 py-4" style={{ borderColor: 'var(--qt-border-grey)' }}>
         <div className="flex items-center gap-2.5">
           <span className={`flex h-9 w-9 items-center justify-center rounded-full ${thinking ? 'qt-thinking' : ''}`} style={{ background: 'var(--qt-deep-teal)' }}>

@@ -178,6 +178,20 @@ Triggered by the request to improve the site's interactive illustrations before 
 | Accessibility | **Verified locally** — touch-sized controls, `aria-pressed`, polite live regions, keyboard focus movement, and reduced-motion behavior are covered by automated tests and rendered checks. |
 | Verification | 51 automated checks pass; workspace typecheck and full production build pass; desktop and iPhone touch flows render without horizontal overflow or browser console errors. |
 
+## Wave 16 — Figma-aligned application surfaces
+
+Triggered by the supplied `qualitracker-qms` Figma source and the request to replace the remaining placeholder dashboard with the intended application UI.
+
+| Item | Status |
+|---|---|
+| Figma source reconciliation | **Completed locally** — inspected the actual application-design file, including its dashboard, documents, non-conformance, responsive, state, prototype, QualiBOT, token, data-visualization, governance, and engineering-handoff pages. The website embed now follows that product language instead of extrapolating from the old placeholder. |
+| Command center | **Rebuilt locally** — dark module rail, application toolbar, operational metrics, accreditation-readiness status, action queue, selected-action detail, and review counters are integrated as one responsive product surface. Metric and task selections update the detail panel. |
+| Controlled documents | **Added locally** — document-state metrics, All/Needs attention/Approved filters, and the Figma-aligned controlled-document table are directly switchable from the website embed. |
+| Non-conformance & CAPA | **Added locally** — selectable non-conformance records update the stage, severity, responsible team, and closure trail shown in the adjacent detail panel. |
+| Evidence boundary | **Preserved** — the frame is labeled `FIGMA-ALIGNED · ILLUSTRATIVE DATA`; sample laboratory and user identities are neutral demo labels, and no record is presented as customer or production data. |
+| Responsive and accessible behavior | **Verified locally** — semantic tabs and buttons remain keyboard/touch operable, the app rail collapses on mobile, dense tables scroll inside their own surface, and the page has no viewport-level horizontal overflow. |
+| Verification | 51 automated checks, workspace typecheck, and full production build pass. Browser checks cover desktop and iPhone layouts, screen switching, document filtering, non-conformance selection, and a clean console. |
+
 ## What this plan deliberately does not include
 
 No GSAP, no WebGL/3D, no new animation library, no CMS, no design-token pipeline change — see `12_SKILL_GAP_ANALYSIS.md` for why each was considered and set aside.
