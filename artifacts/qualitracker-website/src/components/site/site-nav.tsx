@@ -85,6 +85,7 @@ export function SiteNav() {
           style={{ color: 'var(--qt-near-black)' }}
           onClick={() => setMenuOpen((v) => !v)}
           aria-expanded={menuOpen}
+          aria-controls="mobile-navigation"
           aria-label={menuOpen ? tr('Close menu', 'Funga menyu') : tr('Open menu', 'Fungua menyu')}
           data-testid="button-mobile-menu"
         >
@@ -92,7 +93,7 @@ export function SiteNav() {
         </button>
       </div>
       {menuOpen && (
-        <nav className="border-t px-5 py-3 md:hidden" style={{ borderColor: 'var(--qt-border-grey)' }} aria-label={tr('Mobile navigation', 'Urambazaji wa simu')}>
+        <nav id="mobile-navigation" className="border-t px-5 py-3 md:hidden" style={{ borderColor: 'var(--qt-border-grey)' }} aria-label={tr('Mobile navigation', 'Urambazaji wa simu')}>
           {NAV_LINKS.map((item) => (
             <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-sm font-medium" style={{ color: 'var(--qt-near-black)' }}>
               {t(item.key)}

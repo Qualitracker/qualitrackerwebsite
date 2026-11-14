@@ -44,7 +44,7 @@ const ROOT = join(__dirname, '..');
 // the pristine, build-fresh index.html as its fallback shell.
 const ROUTES = ['/product', '/solutions', '/docs', '/company', '/security', '/waitlist', '/talk-to-team', '/privacy', '/'];
 
-const DEFAULT_TITLE = 'QualiTracker — Source-Cited AI Assistant & Digital QMS for Medical Laboratories';
+const DEFAULT_TITLE = 'QualiTracker eQMS | Digital Quality Management for Medical Laboratories';
 
 async function main() {
   const server = await preview({

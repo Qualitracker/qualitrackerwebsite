@@ -328,6 +328,21 @@
 .qt-focus:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--qt-deep-teal); outline-offset: 2px;
 }
+.qt-skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  transform: translateY(-160%);
+  border-radius: 4px;
+  background: var(--qt-clinical-white);
+  color: var(--qt-dark-navy);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--qt-quality-gold);
+}
+.qt-skip-link:focus { transform: translateY(0); }
 
 /* Colour-shift only. No scale, no translate — the brand kit's motion ceiling. */
 .qt-button { transition: background-color .18s cubic-bezier(.2,0,.2,1), color .18s cubic-bezier(.2,0,.2,1), border-color .18s cubic-bezier(.2,0,.2,1); }

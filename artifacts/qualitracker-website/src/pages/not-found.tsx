@@ -2,6 +2,7 @@ import { Link, useLocation } from 'wouter';
 import { PageShell } from '@/components/site/page-shell';
 import { Button } from '@/components/site/button';
 import { useI18n } from '@/lib/i18n';
+import { useDocumentMeta } from '@/lib/use-document-meta';
 
 type Text = { en: string; sw: string };
 const SUGGESTIONS: Array<{ label: Text; href: string; hint: Text }> = [
@@ -15,6 +16,12 @@ const SUGGESTIONS: Array<{ label: Text; href: string; hint: Text }> = [
 export default function NotFound() {
   const [location] = useLocation();
   const { tr } = useI18n();
+  useDocumentMeta(
+    tr('Page not found | QualiTracker', 'Ukurasa haujapatikana | QualiTracker'),
+    tr('The requested QualiTracker page could not be found.', 'Ukurasa wa QualiTracker ulioombwa haukupatikana.'),
+    location,
+    { robots: 'noindex, follow' },
+  );
   return (
     <PageShell>
       <div className="mx-auto flex min-h-[60vh] max-w-[640px] flex-col justify-center px-5 py-16">

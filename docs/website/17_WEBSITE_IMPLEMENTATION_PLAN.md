@@ -14,7 +14,7 @@ Synthesized from `10_WEBSITE_AUDIT.md`, `12_SKILL_GAP_ANALYSIS.md`, `13_MOTION_S
 | Convert homepage scroll reveals from mount-time CSS to real `whileInView` (Framer Motion) | **Shipped**, verified sections reveal correctly on scroll |
 | Fix render-blocking font loading (~800ms, found by Lighthouse) | **Shipped** — preload-then-activate pattern in `index.html`; verified via before/after Lighthouse runs. |
 | Fix `maximum-scale=1` blocking pinch-zoom (found by Lighthouse) | **Shipped** |
-| Resolve canonical domain (`qualitracker.org` vs `qualitracker.co`) | **Resolved — `qualitracker.co`.** See Wave 12. |
+| Resolve canonical domain and preferred host | **Resolved — `https://www.qualitracker.com/`.** The live non-`www` host redirects there; metadata now uses the final host. See Wave 14. |
 | Run the actual `db push` migration for the new lead kinds/columns | **Open — needs a real `DATABASE_URL`**, not run without knowing the target DB |
 
 ## P1 — Important
@@ -126,7 +126,7 @@ Closes three items that had sat open since the very first audit: the canonical-d
 
 | Item | Status |
 |---|---|
-| Canonical domain — resolved to `qualitracker.co` | **Shipped** — fixed in `index.html` (canonical link, og:url), `public/sitemap.xml` (all 8 URLs), and `public/robots.txt` (sitemap directive). |
+| Canonical domain — historical resolution | **Superseded by Wave 14.** The current verified production host is `https://www.qualitracker.com/`; all canonical surfaces now use that final host. |
 | Per-route canonical URL + og:url, not just title/description | **Shipped** — `useDocumentMeta` previously only updated title/description client-side, leaving every route's canonical/og:url pointing at the homepage until now. Extended to take a `path` and update both, plus twitter:title/description (previously untouched). |
 | Organization JSON-LD (site-wide) | **Shipped** — static in `index.html`, real facts only (name, url, logo, description already established elsewhere on the site; no `sameAs`/`foundingDate` since neither is verified). |
 | SoftwareApplication JSON-LD on `/` and `/product` | **Shipped** — no `offers`/price (none exists, pricing was deliberately removed sitewide) and no `aggregateRating` (no reviews exist) — omitted rather than invented. |
@@ -151,6 +151,19 @@ Closes the exact limitation Wave 12's verification note flagged: `vite preview`'
 | Verification — `pnpm run dev` unaffected | `isPreview` is `false` for `vite dev`, so `appType` stays the default `'spa'` and the new plugin never registers. Confirmed live: `curl http://localhost:5177/security` during dev returns `200` with the SPA shell's default title (client-side hydration still required, as expected — no prerendered file exists yet in dev), and an unknown path also returns `200` with the SPA shell (wouter renders `NotFound` client-side), exactly as before this change. |
 | Typecheck/lint/11 tests | Pass (`pnpm run typecheck`, root `pnpm run lint`, `pnpm run test -- --run`). `vite.config.ts` itself sits outside `tsconfig.json`'s `include` (`src/**/*` only), so it isn't part of the typecheck's own signature, but was written with explicit `Plugin`/`Connect.NextHandleFunction` types regardless. |
 | Cleanup | Preview and dev servers stopped after verification; no background processes left running. |
+
+## Wave 14 — complete social metadata, icon set, and keyboard navigation
+
+Triggered by the enterprise website framework and peer-stack review supplied in November 2026.
+
+| Item | Status |
+|---|---|
+| Open Graph and X large-image previews | **Shipped locally** — added a branded 1200×630 PNG and the complete image URL, secure URL, MIME type, dimensions, alt text, site name, locale, and X card fields. |
+| Preferred canonical host | **Shipped locally** — live verification showed `qualitracker.com` redirects to `www.qualitracker.com`; canonical, Open Graph, JSON-LD, sitemap, and robots now use the final `www` host. |
+| App and browser icons | **Shipped locally** — added 32×32 favicon, 180×180 Apple touch icon, 192×192 and 512×512 manifest icons, theme colour, and `site.webmanifest`. |
+| Structured data | **Shipped locally** — site-wide `Organization` and `WebSite` graph plus expanded `SoftwareApplication` identity, image, language, and publisher references. No ratings, pricing, or social profiles were invented. |
+| Accessibility | **Shipped locally** — keyboard skip link, stable main landmark target, and explicit mobile-menu control relationship. Unknown routes now emit `noindex, follow`. |
+| Verification | 49 automated checks pass, workspace typecheck passes, full production build prerenders all nine routes, local browser console is clean, and generated metadata is present in the static route HTML. Social platform cache validators remain post-deploy checks. |
 
 ## What this plan deliberately does not include
 
