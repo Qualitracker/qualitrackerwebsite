@@ -46,7 +46,7 @@ export function PaperToProof() {
           const missing = paperValue === '';
           return (
             <motion.div
-              key={`${mode}-${day.en}`}
+              key={mode + '-' + day.en}
               initial={reduceMotion ? undefined : { opacity: 0, y: 6 }}
               animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.05 }}

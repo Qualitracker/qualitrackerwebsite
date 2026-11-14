@@ -94,7 +94,7 @@ export function RoadmapBuildLog() {
         <ol className="mt-5 space-y-5">
           {current.entries.map((entry, i) => (
             <motion.li
-              key={`${current.id}-${entry.title.en}`}
+              key={entry.title.en}
               initial={reduceMotion ? undefined : { opacity: 0, y: 8 }}
               animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.08, ease: [0.2, 0, 0.2, 1] }}

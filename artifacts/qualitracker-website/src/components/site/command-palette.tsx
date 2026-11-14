@@ -20,19 +20,24 @@ const COMMANDS: Command[] = [
   { label: { en: 'Talk to the team', sw: 'Ongea na timu' }, hint: { en: 'Partnerships, research, evaluation', sw: 'Ushirikiano, utafiti, tathmini' }, href: '/talk-to-team' },
 ];
 
+function localizeCommand(command: Command, lang: keyof Text) {
+  return { label: command.label[lang], hint: command.hint[lang] };
+}
+
 /** ⌘K / Ctrl+K site navigation. Opens from the nav button or the keyboard. */
 export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [, navigate] = useLocation();
   const { lang, tr } = useI18n();
-  const text = (c: Command) => ({ label: c.label[lang], hint: c.hint[lang] });
   const [query, setQuery] = useState('');
   const [index, setIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? COMMANDS.filter((c) => { const x = text(c); return `${x.label} ${x.hint}`.toLowerCase().includes(q); }) : COMMANDS;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return q ? COMMANDS.filter((command) => {
+      const text = localizeCommand(command, lang);
+      return `${text.label} ${text.hint}`.toLowerCase().includes(q);
+    }) : COMMANDS;
   }, [query, lang]);
 
   useEffect(() => {
@@ -97,8 +102,8 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
               className="flex cursor-pointer items-baseline justify-between gap-4 rounded-md px-3 py-2.5"
               style={{ background: i === index ? 'var(--qt-teal-tint)' : 'transparent' }}
             >
-              <span className="text-[13px] font-semibold" style={{ color: 'var(--qt-near-black)' }}>{text(c).label}</span>
-              <span className="truncate text-[11px]" style={{ color: 'var(--qt-body-grey)' }}>{text(c).hint}</span>
+              <span className="text-[13px] font-semibold" style={{ color: 'var(--qt-near-black)' }}>{localizeCommand(c, lang).label}</span>
+              <span className="truncate text-[11px]" style={{ color: 'var(--qt-body-grey)' }}>{localizeCommand(c, lang).hint}</span>
             </li>
           ))}
         </ul>

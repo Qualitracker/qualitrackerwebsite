@@ -50,7 +50,11 @@ function WaitlistPage() {
       });
       setSubmitted(true);
     } catch (err) {
-      setError(tr('Something went wrong. Please try again.', 'Kuna tatizo limetokea. Tafadhali jaribu tena.'));
+      setError(
+        err instanceof Error && err.message === 'ALREADY_SUBSCRIBED'
+          ? tr('Your interest is already recorded.', 'Nia yako tayari imerekodiwa.')
+          : tr('Something went wrong. Please try again.', 'Kuna tatizo limetokea. Tafadhali jaribu tena.'),
+      );
     } finally {
       setSubmitting(false);
     }

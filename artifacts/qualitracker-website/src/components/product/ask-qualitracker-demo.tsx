@@ -127,7 +127,7 @@ export function AskQualiTrackerDemo() {
           />
           <button
             type="button"
-            onClick={() => selectMode(question.toLowerCase().includes('compare') ? 'missing' : 'found')}
+            onClick={() => selectMode(mode)}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
             style={{ background: 'var(--qt-deep-teal)', color: '#FFFFFF' }}
             aria-label={tr('Send question', 'Tuma swali')}

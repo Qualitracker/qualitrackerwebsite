@@ -63,7 +63,7 @@ export function ShiftHandover() {
             {handedOver ? (
               received.map((item, i) => (
                 <motion.li
-                  key={`${mode}-${item.en}`}
+                  key={mode + '-' + item.en}
                   initial={reduce ? undefined : { opacity: 0, x: -12 }}
                   animate={reduce ? undefined : { opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: i * 0.1 }}
