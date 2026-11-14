@@ -276,7 +276,7 @@ function LandingPage() {
           <Reveal>
             <SectionHeader eyebrow={tr("The quality intelligence graph", "Ramani ya akili ya ubora")} title={tr("Quality management isn't a pile of disconnected documents. It's a connected system.", "Usimamizi wa ubora si rundo la nyaraka zisizounganishwa. Ni mfumo uliounganishwa.")} />
             <p className="mt-5 max-w-[520px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-              {tr("A standard implies a document. A document describes a process. A process produces evidence. Evidence is what an audit checks, and what a finding, a non-conformance, or a CAPA all trace back to. Hover a node to follow the connection.", "Kiwango kinaleta hati. Hati inaeleza mchakato. Mchakato unazalisha ushahidi. Ushahidi ndio ukaguzi unaokagua, na ndio tatizo lililobainika, kutokidhi kiwango, au CAPA vyote hurejea. Weka kielekezi juu ya nodi ili ufuate muunganiko.")}
+              {tr("A standard implies a document. A document describes a process. A process produces evidence. Evidence is what an audit checks, and what a finding, a non-conformance, or a CAPA all trace back to. Preview a node, or select it to keep the connection visible.", "Kiwango kinaleta hati. Hati inaeleza mchakato. Mchakato unazalisha ushahidi. Ushahidi ndio ukaguzi unaokagua, na ndio tatizo lililobainika, kutokidhi kiwango, au CAPA vyote hurejea. Tazama nodi, au ichague ili muunganiko uendelee kuonekana.")}
             </p>
           </Reveal>
           <Reveal delay={0.15} className="mt-6">

@@ -61,7 +61,7 @@ describe('language toggle', () => {
     expect(screen.getByText('Hifadhi ya pamoja / karatasi')).toBeInTheDocument();
     expect(screen.getByText('Beta ya faragha ya eQMS inaanza')).toBeInTheDocument();
     expect(screen.getByText('Uliza QualiBOT')).toBeInTheDocument();
-    expect(screen.getByText('Weka kielekezi au lenga nodi ili uone jinsi inavyounganishwa.')).toBeInTheDocument();
+    expect(screen.getByText('Weka kielekezi, lenga, au gusa nodi kuona muhtasari. Ichague ili mahusiano yake yaendelee kuonekana.')).toBeInTheDocument();
   });
 
   // Value: protects=the RAG demo selects its response from stable UI state, not English copy;

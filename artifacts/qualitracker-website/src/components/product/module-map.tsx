@@ -34,10 +34,12 @@ const LANES: Array<{ status: ProductStatus; title: Text; empty?: Text }> = [
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-');
 
 export function ModuleMap() {
-  const { tx } = useI18n();
+  const { tr, tx } = useI18n();
   const reduce = useReducedMotion();
   const [selected, setSelected] = useState<string>(MODULES[0].label.en);
   const current = MODULES.find((m) => m.label.en === selected) ?? MODULES[0];
+  const currentStage = LANES.findIndex((lane) => lane.status === current.status);
+  const maturity = currentStage < 0 ? 0 : (currentStage / (LANES.length - 1)) * 100;
 
   return (
     <div data-testid="module-map">
@@ -98,6 +100,41 @@ export function ModuleMap() {
           <StatusBadge status={current.status} />
         </div>
         <p className="mt-3 max-w-[620px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>{tx(current.copy)}</p>
+        <div className="mt-6 border-t pt-5" style={{ borderColor: 'var(--qt-border-grey)' }} data-testid="module-maturity-path">
+          <div className="flex items-center justify-between gap-3">
+            <p className="qt-technical-label">{tr('Module maturity path', 'Njia ya ukomavu wa moduli')}</p>
+            <p className="font-mono-ui text-[10px] font-bold" style={{ color: 'var(--qt-deep-teal)' }}>
+              {tr('Stage', 'Hatua')} {currentStage + 1}/{LANES.length}
+            </p>
+          </div>
+          <div className="relative mt-4 px-2">
+            <div className="absolute left-2 right-2 top-[7px] h-px" style={{ background: 'var(--qt-border-grey)' }} aria-hidden="true" />
+            <div className="absolute left-2 right-2 top-[7px]" aria-hidden="true">
+              <div className="h-[2px] transition-[width] duration-300" style={{ background: 'var(--qt-deep-teal)', width: `${maturity}%` }} />
+            </div>
+            <ol className="relative grid grid-cols-4 gap-2">
+              {LANES.map((lane, index) => {
+                const isCurrent = index === currentStage;
+                const reached = index <= currentStage;
+                return (
+                  <li key={lane.status} className="text-center" aria-current={isCurrent ? 'step' : undefined}>
+                    <span
+                      className="mx-auto block h-4 w-4 rounded-full border-2 transition-colors duration-300"
+                      style={{
+                        borderColor: reached ? 'var(--qt-deep-teal)' : 'var(--qt-border-grey)',
+                        background: isCurrent ? 'var(--qt-quality-gold)' : reached ? 'var(--qt-deep-teal)' : '#FFFFFF',
+                      }}
+                      aria-hidden="true"
+                    />
+                    <span className="mt-2 block font-mono-ui text-[9px] font-bold uppercase leading-4 tracking-[.04em]" style={{ color: isCurrent ? 'var(--qt-near-black)' : 'var(--qt-body-grey)' }}>
+                      {tx(lane.title)}
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

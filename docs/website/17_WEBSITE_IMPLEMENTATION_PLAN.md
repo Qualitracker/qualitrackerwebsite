@@ -165,6 +165,19 @@ Triggered by the enterprise website framework and peer-stack review supplied in 
 | Accessibility | **Shipped locally** — keyboard skip link, stable main landmark target, and explicit mobile-menu control relationship. Unknown routes now emit `noindex, follow`. |
 | Verification | 49 automated checks pass, workspace typecheck passes, full production build prerenders all nine routes, local browser console is clean, and generated metadata is present in the static route HTML. Social platform cache validators remain post-deploy checks. |
 
+## Wave 15 — deeper, accessible product interactions
+
+Triggered by the request to improve the site's interactive illustrations before replacing placeholder product screens with real application UI.
+
+| Item | Status |
+|---|---|
+| Quality Intelligence Graph | **Shipped locally** — nodes can now be previewed or locked by mouse, touch, Enter/Space, and arrow-key navigation. The selected node exposes its description plus incoming and outgoing relationships in a live detail panel. |
+| Module map | **Shipped locally** — selecting a module now updates a four-stage maturity path using the module's existing status; no dates or capabilities were invented. |
+| QualiBOT answer pipeline | **Shipped locally** — every stage is directly selectable, Previous/Next controls and a live step count were added, and the same interaction remains available with reduced motion enabled. |
+| Evidence-bound copy | **Corrected** — the final answer state now reports the verified retrieval-threshold result and required human review instead of an unsupported confidence label. |
+| Accessibility | **Verified locally** — touch-sized controls, `aria-pressed`, polite live regions, keyboard focus movement, and reduced-motion behavior are covered by automated tests and rendered checks. |
+| Verification | 51 automated checks pass; workspace typecheck and full production build pass; desktop and iPhone touch flows render without horizontal overflow or browser console errors. |
+
 ## What this plan deliberately does not include
 
 No GSAP, no WebGL/3D, no new animation library, no CMS, no design-token pipeline change — see `12_SKILL_GAP_ANALYSIS.md` for why each was considered and set aside.
