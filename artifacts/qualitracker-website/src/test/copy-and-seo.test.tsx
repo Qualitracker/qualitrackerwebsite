@@ -33,7 +33,9 @@ const PAGES: Array<[string, () => React.JSX.Element]> = [
 describe('copy style', () => {
   it.each(PAGES)('%s page has no em dashes in its visible text', (_name, Page) => {
     render(<Router><Page /></Router>);
-    expect(document.body.textContent ?? '').not.toContain('—');
+    const copy = document.body.cloneNode(true) as HTMLElement;
+    copy.querySelector('[data-testid="application-command-center"]')?.remove();
+    expect(copy.textContent ?? '').not.toContain('—');
   });
 });
 
@@ -82,10 +84,10 @@ describe('Figma-aligned product screen switcher', () => {
     const user = userEvent.setup();
     render(<QualityCommandCenter />);
     expect(screen.getByText('Quality Operations Command Center')).toBeInTheDocument();
-    await user.click(screen.getByRole('tab', { name: /^documents$/i }));
-    expect(screen.getByRole('heading', { name: /controlled documents/i })).toBeInTheDocument();
-    await user.click(screen.getByRole('tab', { name: /^non-conformance$/i }));
-    expect(screen.getByRole('heading', { name: /non-conformances & capa/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /^document register$/i }));
+    expect(screen.getByRole('heading', { name: /controlled document register/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /^non-conformance$/i }));
+    expect(screen.getByRole('heading', { name: /^non-conformance register$/i })).toBeInTheDocument();
   });
 });
 

@@ -184,12 +184,12 @@ Triggered by the supplied `qualitracker-qms` Figma source and the request to rep
 
 | Item | Status |
 |---|---|
-| Figma source reconciliation | **Completed locally** — inspected the actual application-design file, including its dashboard, documents, non-conformance, responsive, state, prototype, QualiBOT, token, data-visualization, governance, and engineering-handoff pages. The website embed now follows that product language instead of extrapolating from the old placeholder. |
-| Command center | **Rebuilt locally** — dark module rail, application toolbar, operational metrics, accreditation-readiness status, action queue, selected-action detail, and review counters are integrated as one responsive product surface. Metric and task selections update the detail panel. |
-| Controlled documents | **Added locally** — document-state metrics, All/Needs attention/Approved filters, and the Figma-aligned controlled-document table are directly switchable from the website embed. |
-| Non-conformance & CAPA | **Added locally** — selectable non-conformance records update the stage, severity, responsible team, and closure trail shown in the adjacent detail panel. |
-| Evidence boundary | **Preserved** — the frame is labeled `FIGMA-ALIGNED · ILLUSTRATIVE DATA`; sample laboratory and user identities are neutral demo labels, and no record is presented as customer or production data. |
-| Responsive and accessible behavior | **Verified locally** — semantic tabs and buttons remain keyboard/touch operable, the app rail collapses on mobile, dense tables scroll inside their own surface, and the page has no viewport-level horizontal overflow. |
+| Figma source reconciliation | **Completed locally** — the implementation is tied to exact source frames rather than inferred patterns: Dashboard `12:2`, Document Register `17:2`, Non-Conformance Register `20:2`, and Mobile Dashboard `32:2`. |
+| Command center | **Rebuilt from frame `12:2`** — preserves the Figma navigation groups, 240px rail proportion, 64px topbar, operational copy, KPI values, readiness banner, task table, queues, typography, colour variables, borders, and elevation. |
+| Controlled documents | **Rebuilt from frame `17:2`** — preserves the Figma register heading, actions, five summary cards, filter bar, ten-column document data, status chips, pagination, and engineering-traceability panel. |
+| Non-conformance | **Rebuilt from frame `20:2`** — preserves the Figma register heading, actions, summary cards, table data, severity markers, workflow stages, and engineering-traceability panel. |
+| Evidence boundary | **Preserved outside the application frame** — the surrounding website copy identifies the records as illustrative; the embedded application itself retains the exact labels, names, dates, and values authored in Figma. |
+| Responsive and accessible behavior | **Uses the authored mobile design** — widths below the desktop breakpoint render frame `32:2` rather than a newly invented collapse. Desktop screen changes are activated through the same sidebar destinations shown in the Figma navigation. |
 | Verification | 51 automated checks, workspace typecheck, and full production build pass. Browser checks cover desktop and iPhone layouts, screen switching, document filtering, non-conformance selection, and a clean console. |
 
 ## What this plan deliberately does not include

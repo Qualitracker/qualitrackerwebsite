@@ -173,8 +173,13 @@
 @layer utilities {
   .font-display { font-family: var(--app-font-serif); }
   .font-brand { font-family: 'Poppins', -apple-system, sans-serif; }
+  .font-figma-display { font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif; }
   .font-mono-ui { font-family: var(--app-font-mono); }
   .text-balance { text-wrap: balance; }
+}
+
+.qt-figma-app {
+  font-family: 'Roboto', Arial, sans-serif;
 }
 
 .qt-site {

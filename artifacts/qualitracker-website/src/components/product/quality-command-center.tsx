@@ -1,143 +1,123 @@
-import { useState, type ReactNode } from 'react';
-import {
-  AlertTriangle,
-  Bell,
-  CheckCircle2,
-  ChevronRight,
-  ClipboardCheck,
-  FileText,
-  FlaskConical,
-  LayoutDashboard,
-  PackageOpen,
-  Search,
-  Settings,
-  ShieldCheck,
-  Wrench,
-} from 'lucide-react';
-import { L, type Text, useI18n } from '@/lib/i18n';
+import { useState, type CSSProperties, type ReactNode } from 'react';
+import lockupMark from '@/assets/figma-app/qualitracker-lockup-mark.svg';
+import mobileSymbol from '@/assets/figma-app/qualitracker-mobile-symbol.svg';
 
 type Surface = 'dashboard' | 'documents' | 'nonconformance';
+type Tone = 'neutral' | 'info' | 'warning' | 'success' | 'critical' | 'accent';
 
-const SURFACES: Array<{ id: Surface; label: Text; icon: typeof LayoutDashboard }> = [
-  { id: 'dashboard', label: L('Command center', 'Kituo cha amri'), icon: LayoutDashboard },
-  { id: 'documents', label: L('Documents', 'Nyaraka'), icon: FileText },
-  { id: 'nonconformance', label: L('Non-conformance', 'Kutokidhi kiwango'), icon: AlertTriangle },
-];
+const FIGMA_TOKENS = {
+  '--figma-nav': '#012e36', '--figma-primary': '#036173', '--figma-nav-item': '#a5ddd7', '--figma-mint': '#6ecbc2',
+  '--figma-canvas': '#f7f9f9', '--figma-sunken': '#eff3f3', '--figma-border': '#cbd4d4', '--figma-border-subtle': '#e2e8e8',
+  '--figma-text': '#131a1b', '--figma-text-secondary': '#4b5758', '--figma-text-tertiary': '#6a7878', '--figma-gold': '#c8a24b',
+} as CSSProperties;
 
-const DASHBOARD_STATS = [
-  { value: '12', label: L('Pending my review', 'Zinasubiri mapitio yangu'), detail: L('3 due today', '3 zinatakiwa leo'), icon: ClipboardCheck },
-  { value: '5', label: L('Approvals awaiting', 'Idhini zinasubiri'), detail: L('2 due within 48h', '2 ndani ya saa 48'), icon: CheckCircle2 },
-  { value: '8', label: L('Open non-conformances', 'Kutokidhi kiwango kuliko wazi'), detail: L('3 past due', '3 zimepitwa na muda'), icon: AlertTriangle },
-  { value: '6', label: L('Equipment tasks due', 'Kazi za vifaa zinatakiwa'), detail: L('2 calibration checks', 'Ukaguzi 2 wa urekebishaji'), icon: Wrench },
-  { value: '4', label: L('Reagent lots near expiry', 'Vitendanishi karibu kuisha'), detail: L('1 expires this week', '1 linaisha wiki hii'), icon: PackageOpen },
+const NAV_GROUPS = [
+  { label: 'Quality', items: [['Non-Conformance', 'nonconformance'], ['QC Review'], ['EQA']] },
+  { label: 'Governance', items: [['Audits'], ['Risk Management'], ['Quality Indicators'], ['Management Review']] },
+  { label: 'Documents', items: [['Document Register', 'documents'], ['Review Queue'], ['Approvals'], ['Read & Acknowledge'], ['Amend'], ['Obsolete']] },
+  { label: 'Preventive Controls', items: [['Temperature'], ['Bench Decontamination'], ['Equipment Maintenance']] },
+  { label: 'Assets & Materials', items: [['Equipment'], ['Reagents'], ['Suppliers']] },
+  { label: 'People', items: [['Competency & Training'], ['Staff Directory']] },
+  { label: 'Administration', items: [['Laboratories'], ['Departments'], ['Users'], ['Roles & Permissions'], ['Geography'], ['Standards & Settings']] },
+  { label: 'Insights', items: [['Reports']] },
 ] as const;
 
-const TASKS = [
-  { id: 'CAPA-014', task: L('Reagent storage deviation', 'Mkengeuko wa uhifadhi wa vitendanishi'), type: L('CAPA review', 'Mapitio ya CAPA'), due: L('Today', 'Leo'), status: L('Under review', 'Inapitiwa'), tone: 'warning' },
-  { id: 'SOP-QMS-04', task: L('Document control procedure', 'Utaratibu wa udhibiti wa nyaraka'), type: L('Document approval', 'Idhini ya hati'), due: L('Tomorrow', 'Kesho'), status: L('Needs approval', 'Inahitaji idhini'), tone: 'warning' },
-  { id: 'NC-2026-041', task: L('Missed incubator temperature check', 'Ukaguzi wa joto la incubator uliokosekana'), type: L('Review 1', 'Mapitio ya 1'), due: L('2 days', 'Siku 2'), status: L('Major', 'Kubwa'), tone: 'error' },
-  { id: 'EQA-MIC-02', task: L('Microbiology EQA submission', 'Uwasilishaji wa EQA wa mikrobiolojia'), type: L('EQA round', 'Mzunguko wa EQA'), due: L('3 days', 'Siku 3'), status: L('Scheduled', 'Imepangwa'), tone: 'neutral' },
-  { id: 'TRN-009', task: L('Internal audit refresher', 'Mafunzo ya ukumbusho wa ukaguzi wa ndani'), type: L('Competency', 'Umahiri'), due: L('5 days', 'Siku 5'), status: L('Training', 'Mafunzo'), tone: 'success' },
+const KPI = [
+  ['12', 'Pending my review', '▲ 3 since Monday', '#036173'], ['5', 'Approvals awaiting', '2 due within 48h', '#8f5e14'],
+  ['8', 'Open non-conformances', '3 overdue closure', '#992121'], ['6', 'Equipment tasks due', '1 calibration overdue', '#992121'],
+  ['4', 'Reagent lots near expiry', '≤ 30 days', '#c8a24b'],
+] as const;
+
+const ACTIONS = [
+  ['SOP-QC-014 Rev C — Internal QC review', 'Doc review', 'Today', 'Under Review', 'warning'],
+  ['NC-2026-041 — Blood culture contamination', 'Non-conf.', '2 Sep', 'Review 2', 'critical'],
+  ['Centrifuge C-07 — Quarterly maintenance', 'Equipment', '3 Sep', 'Scheduled', 'info'],
+  ['EQA Round M-2026-Q3 — Enter results', 'EQA', '5 Sep', 'Testing', 'neutral'],
+  ['POL-BIO-002 — Read & acknowledge', 'Document', '6 Sep', 'Ack. Required', 'accent'],
 ] as const;
 
 const DOCUMENTS = [
-  { id: 'SOP-QMS-04', title: L('Document control procedure', 'Utaratibu wa udhibiti wa nyaraka'), owner: L('Quality office', 'Ofisi ya ubora'), version: 'v4', status: L('Under approval', 'Inasubiri idhini') },
-  { id: 'SOP-MIC-17', title: L('Freezer monitoring', 'Ufuatiliaji wa friza'), owner: L('Microbiology', 'Mikrobiolojia'), version: 'v3', status: L('Approved', 'Imeidhinishwa') },
-  { id: 'POL-QMS-02', title: L('Internal audit policy', 'Sera ya ukaguzi wa ndani'), owner: L('Quality office', 'Ofisi ya ubora'), version: 'v2', status: L('Under review', 'Inapitiwa') },
-  { id: 'WI-EQP-08', title: L('Centrifuge calibration', 'Urekebishaji wa centrifuge'), owner: L('Equipment', 'Vifaa'), version: 'v1', status: L('Pending collaboration', 'Inasubiri ushirikiano') },
+  ['QP-QMS-001', 'Quality Manual', 'Manual', '7', 'A. Kimaro', 'QA', '12 Jan 26', '12 Jan 27', 'Approved', 'success'],
+  ['SOP-BIO-014', 'Blood Culture Processing', 'SOP', '3', 'J. Mafie', 'Micro', '04 Mar 26', '04 Mar 27', 'Approved', 'success'],
+  ['SOP-QC-014', 'Internal Quality Control', 'SOP', 'C', 'L. Massawe', 'QC', '—', '—', 'Under Review', 'warning'],
+  ['POL-BIO-002', 'Specimen Rejection Policy', 'Policy', '2', 'A. Kimaro', 'Micro', '20 Feb 26', '20 Feb 28', 'Ack. Required', 'accent'],
+  ['FRM-EQA-009', 'EQA Result Entry Form', 'Form', '4', 'T. Nkya', 'QA', '01 Jun 26', '01 Jun 27', 'Approved', 'success'],
+  ['SOP-CHE-021', 'Electrolyte Analyser Operation', 'SOP', '1', 'D. Shirima', 'Chem', '—', '—', 'Under Approval', 'info'],
+  ['SOP-BIO-009', 'Gram Stain Procedure', 'SOP', '5', 'J. Mafie', 'Micro', '15 Aug 24', '15 Aug 26', 'Overdue Review', 'critical'],
+  ['WI-STO-003', 'Reagent Receiving Work Instruction', 'WI', '2', 'G. Mushi', 'Stores', '09 Apr 26', '09 Apr 27', 'Approved', 'success'],
+  ['SOP-BIO-004', 'AST Disc Diffusion (CLSI)', 'SOP', '6', 'L. Massawe', 'Micro', '28 Jul 26', '28 Jul 27', 'Approved', 'success'],
+  ['SOP-MOL-002', 'GeneXpert MTB/RIF Testing', 'SOP', '2', 'P. Haule', 'Molec', '—', '—', 'Draft', 'neutral'],
 ] as const;
 
 const NONCONFORMANCES = [
-  { id: 'NC-2026-041', title: L('Missed incubator temperature check', 'Ukaguzi wa joto la incubator uliokosekana'), classification: L('Major', 'Kubwa'), stage: L('Pending review 1', 'Inasubiri mapitio ya 1'), owner: L('Microbiology', 'Mikrobiolojia') },
-  { id: 'NC-2026-039', title: L('Reagent label mismatch', 'Kutolingana kwa lebo ya kitendanishi'), classification: L('Minor', 'Ndogo'), stage: L('Pending review 2', 'Inasubiri mapitio ya 2'), owner: L('Haematology', 'Hematolojia') },
-  { id: 'NC-2026-036', title: L('Calibration record gap', 'Pengo katika rekodi ya urekebishaji'), classification: L('Major', 'Kubwa'), stage: L('Pending closure', 'Inasubiri kufungwa'), owner: L('Equipment', 'Vifaa') },
+  ['NC-2026-041', 'Blood culture bottles contaminated on receipt', 'Internal audit', 'P0', 'J. Mafie', '24 Aug', '07 Sep', 'Review 2 Pending', 'critical'],
+  ['NC-2026-040', 'EQA Chemistry Round Q2 — 2 analytes outside', 'EQA', 'P1', 'D. Shirima', '19 Aug', '02 Sep', 'Review 1 Complete', 'warning'],
+  ['NC-2026-039', 'Centrifuge C-03 temperature excursion during', 'Equipment', 'P1', 'L. Massawe', '15 Aug', '29 Aug', 'Overdue', 'critical'],
+  ['NC-2026-038', 'SOP not followed — specimen labelling', 'Supervisor obs.', 'P2', 'A. Kimaro', '12 Aug', '26 Aug', 'Under Review 1', 'info'],
+  ['NC-2026-037', 'Reagent lot failed lot-to-lot verification', 'Reagents', 'P1', 'G. Mushi', '08 Aug', '22 Aug', 'Closed', 'success'],
 ] as const;
 
-const DOCUMENT_SUMMARY: Array<[Text, string]> = [
-  [L('Draft', 'Rasimu'), '6'],
-  [L('Pending collaboration', 'Inasubiri ushirikiano'), '4'],
-  [L('Under review', 'Inapitiwa'), '8'],
-  [L('Approved', 'Imeidhinishwa'), '43'],
-];
+function StatusChip({ children, tone }: { children: ReactNode; tone: Tone }) {
+  const styles: Record<Tone, CSSProperties> = {
+    neutral: { background: '#eff3f3', borderColor: '#cbd4d4', color: '#343f40' }, info: { background: '#deebf6', borderColor: '#84b4da', color: '#124f80' },
+    warning: { background: '#fbeed6', borderColor: '#e4b673', color: '#8f5e14' }, success: { background: '#dcf0e4', borderColor: '#7bc79c', color: '#155c34' },
+    critical: { background: '#fadede', borderColor: '#e48f8f', color: '#992121' }, accent: { background: '#f6edd6', borderColor: '#c8a24b', color: '#a9832f' },
+  };
+  return <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-[3px] text-[12px] font-medium leading-4" style={styles[tone]}><span className="h-1.5 w-1.5 rounded-full bg-current" />{children}</span>;
+}
 
-function StatusPill({ children, tone = 'neutral' }: { children: ReactNode; tone?: string }) {
-  const styles = tone === 'error'
-    ? { background: '#FDECEC', color: 'var(--qt-error)' }
-    : tone === 'warning'
-      ? { background: '#FFF7DD', color: '#7A5B00' }
-      : tone === 'success'
-        ? { background: '#EAF7EE', color: '#196B36' }
-        : { background: 'var(--qt-lab-grey)', color: 'var(--qt-body-grey)' };
-  return <span className="inline-flex rounded-full px-2 py-1 font-mono-ui text-[8px] font-bold uppercase tracking-[.04em]" style={styles}>{children}</span>;
+function Sidebar({ surface, setSurface }: { surface: Surface; setSurface: (surface: Surface) => void }) {
+  return <aside className="flex h-full min-h-[1024px] flex-col border-r py-[14px] text-white" style={{ background: 'var(--figma-nav)', borderColor: 'var(--figma-primary)' }} aria-label="Application navigation">
+    <div className="flex items-center gap-[9px] px-4 py-[14px]"><img src={lockupMark} width="24" height="27" alt="" /><span className="font-figma-display text-[20px] font-bold"><span>Quali</span><span style={{ color: 'var(--figma-mint)' }}>Tracker</span></span></div>
+    <button type="button" onClick={() => setSurface('dashboard')} className="qt-focus flex min-h-6 w-full items-center gap-2.5 border-l-[3px] px-5 py-1 text-left text-[13px] font-medium" style={{ borderColor: surface === 'dashboard' ? 'var(--figma-primary)' : 'transparent', background: surface === 'dashboard' ? 'var(--figma-primary)' : 'transparent', color: surface === 'dashboard' ? '#fff' : 'var(--figma-nav-item)' }}><span className="h-1.5 w-1.5 rounded-full bg-current" />Dashboard</button>
+    {NAV_GROUPS.map((group) => <div key={group.label} className="w-full"><p className="mt-2 bg-white px-5 pb-0.5 pt-2 text-[10px] font-bold uppercase leading-[14px] tracking-[1.2px]" style={{ color: 'var(--figma-mint)' }}>{group.label}</p>{group.items.map(([label, target]) => { const selected = target === surface; return <button key={label} type="button" disabled={!target} onClick={() => target && setSurface(target)} className="qt-focus flex min-h-6 w-full items-center gap-2.5 border-l-[3px] px-5 py-1 text-left text-[13px] font-medium disabled:cursor-default" style={{ borderColor: selected ? 'var(--figma-primary)' : 'transparent', background: selected ? 'var(--figma-primary)' : 'transparent', color: selected ? '#fff' : 'var(--figma-nav-item)' }}><span className="h-1.5 w-1.5 rounded-full bg-current" />{label}</button>; })}</div>)}
+  </aside>;
+}
+
+function Topbar() {
+  return <div className="flex h-16 items-center gap-4 border-b bg-white px-6" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="hidden shrink-0 items-center gap-2 rounded-full border py-[5px] pl-2.5 pr-3 lg:flex" style={{ background: '#eef8f6', borderColor: '#84b4da' }}><span className="h-2 w-2 rounded-full" style={{ background: '#155c34' }} /><span className="text-[12px] font-medium">Mikocheni Regional Lab</span><span className="text-[12px]" style={{ color: 'var(--figma-text-tertiary)' }}>· Microbiology</span></div><div className="flex min-w-0 flex-1 items-center gap-2 rounded-md border px-3 py-2 text-[13px]" style={{ background: 'var(--figma-canvas)', borderColor: 'var(--figma-border)', color: 'var(--figma-text-tertiary)' }}><span>⌕</span><span className="truncate">Search documents, NCs, equipment…</span></div><span className="text-[15px]" style={{ color: 'var(--figma-text-secondary)' }}>?</span><span className="rounded-md border p-1 text-[16px] leading-[18px]" style={{ background: 'var(--figma-canvas)', borderColor: 'var(--figma-border)' }}>🔔</span><div className="hidden items-center gap-2 xl:flex"><span className="grid h-7 w-7 place-items-center rounded-full border text-[11px] font-medium" style={{ background: '#f6edd6', borderColor: 'var(--figma-border-subtle)', color: '#a9832f' }}>JM</span><span className="leading-4"><strong className="block text-[12px] font-medium">Justin Mafie</strong><span className="block text-[12px]" style={{ color: 'var(--figma-text-tertiary)' }}>Quality Manager</span></span></div></div>;
 }
 
 export function QualityCommandCenter() {
-  const { tr, tx } = useI18n();
   const [surface, setSurface] = useState<Surface>('dashboard');
-  const [selectedTask, setSelectedTask] = useState<string>(TASKS[0].id);
-  const [documentFilter, setDocumentFilter] = useState<'all' | 'review' | 'approved'>('all');
-  const [selectedNc, setSelectedNc] = useState<string>(NONCONFORMANCES[0].id);
-  const activeTask = TASKS.find((task) => task.id === selectedTask) ?? TASKS[0];
-  const activeNc = NONCONFORMANCES.find((item) => item.id === selectedNc) ?? NONCONFORMANCES[0];
-  const visibleDocuments = DOCUMENTS.filter((document) => documentFilter === 'all' || (documentFilter === 'approved' ? document.status.en === 'Approved' : document.status.en !== 'Approved'));
-
-  return (
-    <div className="overflow-hidden rounded-xl border bg-white qt-shadow-overlay" style={{ borderColor: 'var(--qt-border-grey)' }} data-testid="application-command-center">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3" style={{ borderColor: 'var(--qt-border-grey)' }}>
-        <div role="tablist" aria-label={tr('Application screen', 'Skrini ya programu')} className="flex flex-wrap gap-1.5">
-          {SURFACES.map((item) => {
-            const Icon = item.icon;
-            const selected = surface === item.id;
-            return <button key={item.id} role="tab" type="button" aria-selected={selected} onClick={() => setSurface(item.id)} className="qt-focus flex min-h-9 items-center gap-2 rounded-md border px-3 text-[10px] font-bold" style={{ borderColor: selected ? 'var(--qt-deep-teal)' : 'var(--qt-border-grey)', background: selected ? 'var(--qt-deep-teal)' : '#FFFFFF', color: selected ? '#FFFFFF' : 'var(--qt-near-black)' }}><Icon size={13} />{tx(item.label)}</button>;
-          })}
-        </div>
-        <span className="font-mono-ui text-[8px] uppercase tracking-[.08em]" style={{ color: 'var(--qt-body-grey)' }}>{tr('Figma-aligned · Illustrative data', 'Kulingana na Figma · Data ya mfano')}</span>
-      </div>
-
-      <div className="grid min-h-[590px] lg:grid-cols-[190px_minmax(0,1fr)]">
-        <aside className="hidden flex-col p-3 lg:flex" style={{ background: '#063E47', color: '#FFFFFF' }} aria-label={tr('Application navigation', 'Urambazaji wa programu')}>
-          <div className="flex items-center gap-2 border-b px-2 pb-4" style={{ borderColor: 'rgba(255,255,255,.16)' }}><span className="grid h-7 w-7 place-items-center rounded-md" style={{ background: 'var(--qt-light-teal)', color: '#063E47' }}><ShieldCheck size={16} /></span><div><p className="font-brand text-xs font-bold">QualiTracker</p><p className="font-mono-ui text-[7px] uppercase tracking-[.08em]" style={{ color: 'rgba(255,255,255,.65)' }}>eQMS</p></div></div>
-          <nav className="mt-4 space-y-1">{SURFACES.map((item) => { const Icon = item.icon; const selected = surface === item.id; return <button key={item.id} type="button" onClick={() => setSurface(item.id)} className="qt-focus flex w-full min-h-9 items-center gap-2 rounded-md px-2 text-left text-[10px] font-semibold" style={{ background: selected ? 'rgba(95,191,193,.18)' : 'transparent', color: selected ? '#FFFFFF' : 'rgba(255,255,255,.72)' }}><Icon size={13} />{tx(item.label)}</button>; })}</nav>
-          <div className="mt-4 border-t pt-4" style={{ borderColor: 'rgba(255,255,255,.16)' }}><p className="px-2 font-mono-ui text-[7px] uppercase tracking-[.1em]" style={{ color: 'rgba(255,255,255,.48)' }}>{tr('Quality modules', 'Moduli za ubora')}</p>{[L('QC review', 'Mapitio ya QC'), L('Reagents', 'Vitendanishi'), L('Equipment', 'Vifaa'), L('Audits', 'Ukaguzi')].map((label) => <div key={label.en} className="mt-1 flex items-center gap-2 rounded-md px-2 py-2 text-[9px]" style={{ color: 'rgba(255,255,255,.62)' }}><FlaskConical size={11} />{tx(label)}</div>)}</div>
-          <div className="mt-auto flex items-center gap-2 border-t px-2 pt-4 text-[9px]" style={{ borderColor: 'rgba(255,255,255,.16)' }}><Settings size={12} />{tr('Standards & settings', 'Viwango na mipangilio')}</div>
-        </aside>
-
-        <div className="min-w-0" style={{ background: '#F7F8F8' }}>
-          <div className="flex min-h-12 items-center gap-3 border-b bg-white px-4" style={{ borderColor: 'var(--qt-border-grey)' }}>
-            <button type="button" className="qt-focus hidden min-h-8 rounded-md border px-2 text-[9px] font-semibold sm:block" style={{ borderColor: 'var(--qt-border-grey)' }}>{tr('Demo reference lab', 'Maabara ya marejeo ya mfano')}</button>
-            <label className="relative min-w-0 flex-1"><Search className="absolute left-2.5 top-1/2 -translate-y-1/2" size={12} style={{ color: 'var(--qt-body-grey)' }} /><span className="sr-only">{tr('Search the application', 'Tafuta katika programu')}</span><input className="qt-focus h-8 w-full rounded-md border bg-white pl-8 pr-3 text-[9px]" style={{ borderColor: 'var(--qt-border-grey)' }} placeholder={tr('Search documents, NCs, equipment…', 'Tafuta nyaraka, NC, vifaa…')} /></label>
-            <button type="button" className="qt-focus relative grid h-8 w-8 place-items-center rounded-md" aria-label={tr('Notifications', 'Arifa')}><Bell size={13} /><span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full" style={{ background: 'var(--qt-error)' }} /></button>
-            <div className="hidden text-right sm:block"><p className="text-[9px] font-bold">{tr('Demo user', 'Mtumiaji wa mfano')}</p><p className="text-[7px]" style={{ color: 'var(--qt-body-grey)' }}>{tr('Quality manager', 'Meneja wa ubora')}</p></div>
-          </div>
-
-          {surface === 'dashboard' && <DashboardScreen selectedTask={selectedTask} setSelectedTask={setSelectedTask} activeTask={activeTask} />}
-          {surface === 'documents' && <DocumentsScreen filter={documentFilter} setFilter={setDocumentFilter} documents={visibleDocuments} />}
-          {surface === 'nonconformance' && <NonConformanceScreen selectedNc={selectedNc} setSelectedNc={setSelectedNc} activeNc={activeNc} />}
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="qt-figma-app overflow-hidden rounded-[10px] border bg-white qt-shadow-overlay" style={{ ...FIGMA_TOKENS, borderColor: 'var(--figma-border-subtle)', color: 'var(--figma-text)' }} data-testid="application-command-center"><div className="hidden min-h-[1024px] grid-cols-[16.667%_83.333%] md:grid"><Sidebar surface={surface} setSurface={setSurface} /><main className="min-w-0" style={{ background: 'var(--figma-canvas)' }}><Topbar />{surface === 'dashboard' ? <Dashboard /> : surface === 'documents' ? <DocumentRegister /> : <NonConformanceRegister />}</main></div><div className="md:hidden"><MobileDashboard /></div></div>;
 }
 
-function DashboardScreen({ selectedTask, setSelectedTask, activeTask }: { selectedTask: string; setSelectedTask: (id: string) => void; activeTask: (typeof TASKS)[number] }) {
-  const { tr, tx } = useI18n();
-  return <div className="p-4 sm:p-5" aria-live="polite">
-    <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="qt-technical-label">{tr('Dashboard', 'Dashibodi')}</p><h3 className="mt-1 font-brand text-lg font-bold">{tr('Quality Operations Command Center', 'Kituo cha Amri cha Uendeshaji wa Ubora')}</h3><p className="mt-1 text-[9px]" style={{ color: 'var(--qt-body-grey)' }}>{tr('Microbiology · Week of 5 Oct 2026', 'Mikrobiolojia · Wiki ya 5 Okt 2026')}</p></div><StatusPill tone="success">{tr('Lab view active', 'Mwonekano wa maabara unatumika')}</StatusPill></div>
-    <div className="mt-4 grid grid-cols-2 gap-2 xl:grid-cols-5">{DASHBOARD_STATS.map((stat, index) => { const Icon = stat.icon; return <button key={stat.label.en} type="button" onClick={() => setSelectedTask(TASKS[index].id)} className="qt-focus rounded-lg border bg-white p-3 text-left" style={{ borderColor: 'var(--qt-border-grey)' }}><div className="flex items-start justify-between gap-2"><span className="font-brand text-xl font-bold">{stat.value}</span><Icon size={14} style={{ color: 'var(--qt-deep-teal)' }} /></div><p className="mt-2 text-[9px] font-semibold leading-4">{tx(stat.label)}</p><p className="mt-1 text-[8px]" style={{ color: 'var(--qt-body-grey)' }}>{tx(stat.detail)}</p></button>; })}</div>
-    <div className="mt-3 flex items-center gap-3 rounded-md border px-3 py-2.5" style={{ borderColor: '#E6D49A', background: '#FFF9E8' }}><ShieldCheck size={15} style={{ color: 'var(--qt-gold-text)' }} /><div className="min-w-0 flex-1"><p className="text-[9px] font-bold">{tr('Accreditation readiness · 41% ready for audit', 'Utayari wa ithibati · 41% tayari kwa ukaguzi')}</p><div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white"><div className="h-full w-[41%]" style={{ background: 'var(--qt-quality-gold)' }} /></div></div><ChevronRight size={13} /></div>
-    <div className="mt-4 grid gap-3 xl:grid-cols-[1.5fr_.75fr]">
-      <div className="overflow-hidden rounded-lg border bg-white" style={{ borderColor: 'var(--qt-border-grey)' }}><div className="flex items-center justify-between border-b px-3 py-2.5" style={{ borderColor: 'var(--qt-border-grey)' }}><p className="text-[10px] font-bold">{tr('Requires your action', 'Inahitaji hatua yako')}</p><span className="text-[8px]" style={{ color: 'var(--qt-deep-teal)' }}>{tr('View all', 'Ona zote')}</span></div><div className="overflow-x-auto"><table className="w-full min-w-[520px] text-left"><thead><tr className="font-mono-ui text-[7px] uppercase tracking-[.06em]" style={{ color: 'var(--qt-body-grey)' }}><th className="px-3 py-2">{tr('Item', 'Kipengee')}</th><th className="px-3 py-2">{tr('Type', 'Aina')}</th><th className="px-3 py-2">{tr('Due', 'Mwisho')}</th><th className="px-3 py-2">{tr('Status', 'Hali')}</th></tr></thead><tbody>{TASKS.map((task) => <tr key={task.id} onClick={() => setSelectedTask(task.id)} className="cursor-pointer border-t text-[8px]" style={{ borderColor: 'var(--qt-border-grey)', background: selectedTask === task.id ? 'var(--qt-teal-tint)' : '#FFFFFF' }}><td className="px-3 py-2.5"><span className="font-mono-ui font-bold" style={{ color: 'var(--qt-deep-teal)' }}>{task.id}</span><span className="ml-2">{tx(task.task)}</span></td><td className="px-3 py-2.5">{tx(task.type)}</td><td className="px-3 py-2.5">{tx(task.due)}</td><td className="px-3 py-2.5"><StatusPill tone={task.tone}>{tx(task.status)}</StatusPill></td></tr>)}</tbody></table></div></div>
-      <div className="space-y-3"><div className="rounded-lg border bg-white p-3" style={{ borderColor: 'var(--qt-border-grey)' }}><div className="flex items-center justify-between"><p className="text-[10px] font-bold">{tr('Selected action', 'Hatua iliyochaguliwa')}</p><ClipboardCheck size={13} style={{ color: 'var(--qt-deep-teal)' }} /></div><p className="mt-3 font-mono-ui text-[9px] font-bold" style={{ color: 'var(--qt-deep-teal)' }}>{activeTask.id}</p><p className="mt-1 text-[10px] font-semibold leading-4">{tx(activeTask.task)}</p><p className="mt-2 text-[8px] leading-4" style={{ color: 'var(--qt-body-grey)' }}>{tr('Review its evidence, owner, due date, and complete audit trail.', 'Pitia ushahidi, mmiliki, tarehe ya mwisho, na historia kamili ya ukaguzi.')}</p></div>{[L('QC runs to review', 'Vipimo vya QC vya kupitia'), L('EQA rounds in progress', 'Mizunguko ya EQA inayoendelea'), L('Competency renewals', 'Upyaji wa umahiri')].map((label, i) => <button key={label.en} type="button" className="qt-focus flex w-full items-center justify-between rounded-lg border bg-white p-3 text-left" style={{ borderColor: 'var(--qt-border-grey)' }}><span className="text-[9px] font-semibold">{tx(label)}</span><StatusPill tone={i === 0 ? 'warning' : i === 1 ? 'success' : 'error'}>{[6, 3, 2][i]}</StatusPill></button>)}</div>
-    </div>
-  </div>;
+function Dashboard() {
+  return <div className="p-7 lg:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>Dashboard</p><h3 className="font-figma-display mt-1 text-[28px] font-bold leading-[34px]">Quality Operations Command Center</h3><p className="mt-1 text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>Mikocheni Regional Lab · Microbiology · Week of 1 Sep 2026 · ISO 15189 · SLIPTA Level 3</p></div><button type="button" className="qt-focus mt-5 shrink-0 rounded-md px-4 py-2.5 text-[14px] font-medium text-white" style={{ background: 'var(--figma-primary)' }}>＋ Log an event</button></div><div className="mt-6 grid grid-cols-5 gap-4">{KPI.map(([value, label, trend, color]) => <div key={label} className="rounded-[10px] border bg-white px-[18px] py-4 shadow-[0_4px_12px_-2px_rgba(13,23,23,.06),0_1px_3px_rgba(13,23,23,.08)]" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="h-[3px] w-9" style={{ background: color }} /><p className="font-figma-display mt-1.5 text-[30px] font-bold leading-[34px]">{value}</p><p className="mt-1 text-[13px] font-medium leading-4" style={{ color: 'var(--figma-text-secondary)' }}>{label}</p><p className="mt-1.5 text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>{trend}</p></div>)}</div><div className="mt-6 flex items-center gap-3 rounded-md border px-4 py-3" style={{ background: '#f6edd6', borderColor: '#c8a24b' }}><span style={{ color: '#a9832f' }}>◇</span><div className="flex-1"><p className="text-[13px] font-medium">Accreditation readiness — 82% ready for SLIPTA re-audit</p><p className="text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>11 of 12 checklist areas green. Competency renewals is the open area.</p></div><span className="rounded px-2 py-1 text-[10px] font-bold uppercase tracking-[1.2px]" style={{ background: 'white', color: '#a9832f' }}>Future enhancement</span></div><div className="mt-6 grid grid-cols-[minmax(0,2.09fr)_minmax(230px,1fr)] gap-6"><ActionTable /><DashboardQueues /></div></div>;
 }
 
-function DocumentsScreen({ filter, setFilter, documents }: { filter: 'all' | 'review' | 'approved'; setFilter: (filter: 'all' | 'review' | 'approved') => void; documents: typeof DOCUMENTS[number][] }) {
-  const { tr, tx } = useI18n();
-  return <div className="p-4 sm:p-5" aria-live="polite"><p className="qt-technical-label">{tr('Document control', 'Udhibiti wa nyaraka')}</p><h3 className="mt-1 font-brand text-lg font-bold">{tr('Controlled documents', 'Nyaraka zinazodhibitiwa')}</h3><p className="mt-1 text-[9px]" style={{ color: 'var(--qt-body-grey)' }}>{tr('Draft, collaborate, review, approve, and retain every version.', 'Andaa, shirikiana, pitia, idhinisha, na hifadhi kila toleo.')}</p><div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">{DOCUMENT_SUMMARY.map(([label, value]) => <div key={label.en} className="rounded-lg border bg-white p-3" style={{ borderColor: 'var(--qt-border-grey)' }}><p className="font-brand text-xl font-bold">{value}</p><p className="mt-1 text-[8px]" style={{ color: 'var(--qt-body-grey)' }}>{tx(label)}</p></div>)}</div><div className="mt-4 flex flex-wrap gap-2" role="group" aria-label={tr('Document filter', 'Kichujio cha nyaraka')}>{(['all', 'review', 'approved'] as const).map((item) => <button key={item} type="button" aria-pressed={filter === item} onClick={() => setFilter(item)} className="qt-focus min-h-8 rounded-md border px-3 text-[9px] font-semibold" style={{ borderColor: filter === item ? 'var(--qt-deep-teal)' : 'var(--qt-border-grey)', background: filter === item ? 'var(--qt-teal-tint)' : '#FFFFFF' }}>{item === 'all' ? tr('All documents', 'Nyaraka zote') : item === 'review' ? tr('Needs attention', 'Inahitaji hatua') : tr('Approved', 'Imeidhinishwa')}</button>)}</div><div className="mt-3 overflow-hidden rounded-lg border bg-white" style={{ borderColor: 'var(--qt-border-grey)' }}><div className="overflow-x-auto"><table className="w-full min-w-[560px] text-left"><thead><tr className="font-mono-ui text-[7px] uppercase" style={{ color: 'var(--qt-body-grey)' }}><th className="px-4 py-3">ID</th><th className="px-4 py-3">{tr('Document', 'Hati')}</th><th className="px-4 py-3">{tr('Owner', 'Mmiliki')}</th><th className="px-4 py-3">{tr('Version', 'Toleo')}</th><th className="px-4 py-3">{tr('Status', 'Hali')}</th></tr></thead><tbody>{documents.map((document) => <tr key={document.id} className="border-t text-[9px]" style={{ borderColor: 'var(--qt-border-grey)' }}><td className="px-4 py-3 font-mono-ui font-bold" style={{ color: 'var(--qt-deep-teal)' }}>{document.id}</td><td className="px-4 py-3 font-semibold">{tx(document.title)}</td><td className="px-4 py-3">{tx(document.owner)}</td><td className="px-4 py-3 font-mono-ui">{document.version}</td><td className="px-4 py-3"><StatusPill tone={document.status.en === 'Approved' ? 'success' : 'warning'}>{tx(document.status)}</StatusPill></td></tr>)}</tbody></table></div></div></div>;
+function ActionTable() {
+  return <section className="overflow-hidden rounded-[10px] border bg-white shadow-[0_4px_12px_-2px_rgba(13,23,23,.06),0_1px_3px_rgba(13,23,23,.08)]" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="flex items-center justify-between border-b px-[18px] py-[14px]" style={{ borderColor: 'var(--figma-border-subtle)' }}><h4 className="text-[16px] font-medium leading-[22px]">Requires your action</h4><button type="button" className="qt-focus text-[12px] font-medium" style={{ color: 'var(--figma-primary)' }}>View all</button></div><div className="overflow-x-auto"><table className="w-full min-w-[690px] table-fixed text-left"><thead><tr className="text-[11px] font-medium uppercase leading-4 tracking-[.6px]" style={{ background: 'var(--figma-sunken)', color: 'var(--figma-text-tertiary)' }}><th className="w-[44%] px-[18px] py-[9px]">Item</th><th className="w-[18%] px-3 py-[9px]">Type</th><th className="w-[11%] px-3 py-[9px]">Due</th><th className="w-[20%] px-3 py-[9px]">Status</th><th className="px-2 py-[9px]" /></tr></thead><tbody>{ACTIONS.map(([item, type, due, status, tone]) => <tr key={item} className="border-t text-[13px] leading-[18px]" style={{ borderColor: 'var(--figma-border-subtle)' }}><td className="truncate px-[18px] py-3">{item}</td><td className="px-3 py-3">{type}</td><td className="px-3 py-3">{due}</td><td className="px-3 py-3"><StatusChip tone={tone}>{status}</StatusChip></td><td className="px-2 py-3 text-[12px] font-medium" style={{ color: 'var(--figma-primary)' }}>Open →</td></tr>)}</tbody></table></div></section>;
 }
 
-function NonConformanceScreen({ selectedNc, setSelectedNc, activeNc }: { selectedNc: string; setSelectedNc: (id: string) => void; activeNc: typeof NONCONFORMANCES[number] }) {
-  const { tr, tx } = useI18n();
-  return <div className="p-4 sm:p-5" aria-live="polite"><p className="qt-technical-label">{tr('Corrective action lifecycle', 'Mzunguko wa hatua za marekebisho')}</p><h3 className="mt-1 font-brand text-lg font-bold">{tr('Non-conformances & CAPA', 'Kutokidhi kiwango na CAPA')}</h3><p className="mt-1 text-[9px]" style={{ color: 'var(--qt-body-grey)' }}>{tr('Every finding is classified, assigned, independently reviewed, and tracked to closure.', 'Kila tatizo linaainishwa, linakabidhiwa, linapitiwa kwa uhuru, na kufuatiliwa hadi kufungwa.')}</p><div className="mt-4 grid gap-3 lg:grid-cols-[1.2fr_.8fr]"><div className="overflow-hidden rounded-lg border bg-white" style={{ borderColor: 'var(--qt-border-grey)' }}>{NONCONFORMANCES.map((item) => <button key={item.id} type="button" onClick={() => setSelectedNc(item.id)} className="qt-focus flex w-full items-center gap-3 border-b p-3 text-left last:border-b-0" style={{ borderColor: 'var(--qt-border-grey)', background: selectedNc === item.id ? 'var(--qt-teal-tint)' : '#FFFFFF' }}><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full" style={{ background: item.classification.en === 'Major' ? '#FDECEC' : '#FFF7DD', color: item.classification.en === 'Major' ? 'var(--qt-error)' : '#7A5B00' }}><AlertTriangle size={14} /></span><span className="min-w-0 flex-1"><span className="block font-mono-ui text-[8px] font-bold" style={{ color: 'var(--qt-deep-teal)' }}>{item.id}</span><span className="mt-1 block truncate text-[9px] font-semibold">{tx(item.title)}</span><span className="mt-1 block text-[8px]" style={{ color: 'var(--qt-body-grey)' }}>{tx(item.owner)} · {tx(item.stage)}</span></span><ChevronRight size={13} /></button>)}</div><div className="rounded-lg border bg-white p-4" style={{ borderColor: 'var(--qt-border-grey)' }}><div className="flex items-center justify-between"><p className="font-mono-ui text-[9px] font-bold" style={{ color: 'var(--qt-deep-teal)' }}>{activeNc.id}</p><StatusPill tone={activeNc.classification.en === 'Major' ? 'error' : 'warning'}>{tx(activeNc.classification)}</StatusPill></div><h4 className="mt-3 font-brand text-sm font-bold">{tx(activeNc.title)}</h4><dl className="mt-4 space-y-3 text-[9px]"><div><dt className="qt-technical-label">{tr('Current stage', 'Hatua ya sasa')}</dt><dd className="mt-1 font-semibold">{tx(activeNc.stage)}</dd></div><div><dt className="qt-technical-label">{tr('Responsible team', 'Timu inayohusika')}</dt><dd className="mt-1 font-semibold">{tx(activeNc.owner)}</dd></div></dl><div className="mt-5 flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ background: 'var(--qt-deep-teal)' }} /><div className="h-px flex-1" style={{ background: 'var(--qt-border-grey)' }} /><span className="h-2 w-2 rounded-full" style={{ background: 'var(--qt-quality-gold)' }} /><div className="h-px flex-1" style={{ background: 'var(--qt-border-grey)' }} /><span className="h-2 w-2 rounded-full" style={{ background: 'var(--qt-border-grey)' }} /></div><p className="mt-3 text-[8px] leading-4" style={{ color: 'var(--qt-body-grey)' }}>{tr('Evidence and reviewer decisions remain attached to the record through closure.', 'Ushahidi na maamuzi ya wakaguzi hubaki kwenye rekodi hadi kufungwa.')}</p></div></div></div>;
+const QUEUES = [
+  ['QC runs to review', [['Chemistry panel — L1 & L2', 'AU480 · 1 Westgard flag (1-2s)', 'Warning', 'warning'], ['Haematology — 3-part diff', 'XN-550 · in control', 'In Control', 'success']]],
+  ['EQA rounds in progress', [['M-2026-Q3 Microbiology', 'OneWorld · samples received', 'Testing', 'neutral'], ['C-2026-Q3 Chemistry', 'RCPA · results submitted', 'Under Review', 'info']]],
+  ['Temperature charts due', [['Vaccine fridge F-02 — August', '3 readings missing · sign-off due', 'Overdue', 'critical'], ['Reagent fridge F-05 — August', 'complete · awaiting review', 'Under Review', 'warning']]],
+  ['Competency renewals', [['Gram stain — 2 staff', 'expires within 30 days', 'Renewal Due', 'accent'], ['Malaria RDT — 1 staff', 'lapsed', 'Expired', 'critical']]],
+] as const;
+
+function DashboardQueues() { return <div className="space-y-5">{QUEUES.map(([title, rows]) => <section key={title} className="overflow-hidden rounded-[10px] border bg-white shadow-[0_4px_12px_-2px_rgba(13,23,23,.06),0_1px_3px_rgba(13,23,23,.08)]" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="flex items-center justify-between border-b px-[18px] py-[14px]" style={{ borderColor: 'var(--figma-border-subtle)' }}><h4 className="text-[16px] font-medium leading-[22px]">{title}</h4><span className="text-[12px] font-medium" style={{ color: 'var(--figma-primary)' }}>View all</span></div>{rows.map(([name, detail, status, tone]) => <div key={name} className="flex items-center gap-2.5 border-b px-[18px] py-[11px] last:border-b-0" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="min-w-0 flex-1"><p className="truncate text-[12px] font-medium leading-4">{name}</p><p className="truncate text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>{detail}</p></div><StatusChip tone={tone}>{status}</StatusChip></div>)}</section>)}</div>; }
+
+function SummaryCards({ items }: { items: readonly (readonly [string, string])[] }) { return <div className="mt-6 grid grid-cols-5 gap-4">{items.map(([value, label]) => <div key={label} className="rounded-[10px] border bg-white px-4 py-3.5" style={{ borderColor: 'var(--figma-border-subtle)' }}><p className="font-figma-display text-[24px] font-bold leading-7">{value}</p><p className="mt-1 text-[12px] leading-4" style={{ color: 'var(--figma-text-secondary)' }}>{label}</p></div>)}</div>; }
+
+function DocumentRegister() {
+  const summary = [['214', 'Controlled documents'], ['6', 'Due for review ≤30d'], ['3', 'Under review'], ['2', 'Under approval'], ['18', 'Awaiting your acknowledgment']] as const;
+  return <div className="p-7 lg:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>Documents / Controlled Document Register</p><h3 className="font-figma-display mt-1 text-[28px] font-bold leading-[34px]">Controlled Document Register</h3></div><div className="flex gap-2"><button type="button" className="qt-focus rounded-md px-4 py-2.5 text-[14px] font-medium text-white" style={{ background: 'var(--figma-primary)' }}>＋ Create document</button><button type="button" className="qt-focus rounded-md border bg-white px-4 py-2.5 text-[14px] font-medium" style={{ borderColor: 'var(--figma-border)' }}>Export</button></div></div><SummaryCards items={summary} /><div className="mt-6 flex gap-2"><div className="min-w-0 flex-1 rounded-md border bg-white px-3 py-2 text-[13px]" style={{ borderColor: 'var(--figma-border)', color: 'var(--figma-text-tertiary)' }}>⌕ &nbsp; Search documents…</div>{['Type: All', 'Department: All', 'Status: All', 'Effective date', '⚙ Columns'].map((item) => <button key={item} type="button" className="qt-focus shrink-0 rounded-md border bg-white px-3 py-2 text-[12px]" style={{ borderColor: 'var(--figma-border)' }}>{item}{item.includes('All') ? ' ▾' : ''}</button>)}</div><div className="mt-6 overflow-hidden rounded-[10px] border bg-white" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="overflow-x-auto"><table className="w-full min-w-[930px] text-left"><thead><tr className="text-[11px] font-medium uppercase leading-4 tracking-[.6px]" style={{ background: 'var(--figma-sunken)', color: 'var(--figma-text-tertiary)' }}>{['Code', 'Title', 'Type', 'Ver', 'Owner', 'Dept', 'Effective', 'Review due', 'Status'].map((h) => <th key={h} className="px-3 py-2">{h}</th>)}</tr></thead><tbody>{DOCUMENTS.map((row) => <tr key={row[0]} className="border-t text-[13px] leading-[18px]" style={{ borderColor: 'var(--figma-border-subtle)' }}>{row.slice(0, 8).map((cell, i) => <td key={i} className={`px-3 py-3 ${i === 1 ? 'min-w-[190px]' : 'whitespace-nowrap'}`}>{cell}</td>)}<td className="px-3 py-3"><StatusChip tone={row[9]}>{row[8]}</StatusChip></td></tr>)}</tbody></table></div></div><Pagination /><Traceability lines={['module: documents', 'route: /documents/list/', 'template: templates/documents/list.html', 'view: views.document_list', 'permission: document_list', 'status: Existing functionality']} /></div>;
+}
+
+function Pagination() { return <div className="mt-6 flex gap-1.5">{['‹', '1', '2', '3', '…', '12', '›'].map((item) => <button key={item} type="button" className="qt-focus grid h-[30px] w-[30px] place-items-center rounded border text-[12px] font-medium" style={{ borderColor: 'var(--figma-border)', background: item === '2' ? 'var(--figma-primary)' : '#fff', color: item === '2' ? '#fff' : 'var(--figma-text-secondary)' }}>{item}</button>)}</div>; }
+
+function NonConformanceRegister() {
+  const summary = [['8', 'Open'], ['3', 'Overdue closure'], ['2', 'In Review 2'], ['19', 'Closed this quarter'], ['6.4d', 'Avg. days to close']] as const;
+  return <div className="p-7 lg:p-8"><div className="flex items-start justify-between gap-4"><div><p className="text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>Quality / Non-Conformance</p><h3 className="font-figma-display mt-1 text-[28px] font-bold leading-[34px]">Non-Conformance Register</h3></div><div className="flex gap-2"><button type="button" className="qt-focus rounded-md px-4 py-2.5 text-[14px] font-medium text-white" style={{ background: 'var(--figma-primary)' }}>＋ Register NC</button><button type="button" className="qt-focus rounded-md border bg-white px-4 py-2.5 text-[14px] font-medium" style={{ borderColor: 'var(--figma-border)' }}>Export</button></div></div><SummaryCards items={summary} /><div className="mt-6 overflow-hidden rounded-[10px] border bg-white" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="overflow-x-auto"><table className="w-full min-w-[910px] text-left"><thead><tr className="text-[11px] font-medium uppercase leading-4 tracking-[.6px]" style={{ background: 'var(--figma-sunken)', color: 'var(--figma-text-tertiary)' }}>{['NC ID', 'Description', 'Source', 'Severity', 'Owner', 'Raised', 'Due', 'Stage', ''].map((h, i) => <th key={`${h}-${i}`} className="px-3 py-2">{h}</th>)}</tr></thead><tbody>{NONCONFORMANCES.map((row) => <tr key={row[0]} className="border-t text-[13px] leading-[18px]" style={{ borderColor: 'var(--figma-border-subtle)' }}><td className="whitespace-nowrap px-3 py-3">{row[0]}</td><td className="min-w-[260px] px-3 py-3">{row[1]}</td><td className="whitespace-nowrap px-3 py-3">{row[2]}</td><td className="px-3 py-3"><span className="rounded px-1.5 py-1 text-[11px] font-medium" style={{ background: row[3] === 'P0' ? '#fadede' : row[3] === 'P1' ? '#fbeed6' : '#deebf6', color: row[3] === 'P0' ? '#992121' : row[3] === 'P1' ? '#8f5e14' : '#124f80' }}>{row[3]}</span></td><td className="whitespace-nowrap px-3 py-3">{row[4]}</td><td className="whitespace-nowrap px-3 py-3">{row[5]}</td><td className="whitespace-nowrap px-3 py-3">{row[6]}</td><td className="px-3 py-3"><StatusChip tone={row[8]}>{row[7]}</StatusChip></td><td className="px-3 py-3 text-[12px] font-medium" style={{ color: 'var(--figma-primary)' }}>Open</td></tr>)}</tbody></table></div></div><Traceability lines={['module: non_conformance', 'route: /non-conformance/register/', 'template: templates/non_conformance/register_list.html', 'view: views.nc_register_list', 'permission: nc_register', 'status: Existing functionality']} /></div>;
+}
+
+function Traceability({ lines }: { lines: string[] }) { return <div className="mt-6 rounded-md border px-3.5 py-2.5" style={{ background: 'var(--figma-sunken)', borderColor: 'var(--figma-border-subtle)' }}><p className="text-[10px] font-bold uppercase leading-[14px] tracking-[1.2px]" style={{ color: 'var(--figma-text-tertiary)' }}>Engineering traceability</p>{lines.map((line) => <p key={line} className="font-mono-ui text-[13px] leading-[18px]" style={{ color: 'var(--figma-text-secondary)' }}>{line}</p>)}</div>; }
+
+const MOBILE_ACTIONS = [['SOP-QC-014 — QC review', 'Doc · due today', 'Under Review', 'warning'], ['NC-2026-041 — contamination', 'NC · due 2 Sep', 'Review 2', 'critical'], ['Centrifuge C-07 maintenance', 'Equip · 3 Sep', 'Scheduled', 'info'], ['POL-BIO-002 — acknowledge', 'Doc · 6 Sep', 'Ack. req.', 'accent']] as const;
+
+function MobileDashboard() {
+  return <div className="flex min-h-[844px] flex-col bg-white"><div className="flex items-center gap-2.5 px-4 py-[14px] text-white" style={{ background: 'var(--figma-nav)' }}><img src={mobileSymbol} width="14" height="16" alt="" /><span className="flex-1 text-[13px] font-medium">QualiTracker</span><span className="text-[13px]" style={{ color: 'var(--figma-nav-item)' }}>☰</span></div><div className="flex-1 px-4 pb-6 pt-4"><p className="text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>Wednesday, 1 Sep</p><h3 className="font-figma-display mt-[14px] text-[22px] font-bold leading-7 tracking-[.2px]">Requires your action</h3><div className="mt-[14px] grid grid-cols-3 gap-2.5">{[['12', 'My reviews', '#036173'], ['8', 'Open NCs', '#992121'], ['4', 'Reagents', '#c8a24b']].map(([value, label, color]) => <div key={label} className="rounded-[10px] border px-3 py-2.5" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="h-[3px] w-[22px]" style={{ background: color }} /><p className="font-figma-display mt-0.5 text-[20px] font-bold leading-6">{value}</p><p className="text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>{label}</p></div>)}</div><div className="mt-[14px] overflow-hidden rounded-[10px] border" style={{ borderColor: 'var(--figma-border-subtle)' }}>{MOBILE_ACTIONS.map(([title, detail, status, tone]) => <div key={title} className="border-b px-[14px] py-3 last:border-b-0" style={{ borderColor: 'var(--figma-border-subtle)' }}><div className="flex items-center gap-2"><p className="min-w-0 flex-1 text-[13px] font-medium leading-4">{title}</p><StatusChip tone={tone}>{status}</StatusChip></div><p className="mt-1 text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>{detail}</p></div>)}</div><p className="mt-[14px] text-[12px] leading-4" style={{ color: 'var(--figma-text-tertiary)' }}>Desktop KPI row + 2-column layout collapses to a stacked list. Nav rail → hamburger + bottom tab bar.</p></div><div className="grid grid-cols-5 border-t px-2 pb-2.5 pt-2" style={{ borderColor: 'var(--figma-border-subtle)' }}>{['Home', 'Tasks', 'Scan', 'Alerts', 'More'].map((item) => <div key={item} className="flex flex-col items-center gap-0.5 text-[12px] leading-4" style={{ color: item === 'Tasks' ? 'var(--figma-primary)' : 'var(--figma-text-tertiary)' }}><span className="h-1.5 w-1.5 rounded-full bg-current" />{item}</div>)}</div></div>;
 }
