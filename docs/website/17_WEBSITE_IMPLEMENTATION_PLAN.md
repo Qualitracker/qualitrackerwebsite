@@ -192,6 +192,19 @@ Triggered by the supplied `qualitracker-qms` Figma source and the request to rep
 | Responsive and accessible behavior | **Uses the authored mobile design** — widths below the desktop breakpoint render frame `32:2` rather than a newly invented collapse. Desktop screen changes are activated through the same sidebar destinations shown in the Figma navigation. |
 | Verification | 51 automated checks, workspace typecheck, and full production build pass. Browser checks cover desktop and iPhone layouts, screen switching, document filtering, non-conformance selection, and a clean console. |
 
+## Wave 17 — creatively staged product UI
+
+Triggered by the request to make every embedded product interface feel intentionally composed inside the marketing site without redesigning the source UI.
+
+| Item | Status |
+|---|---|
+| Shared product theatre | **Shipped locally** — one reusable outer stage now frames application, intelligence, assistant, workflow, and module interfaces with contextual chrome, depth plates, a restrained grid, status labels, and an information rail. The child interface is never restyled or reauthored. |
+| Figma application surfaces | **Preserved** — Dashboard `12:2`, Document Register `17:2`, Non-Conformance Register `20:2`, and Mobile Dashboard `32:2` remain unchanged inside the new stage. The existing sidebar destinations still control the desktop surface. |
+| Site-wide product embeds | **Staged consistently** — the command center, quality graph, document and corrective-action lifecycles, QualiBOT, retrieval walkthrough, and module map use the same composition system with variants suited to their content. |
+| Responsive behavior | **Verified locally** — depth plates simplify on phones, contextual labels move into a horizontal rail, and the authored mobile application screen remains the visible product surface. No page-level horizontal overflow was introduced. |
+| Accessibility and interaction | **Preserved** — decorative layers are hidden from assistive technology, reduced-motion rules still apply, and product controls remain directly reachable by keyboard, touch, and pointer. |
+| Verification | 52 automated checks, website typecheck, production build with all nine prerendered routes, interactive screen switching, desktop and iPhone browser checks, and a clean browser console. |
+
 ## What this plan deliberately does not include
 
 No GSAP, no WebGL/3D, no new animation library, no CMS, no design-token pipeline change — see `12_SKILL_GAP_ANALYSIS.md` for why each was considered and set aside.

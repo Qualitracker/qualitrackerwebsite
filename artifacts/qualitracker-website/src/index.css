@@ -285,6 +285,160 @@
 }
 .qt-shadow-overlay { box-shadow: 0 12px 32px rgba(28, 40, 51, .18); }
 
+/* Product theatres keep real product UI unchanged while giving it the staged,
+   layered presentation used by leading software sites. All decorative depth
+   sits outside the child surface and disappears cleanly on small screens. */
+.qt-product-theatre {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--qt-deep-teal) 20%, var(--qt-border-grey));
+  border-radius: 24px;
+  padding: 14px;
+  background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(235,245,243,.9));
+  box-shadow: 0 30px 80px -48px rgba(4, 43, 51, .55);
+  scroll-margin-top: 88px;
+}
+.qt-product-theatre--application {
+  padding: 18px;
+  border-color: rgba(110,203,194,.24);
+  background:
+    radial-gradient(circle at 88% 12%, rgba(110,203,194,.22), transparent 28%),
+    radial-gradient(circle at 5% 100%, rgba(200,162,75,.14), transparent 34%),
+    var(--qt-dark-navy);
+  box-shadow: 0 38px 100px -48px rgba(1, 46, 54, .8);
+}
+.qt-product-theatre--intelligence {
+  background:
+    radial-gradient(circle at 84% 8%, rgba(95,191,193,.22), transparent 30%),
+    linear-gradient(145deg, #f8fbfa, #e7f3f1);
+}
+.qt-product-theatre--assistant {
+  background:
+    radial-gradient(circle at 12% 14%, rgba(200,162,75,.18), transparent 25%),
+    radial-gradient(circle at 88% 85%, rgba(95,191,193,.2), transparent 28%),
+    #f6f7f4;
+}
+.qt-product-theatre--workflow {
+  background: linear-gradient(145deg, #f8faf9, #edf2f1);
+}
+.qt-product-theatre__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  opacity: .6;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(2,85,97,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(2,85,97,.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, #000, transparent 82%);
+}
+.qt-product-theatre--application .qt-product-theatre__grid {
+  opacity: .45;
+  background-image:
+    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+}
+.qt-product-theatre__plate {
+  position: absolute;
+  z-index: -2;
+  width: 34%;
+  aspect-ratio: 1.55;
+  border: 1px solid rgba(2,85,97,.18);
+  border-radius: 14px;
+  background: rgba(255,255,255,.48);
+  pointer-events: none;
+}
+.qt-product-theatre__plate--one { top: 58px; right: -8%; transform: rotate(7deg); }
+.qt-product-theatre__plate--two { bottom: 44px; left: -10%; transform: rotate(-6deg); }
+.qt-product-theatre--application .qt-product-theatre__plate { border-color: rgba(110,203,194,.22); background: rgba(3,97,115,.18); }
+.qt-product-theatre__chrome,
+.qt-product-theatre__caption {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 38px;
+  padding: 0 6px;
+}
+.qt-product-theatre__chrome { margin-bottom: 12px; }
+.qt-product-theatre__caption { min-height: 42px; padding-top: 10px; }
+.qt-product-theatre__label,
+.qt-product-theatre__status,
+.qt-product-theatre__caption {
+  font-family: var(--app-font-mono);
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.qt-product-theatre__label { overflow: hidden; color: var(--qt-near-black); font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.qt-product-theatre__status { display: inline-flex; flex-shrink: 0; align-items: center; gap: 7px; color: var(--qt-body-grey); }
+.qt-product-theatre__status i { width: 6px; height: 6px; border-radius: 999px; background: var(--qt-deep-teal); box-shadow: 0 0 0 4px rgba(2,85,97,.09); }
+.qt-product-theatre--application .qt-product-theatre__label,
+.qt-product-theatre--application .qt-product-theatre__status,
+.qt-product-theatre--application .qt-product-theatre__caption { color: var(--qt-mint-light); }
+.qt-product-theatre--application .qt-product-theatre__status i { background: var(--qt-light-teal); box-shadow: 0 0 0 4px rgba(110,203,194,.12); }
+.qt-product-theatre__lights { display: inline-flex; gap: 4px; }
+.qt-product-theatre__lights i { display: block; width: 6px; height: 6px; border-radius: 999px; background: var(--qt-border-grey); }
+.qt-product-theatre__lights i:nth-child(2) { background: var(--qt-light-teal); }
+.qt-product-theatre__lights i:nth-child(3) { background: var(--qt-quality-gold); }
+.qt-product-theatre__surface {
+  position: relative;
+  z-index: 2;
+  transform: translateY(0);
+  transition: transform .35s cubic-bezier(.2,0,.2,1), box-shadow .35s cubic-bezier(.2,0,.2,1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .qt-product-theatre:hover .qt-product-theatre__surface { transform: translateY(-3px); }
+}
+.qt-product-theatre__markers {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 10px;
+}
+.qt-product-theatre__markers span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid rgba(2,85,97,.18);
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 10px 30px -18px rgba(4,43,51,.6);
+  color: var(--qt-deep-teal);
+  font-family: var(--app-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+.qt-product-theatre--application .qt-product-theatre__markers span { border-color: rgba(110,203,194,.28); background: rgba(1,46,54,.9); color: var(--qt-mint-light); }
+.qt-product-theatre__caption span:first-child { color: var(--qt-near-black); font-weight: 700; }
+.qt-product-theatre__caption span:last-child { color: var(--qt-body-grey); text-align: right; }
+.qt-product-theatre--application .qt-product-theatre__caption span:first-child { color: #fff; }
+.qt-product-theatre--application .qt-product-theatre__caption span:last-child { color: var(--qt-mint-light); }
+
+@media (max-width: 767px) {
+  .qt-product-theatre,
+  .qt-product-theatre--application { border-radius: 16px; padding: 10px; }
+  .qt-product-theatre__plate { display: none; }
+  .qt-product-theatre__chrome { margin-bottom: 8px; }
+  .qt-product-theatre__status { max-width: 48%; text-align: right; }
+  .qt-product-theatre__markers { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .qt-product-theatre__markers::-webkit-scrollbar { display: none; }
+  .qt-product-theatre__caption { align-items: flex-start; flex-direction: column; gap: 3px; padding: 9px 3px 2px; }
+  .qt-product-theatre__caption span:last-child { text-align: left; }
+}
+
 .qt-reveal { animation: qt-reveal .7s cubic-bezier(.22, 1, .36, 1) both; }
 .qt-reveal-delay-1 { animation-delay: .12s; }
 .qt-reveal-delay-2 { animation-delay: .22s; }

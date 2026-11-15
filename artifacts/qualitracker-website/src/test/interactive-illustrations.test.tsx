@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { QualityIntelligenceGraph } from '@/components/product/quality-intelligence-graph';
 import { RagPipelineScroll } from '@/components/product/rag-pipeline-scroll';
+import { ProductTheatre } from '@/components/product/product-theatre';
 
 describe('interactive product illustrations', () => {
   it('lets touch and keyboard users lock a quality-graph node and inspect its relationships', async () => {
@@ -36,5 +37,27 @@ describe('interactive product illustrations', () => {
     await user.click(screen.getByRole('button', { name: 'Next stage' }));
     expect(screen.getByTestId('pipeline-progress')).toHaveTextContent('Step 5/7');
     expect(screen.getByTestId('answer-row-5')).toHaveAttribute('data-active', 'true');
+  });
+
+  it('frames product UI without replacing or blocking its controls', async () => {
+    const user = userEvent.setup();
+    render(
+      <ProductTheatre
+        label="Product surface"
+        status="Interactive"
+        caption="Workspace"
+        detail="Source linked"
+        markers={['Dashboard', 'Documents']}
+      >
+        <button type="button">Open document</button>
+      </ProductTheatre>,
+    );
+
+    const control = screen.getByRole('button', { name: 'Open document' });
+    await user.click(control);
+
+    expect(control).toBeEnabled();
+    expect(document.querySelector('[data-theatre="application"]')).toContainElement(control);
+    expect(screen.getByText('Product surface')).toBeInTheDocument();
   });
 });

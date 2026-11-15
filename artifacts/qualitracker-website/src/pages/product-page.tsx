@@ -6,6 +6,7 @@ import { StatusBadge } from '@/components/site/status-badge';
 import { ModuleMap } from '@/components/product/module-map';
 import { QualityIntelligenceGraph, type NodeId } from '@/components/product/quality-intelligence-graph';
 import { AskQualiTrackerDemo } from '@/components/product/ask-qualitracker-demo';
+import { ProductTheatre } from '@/components/product/product-theatre';
 import { TraceBlock, ExplorerFrame, StatusIndicator } from '@/components/site/technical-block';
 import { useDocumentMeta, useStructuredData } from '@/lib/use-document-meta';
 import { useI18n, L, type Text } from '@/lib/i18n';
@@ -65,23 +66,32 @@ function ProductPage() {
             {tr("Every finding in QualiTracker eQMS stays linked to the requirement it came from, and the corrective action that closed it, so nothing gets separated from the work it proves. Hover a node, or a step in the trace path, to see how it connects.", "Kila tatizo lililobainika kwenye QualiTracker eQMS hubaki limeunganishwa na sharti lililolisababisha, na hatua ya kurekebisha iliyolifunga, ili kisitenganishwe na kazi kinayoithibitisha. Weka kielekezi juu ya nodi, au hatua kwenye njia ya ufuatiliaji, uone inavyounganika.")}
           </p>
           <div className="mt-10">
-            <ExplorerFrame
-              title={tr("QUALITY INTELLIGENCE", "AKILI YA UBORA")}
-              status={<StatusIndicator label={tr("INTERACTIVE MODEL", "MFANO SHIRIKISHI")} tone="verified" light />}
-              footer={
-                <p className="qt-technical-label whitespace-nowrap" style={{ color: 'var(--qt-body-grey)' }}>
-                  <span style={{ color: 'var(--qt-deep-teal)', fontWeight: 700 }}>{tr('TRACE', 'UFUATILIAJI')}</span>{'  '}
-                  {traceSteps.map((s) => s.label).join('  →  ')}
-                </p>
-              }
+            <ProductTheatre
+              variant="intelligence"
+              label={tr('QualiTracker product model', 'Mfano wa bidhaa wa QualiTracker')}
+              status={tr('Interactive system map', 'Ramani shirikishi ya mfumo')}
+              caption={tr('Quality intelligence explorer', 'Kichunguzi cha akili ya ubora')}
+              detail={tr('Graph and trace move together', 'Grafu na ufuatiliaji husogea pamoja')}
+              markers={[tr('Standard', 'Kiwango'), tr('Evidence', 'Ushahidi'), tr('Verification', 'Uthibitisho')]}
             >
-              <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
-                <div className="max-w-[680px]">
-                  <QualityIntelligenceGraph activeId={activeGraphNode} onActiveChange={setActiveGraphNode} />
+              <ExplorerFrame
+                title={tr("QUALITY INTELLIGENCE", "AKILI YA UBORA")}
+                status={<StatusIndicator label={tr("INTERACTIVE MODEL", "MFANO SHIRIKISHI")} tone="verified" light />}
+                footer={
+                  <p className="qt-technical-label whitespace-nowrap" style={{ color: 'var(--qt-body-grey)' }}>
+                    <span style={{ color: 'var(--qt-deep-teal)', fontWeight: 700 }}>{tr('TRACE', 'UFUATILIAJI')}</span>{'  '}
+                    {traceSteps.map((s) => s.label).join('  →  ')}
+                  </p>
+                }
+              >
+                <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
+                  <div className="max-w-[680px]">
+                    <QualityIntelligenceGraph activeId={activeGraphNode} onActiveChange={setActiveGraphNode} />
+                  </div>
+                  <TraceBlock<NodeId> eyebrow={tr("Traceability path", "Njia ya ufuatiliaji")} steps={traceSteps} activeId={activeGraphNode} onStepFocus={(id) => setActiveGraphNode(id)} />
                 </div>
-                <TraceBlock<NodeId> eyebrow={tr("Traceability path", "Njia ya ufuatiliaji")} steps={traceSteps} activeId={activeGraphNode} onStepFocus={(id) => setActiveGraphNode(id)} />
-              </div>
-            </ExplorerFrame>
+              </ExplorerFrame>
+            </ProductTheatre>
           </div>
         </div>
       </section>
@@ -89,8 +99,17 @@ function ProductPage() {
       <section id="ai-rag" className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <SectionHeader eyebrow="AI & RAG" title={tr("QualiBOT: grounded, cited, honest when it doesn't know.", "QualiBOT: inategemea nyaraka, hutaja chanzo, mkweli asipojua.")} />
-          <div className="mt-10 mx-auto max-w-[560px]">
-            <AskQualiTrackerDemo />
+          <div className="mt-10 mx-auto max-w-[720px]">
+            <ProductTheatre
+              variant="assistant"
+              label="QualiBOT"
+              status={tr('Interactive evidence demo', 'Onyesho shirikishi la ushahidi')}
+              caption={tr('Grounded answer workspace', 'Eneo la jibu linalotegemea ushahidi')}
+              detail={tr('Source shown · human review required', 'Chanzo kinaonyeshwa · mapitio ya binadamu yanahitajika')}
+              markers={[tr('Source', 'Chanzo'), tr('Trace', 'Ufuatiliaji'), tr('No record found', 'Hakuna rekodi iliyopatikana')]}
+            >
+              <AskQualiTrackerDemo />
+            </ProductTheatre>
           </div>
         </div>
       </section>
@@ -102,7 +121,16 @@ function ProductPage() {
             {tr("Every module sits in the stage it has actually reached. Select one to see what it is for.", "Kila moduli iko kwenye hatua iliyofikia kweli. Chagua moja uone inatumika kwa nini.")}
           </p>
           <div className="mt-10">
-            <ModuleMap />
+            <ProductTheatre
+              variant="workflow"
+              label={tr('Platform modules', 'Moduli za jukwaa')}
+              status={tr('Interactive build map', 'Ramani shirikishi ya ujenzi')}
+              caption={tr('Product maturity map', 'Ramani ya ukomavu wa bidhaa')}
+              detail={tr('Select a module to inspect its current stage', 'Chagua moduli ili kuona hatua yake ya sasa')}
+              markers={[tr('Private beta', 'Beta ya faragha'), tr('In development', 'Inaendelezwa'), tr('Planned', 'Imepangwa')]}
+            >
+              <ModuleMap />
+            </ProductTheatre>
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
             <Button href="/docs" variant="secondary" arrow="arrow">{tr("Read the docs", "Soma nyaraka")}</Button>

@@ -19,6 +19,7 @@ import { HowItWorks } from '@/components/product/how-it-works';
 import { RecordTicker } from '@/components/product/record-ticker';
 import { PaperToProof } from '@/components/product/paper-to-proof';
 import { RoadmapBuildLog } from '@/components/product/roadmap-build-log';
+import { ProductTheatre } from '@/components/product/product-theatre';
 import { Reveal } from '@/components/site/reveal';
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -264,7 +265,16 @@ function LandingPage() {
               </p>
             </Reveal>
             <Reveal delay={0.1} className="lg:col-span-2">
-              <QualityCommandCenter />
+              <ProductTheatre
+                variant="application"
+                label={tr('QualiTracker eQMS', 'QualiTracker eQMS')}
+                status={tr('Interactive product surface', 'Skrini shirikishi ya bidhaa')}
+                caption={tr('Quality operations workspace', 'Eneo la kazi la uendeshaji wa ubora')}
+                detail={tr('Dashboard · documents · non-conformance', 'Dashibodi · nyaraka · kutokidhi kiwango')}
+                markers={[tr('Dashboard', 'Dashibodi'), tr('Document register', 'Rejesta ya nyaraka'), tr('Non-conformance', 'Kutokidhi kiwango')]}
+              >
+                <QualityCommandCenter />
+              </ProductTheatre>
             </Reveal>
           </div>
         </div>
@@ -286,7 +296,16 @@ function LandingPage() {
           </Reveal>
           </div>
           <Reveal delay={0.1}>
-            <QualityIntelligenceGraph />
+            <ProductTheatre
+              variant="intelligence"
+              label={tr('Quality intelligence', 'Akili ya ubora')}
+              status={tr('Interactive model', 'Mfano shirikishi')}
+              caption={tr('Traceability graph', 'Grafu ya ufuatiliaji')}
+              detail={tr('Select a node to hold its relationships', 'Chagua nodi ili kudumisha mahusiano yake')}
+              markers={[tr('Standard', 'Kiwango'), tr('Evidence', 'Ushahidi'), 'CAPA']}
+            >
+              <QualityIntelligenceGraph />
+            </ProductTheatre>
           </Reveal>
           </div>
         </div>
@@ -342,7 +361,16 @@ function LandingPage() {
             </p>
           </Reveal>
           <Reveal delay={0.1} className="mt-10">
-            <LifecycleTimeline stages={DOCUMENT_STAGES} />
+            <ProductTheatre
+              variant="workflow"
+              label={tr('Controlled document flow', 'Mtiririko wa hati iliyodhibitiwa')}
+              status={tr('Selectable workflow', 'Mtiririko unaochaguliwa')}
+              caption={tr('Document lifecycle', 'Mzunguko wa hati')}
+              detail={tr('From draft to an approved, version-locked record', 'Kutoka rasimu hadi rekodi iliyoidhinishwa na kufungwa toleo')}
+              markers={[tr('Draft', 'Rasimu'), tr('Review', 'Mapitio'), tr('Approved', 'Imeidhinishwa')]}
+            >
+              <LifecycleTimeline stages={DOCUMENT_STAGES} />
+            </ProductTheatre>
           </Reveal>
         </div>
       </section>
@@ -359,7 +387,16 @@ function LandingPage() {
           <Reveal delay={0.1} className="mt-10">
             {/* Teal, not gold — gold is reserved for the hero and waitlist/
                 talk-to-team CTAs only, per the brand kit's own rule. */}
-            <LifecycleTimeline stages={CAPA_STAGES} />
+            <ProductTheatre
+              variant="workflow"
+              label={tr('Corrective action flow', 'Mtiririko wa hatua ya kurekebisha')}
+              status={tr('Selectable workflow', 'Mtiririko unaochaguliwa')}
+              caption={tr('Non-conformance lifecycle', 'Mzunguko wa kutokidhi kiwango')}
+              detail={tr('Two independent reviews before closure', 'Mapitio mawili huru kabla ya kufungwa')}
+              markers={[tr('Finding', 'Tatizo'), tr('Review 1', 'Mapitio 1'), tr('Closure', 'Kufungwa')]}
+            >
+              <LifecycleTimeline stages={CAPA_STAGES} />
+            </ProductTheatre>
           </Reveal>
         </div>
       </section>
@@ -371,8 +408,17 @@ function LandingPage() {
           <p className="mt-5 max-w-[560px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
             {tr("Ask in plain language. Get an answer grounded in your lab's own records, with the source beside it, and if there's no relevant record, QualiBOT says so rather than guessing.", "Uliza kwa lugha rahisi. Pata jibu linalotegemea rekodi za maabara yako, na chanzo pembeni yake, na kama hakuna rekodi inayohusika, QualiBOT husema hivyo badala ya kubahatisha.")}
           </p>
-          <Reveal className="mt-10 mx-auto max-w-[560px]">
-            <AskQualiTrackerDemo />
+          <Reveal className="mt-10 mx-auto max-w-[720px]">
+            <ProductTheatre
+              variant="assistant"
+              label="QualiBOT"
+              status={tr('Interactive evidence demo', 'Onyesho shirikishi la ushahidi')}
+              caption={tr('Grounded answer workspace', 'Eneo la jibu linalotegemea ushahidi')}
+              detail={tr('Source shown · human review required', 'Chanzo kinaonyeshwa · mapitio ya binadamu yanahitajika')}
+              markers={[tr('Source', 'Chanzo'), tr('Trace', 'Ufuatiliaji'), tr('Human review', 'Mapitio ya binadamu')]}
+            >
+              <AskQualiTrackerDemo />
+            </ProductTheatre>
           </Reveal>
         </div>
       </section>
@@ -387,7 +433,16 @@ function LandingPage() {
             </h2>
           </Reveal>
           <div className="mt-10">
-            <RagPipelineScroll />
+            <ProductTheatre
+              variant="intelligence"
+              label={tr('Answer trace', 'Ufuatiliaji wa jibu')}
+              status={tr('Scroll-linked walkthrough', 'Mwongozo unaofuata usogezaji')}
+              caption={tr('Retrieval pipeline', 'Mtiririko wa utafutaji')}
+              detail={tr('Question → retrieval → evidence → answer', 'Swali → utafutaji → ushahidi → jibu')}
+              markers={[tr('Question', 'Swali'), tr('Evidence', 'Ushahidi'), tr('Answer', 'Jibu')]}
+            >
+              <RagPipelineScroll />
+            </ProductTheatre>
           </div>
         </div>
       </section>
