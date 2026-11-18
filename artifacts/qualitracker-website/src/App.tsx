@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { ChatWidget } from '@/components/site/chat-widget';
 import {
   Route,
   Switch,
@@ -73,6 +74,9 @@ function App() {
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
           <Router />
         </WouterRouter>
+        {/* QualiBOT site embed (ADR-033): renders nothing until
+            VITE_QUALIBOT_URL is set on the build. */}
+        <ChatWidget />
       </I18nProvider>
     </QueryClientProvider>
   );
