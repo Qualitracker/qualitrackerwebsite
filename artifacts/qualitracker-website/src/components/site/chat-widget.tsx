@@ -11,9 +11,11 @@ import { MessageSquareText, X } from 'lucide-react';
  *                        (unset → the widget renders nothing; safe pre-launch default)
  *   VITE_QUALIBOT_TENANT public tenant slug (default: "qualitracker")
  *
- * The iframe mounts on first open and stays mounted so an in-progress
- * conversation survives the panel being closed and reopened, and survives
- * client-side route changes (the widget lives outside the router switch).
+ * The iframe mounts lazily on first open and unmounts with the panel.
+ * Conversation history survives across closes because the embed page keys
+ * sessions by visitor_id in its own storage and refetches them on load.
+ * Closing mid-answer abandons the in-flight turn (nothing is stored
+ * unless the final event arrives) — same semantics as Esc-to-stop.
  */
 function embedUrl(): string {
   const base = (import.meta.env.VITE_QUALIBOT_URL ?? '').replace(/\/+$/, '');
@@ -36,9 +38,20 @@ export function ChatWidget() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
+    // Keys pressed inside the iframe never reach this document, so the embed
+    // page asks to be closed via postMessage when Esc is hit while not
+    // streaming. Only honour it from the chat's own origin.
+    const embedOrigin = new URL(src).origin;
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin === embedOrigin && e.data === 'qualibot:request-close') setOpen(false);
+    };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open]);
+    window.addEventListener('message', onMessage);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('message', onMessage);
+    };
+  }, [open, src]);
 
   // Return focus to the launcher only on a real open→close transition —
   // not on first mount, where open starts false.
