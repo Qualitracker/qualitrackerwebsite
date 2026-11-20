@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import {
   ShieldCheck,
   FileText,
@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   AlertOctagon,
 } from 'lucide-react';
+import { L, type Text, useI18n } from '@/lib/i18n';
 
 /**
  * The "Quality Intelligence Graph" — QualiTracker's own equivalent to
@@ -39,25 +40,25 @@ export type NodeId = 'standard' | 'document' | 'audit' | 'process' | 'finding' |
 
 interface GraphNode {
   id: NodeId;
-  label: string;
+  label: Text;
   x: number;
   y: number;
   planned?: boolean;
-  detail: string;
+  detail: Text;
   icon: typeof ShieldCheck;
 }
 
 const NODES: GraphNode[] = [
-  { id: 'standard', label: 'Standard', x: 320, y: 30, icon: ShieldCheck, detail: 'ISO 15189, WHO LQMS, SLIPTA, the requirement a lab is working against.' },
-  { id: 'document', label: 'Document', x: 150, y: 130, icon: FileText, detail: 'The SOP or policy that implements a standard’s requirement.' },
-  { id: 'audit', label: 'Audit', x: 490, y: 130, icon: Search, detail: 'Reviews evidence against the standard.' },
-  { id: 'process', label: 'Process', x: 150, y: 230, icon: Workflow, detail: 'The workflow a document describes.' },
-  { id: 'finding', label: 'Finding', x: 490, y: 230, icon: AlertTriangle, detail: 'What an audit surfaces when something doesn’t conform.' },
-  { id: 'evidence', label: 'Evidence', x: 320, y: 300, icon: FileCheck2, detail: 'Records proving a process was followed, logs, QC runs, signatures.' },
-  { id: 'nonconformance', label: 'Non-Conformance', x: 490, y: 320, icon: XCircle, detail: 'A finding, formalized and tracked to closure.' },
-  { id: 'capa', label: 'CAPA', x: 400, y: 400, icon: Wrench, detail: 'The corrective action assigned to resolve a non-conformance.' },
-  { id: 'risk', label: 'Risk', x: 560, y: 400, planned: true, icon: AlertOctagon, detail: 'Planned: surfacing risk patterns across repeated non-conformances.' },
-  { id: 'verification', label: 'Verification', x: 270, y: 400, icon: CheckCircle2, detail: 'Confirms the CAPA actually closed the gap, and becomes new evidence.' },
+  { id: 'standard', label: L('Standard', 'Kiwango'), x: 320, y: 30, icon: ShieldCheck, detail: L('ISO 15189, WHO LQMS, SLIPTA, the requirement a lab is working against.', 'ISO 15189, WHO LQMS, SLIPTA, hitaji ambalo maabara inalifanyia kazi.') },
+  { id: 'document', label: L('Document', 'Hati'), x: 150, y: 130, icon: FileText, detail: L('The SOP or policy that implements a standard’s requirement.', 'SOP au sera inayotekeleza hitaji la kiwango.') },
+  { id: 'audit', label: L('Audit', 'Ukaguzi'), x: 490, y: 130, icon: Search, detail: L('Reviews evidence against the standard.', 'Hupitia ushahidi dhidi ya kiwango.') },
+  { id: 'process', label: L('Process', 'Mchakato'), x: 150, y: 230, icon: Workflow, detail: L('The workflow a document describes.', 'Mtiririko wa kazi unaoelezwa na hati.') },
+  { id: 'finding', label: L('Finding', 'Tatizo'), x: 490, y: 230, icon: AlertTriangle, detail: L('What an audit surfaces when something doesn’t conform.', 'Kile ambacho ukaguzi hubaini wakati jambo halikidhi kiwango.') },
+  { id: 'evidence', label: L('Evidence', 'Ushahidi'), x: 320, y: 300, icon: FileCheck2, detail: L('Records proving a process was followed, logs, QC runs, signatures.', 'Rekodi zinazothibitisha mchakato ulifuatwa, kumbukumbu, ukaguzi wa QC, na sahihi.') },
+  { id: 'nonconformance', label: L('Non-Conformance', 'Kutokidhi kiwango'), x: 490, y: 320, icon: XCircle, detail: L('A finding, formalized and tracked to closure.', 'Tatizo lililobainika, lililorasimishwa na kufuatiliwa hadi kufungwa.') },
+  { id: 'capa', label: L('CAPA', 'CAPA'), x: 400, y: 400, icon: Wrench, detail: L('The corrective action assigned to resolve a non-conformance.', 'Hatua ya kurekebisha iliyokabidhiwa kutatua kutokidhi kiwango.') },
+  { id: 'risk', label: L('Risk', 'Hatari'), x: 560, y: 400, planned: true, icon: AlertOctagon, detail: L('Planned: surfacing risk patterns across repeated non-conformances.', 'Imepangwa: kubaini mifumo ya hatari katika kutokidhi kiwango kunakojirudia.') },
+  { id: 'verification', label: L('Verification', 'Uthibitishaji'), x: 270, y: 400, icon: CheckCircle2, detail: L('Confirms the CAPA actually closed the gap, and becomes new evidence.', 'Huthibitisha kuwa CAPA ilifunga pengo na huwa ushahidi mpya.') },
 ];
 
 const EDGES: Array<{ from: NodeId; to: NodeId; loop?: boolean }> = [
@@ -90,14 +91,6 @@ function controlPoint(x1: number, y1: number, x2: number, y2: number, bend: numb
   return { x: mx + (-dy / len) * bend, y: my + (dx / len) * bend };
 }
 
-function bezierSample(x1: number, y1: number, cx: number, cy: number, x2: number, y2: number, t: number) {
-  const u = 1 - t;
-  return {
-    x: u * u * x1 + 2 * u * t * cx + t * t * x2,
-    y: u * u * y1 + 2 * u * t * cy + t * t * y2,
-  };
-}
-
 interface QualityIntelligenceGraphProps {
   /** Controlled active node — lets an external element (e.g. a TraceBlock)
       drive the highlight. Falls back to internal hover/focus state when omitted. */
@@ -106,22 +99,45 @@ interface QualityIntelligenceGraphProps {
 }
 
 export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIntelligenceGraphProps = {}) {
-  const [internalActive, setInternalActive] = useState<NodeId | null>(null);
-  const isControlled = activeId !== undefined;
-  const active = isControlled ? activeId : internalActive;
-  const setActive = (id: NodeId | null) => {
-    if (!isControlled) setInternalActive(id);
-    onActiveChange?.(id);
-  };
+  const { tr, tx } = useI18n();
+  const [preview, setPreview] = useState<NodeId | null>(null);
+  const [locked, setLocked] = useState<NodeId | null>(null);
+  const active = activeId ?? preview ?? locked;
   const reduceMotion = useReducedMotion();
 
   const connectedTo = (id: NodeId) =>
     new Set(EDGES.filter((e) => e.from === id || e.to === id).flatMap((e) => [e.from, e.to]));
   const highlighted = active ? connectedTo(active) : null;
+  const activeNode = active ? nodeById(active) : null;
+  const incoming = active ? EDGES.filter((edge) => edge.to === active).map((edge) => nodeById(edge.from)) : [];
+  const outgoing = active ? EDGES.filter((edge) => edge.from === active).map((edge) => nodeById(edge.to)) : [];
+
+  function previewNode(id: NodeId) {
+    setPreview(id);
+    onActiveChange?.(id);
+  }
+
+  function clearPreview() {
+    setPreview(null);
+    onActiveChange?.(locked);
+  }
+
+  function toggleLocked(id: NodeId) {
+    const next = locked === id ? null : id;
+    setLocked(next);
+    setPreview(null);
+    onActiveChange?.(next);
+  }
+
+  function moveFocus(current: NodeId, direction: 1 | -1) {
+    const currentIndex = NODES.findIndex((node) => node.id === current);
+    const nextIndex = (currentIndex + direction + NODES.length) % NODES.length;
+    document.getElementById(`quality-node-${NODES[nextIndex].id}`)?.focus();
+  }
 
   return (
-    <div className="qt-card p-4 sm:p-6">
-      <svg viewBox="0 0 640 440" className="w-full" role="img" aria-label="QualiTracker eQMS quality intelligence graph">
+    <div className="qt-card p-4 sm:p-6" data-testid="quality-intelligence-graph">
+      <svg viewBox="0 0 640 440" className="w-full" role="img" aria-label={tr('QualiTracker eQMS quality intelligence graph', 'Ramani ya akili ya ubora ya QualiTracker eQMS')}>
         <defs>
           <marker id="qig-arrow-lit" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto-start-reverse">
             <path d="M0,0 L7,3.5 L0,7 Z" fill="var(--qt-deep-teal)" />
@@ -133,12 +149,11 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
         {EDGES.map((e, i) => {
           const from = nodeById(e.from);
           const to = nodeById(e.to);
-          const isLit = !active || (highlighted?.has(e.from) && highlighted?.has(e.to));
+          const isLit = !active || e.from === active || e.to === active;
           const isFlowing = active === e.from && !reduceMotion;
           const bend = e.loop ? 46 : 20;
           const cp = controlPoint(from.x, from.y, to.x, to.y, bend);
           const d = `M ${from.x} ${from.y} Q ${cp.x} ${cp.y} ${to.x} ${to.y}`;
-          const samples = isFlowing ? Array.from({ length: 9 }, (_, s) => bezierSample(from.x, from.y, cp.x, cp.y, to.x, to.y, s / 8)) : null;
           return (
             <g key={i}>
               <path
@@ -154,13 +169,10 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
               {/* A small pulse traveling the real, directional edge out of
                   the active node, shown only for that node's own outgoing
                   relationships, and only when motion is allowed. */}
-              {samples && (
-                <motion.circle
-                  r={3}
-                  fill="var(--qt-deep-teal)"
-                  animate={{ cx: samples.map((p) => p.x), cy: samples.map((p) => p.y), opacity: [0, 1, 1, 0] }}
-                  transition={{ duration: 1.1, repeat: Infinity, ease: 'linear' }}
-                />
+              {isFlowing && (
+                <circle r={3} fill="var(--qt-deep-teal)" opacity={0.9}>
+                  <animateMotion dur="1.1s" repeatCount="indefinite" path={d} />
+                </circle>
               )}
             </g>
           );
@@ -173,13 +185,33 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
           return (
             <g
               key={node.id}
+              id={`quality-node-${node.id}`}
               transform={`translate(${node.x}, ${node.y})`}
-              onMouseEnter={() => setActive(node.id)}
-              onFocus={() => setActive(node.id)}
-              onMouseLeave={() => setActive(null)}
-              onBlur={() => setActive(null)}
+              onMouseEnter={() => previewNode(node.id)}
+              onFocus={() => previewNode(node.id)}
+              onMouseLeave={clearPreview}
+              onBlur={clearPreview}
+              onClick={() => toggleLocked(node.id)}
+              onKeyDown={(event) => {
+                if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                  event.preventDefault();
+                  moveFocus(node.id, 1);
+                } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                  event.preventDefault();
+                  moveFocus(node.id, -1);
+                } else if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  toggleLocked(node.id);
+                } else if (event.key === 'Escape') {
+                  setLocked(null);
+                  setPreview(null);
+                  onActiveChange?.(null);
+                }
+              }}
               tabIndex={0}
               role="button"
+              aria-labelledby={`quality-node-label-${node.id}`}
+              aria-pressed={locked === node.id}
               style={{ cursor: 'pointer', outline: 'none' }}
               data-testid={`graph-node-${node.id}`}
             >
@@ -200,21 +232,69 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
               <g transform="translate(-6, -6)" opacity={isDimmed ? 0.6 : 1} style={{ pointerEvents: 'none' }}>
                 <Icon size={12} color="#FFFFFF" strokeWidth={2.5} />
               </g>
-              <text x={0} y={-20} textAnchor="middle" className="font-brand" fontSize={13} fontWeight={700} fill="var(--qt-near-black)" stroke="#FFFFFF" strokeWidth={5} strokeLinejoin="round" paintOrder="stroke">
-                {node.label}
+              <text id={`quality-node-label-${node.id}`} x={0} y={-20} textAnchor="middle" className="font-brand" fontSize={13} fontWeight={700} fill="var(--qt-near-black)" stroke="#FFFFFF" strokeWidth={5} strokeLinejoin="round" paintOrder="stroke">
+                {tx(node.label)}
               </text>
               {node.planned && (
                 <text x={0} y={28} textAnchor="middle" className="font-mono-ui" fontSize={9} fill="var(--qt-body-grey)">
-                  PLANNED
+                  {tr('PLANNED', 'IMEPANGWA')}
                 </text>
               )}
             </g>
           );
         })}
       </svg>
-      <p className="mt-4 min-h-[20px] text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>
-        {active ? nodeById(active).detail : 'Hover or focus a node to see how it connects.'}
-      </p>
+      <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--qt-border-grey)' }}>
+        <p className="qt-technical-label mb-2">{tr('Explore the model', 'Chunguza muundo')}</p>
+        <div className="flex flex-wrap gap-2" aria-label={tr('Quality model nodes', 'Nodi za muundo wa ubora')}>
+          {NODES.map((node) => (
+            <button
+              key={node.id}
+              type="button"
+              aria-pressed={locked === node.id}
+              onClick={() => toggleLocked(node.id)}
+              onMouseEnter={() => previewNode(node.id)}
+              onMouseLeave={clearPreview}
+              onFocus={() => previewNode(node.id)}
+              onBlur={clearPreview}
+              className="qt-focus min-h-9 rounded-md border px-3 py-1.5 font-mono-ui text-[10px] font-bold uppercase tracking-[.06em]"
+              style={{
+                borderColor: active === node.id ? 'var(--qt-deep-teal)' : 'var(--qt-border-grey)',
+                background: locked === node.id ? 'var(--qt-deep-teal)' : active === node.id ? 'var(--qt-teal-tint)' : '#FFFFFF',
+                color: locked === node.id ? '#FFFFFF' : 'var(--qt-near-black)',
+              }}
+              data-testid={`graph-control-${node.id}`}
+            >
+              {tx(node.label)}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 min-h-[116px] rounded-md border p-4" style={{ borderColor: 'var(--qt-border-grey)', background: 'var(--qt-lab-grey)' }} aria-live="polite" data-testid="graph-detail">
+        {activeNode ? (
+          <>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="font-brand text-base font-bold" style={{ color: 'var(--qt-near-black)' }}>{tx(activeNode.label)}</p>
+              <span className="qt-technical-label">{locked === activeNode.id ? tr('Selected', 'Imechaguliwa') : tr('Preview', 'Muhtasari')}</span>
+            </div>
+            <p className="mt-2 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>{tx(activeNode.detail)}</p>
+            <dl className="mt-3 grid gap-2 sm:grid-cols-2">
+              <div>
+                <dt className="qt-technical-label">{tr('Receives from', 'Inapokea kutoka')}</dt>
+                <dd className="mt-1 text-xs font-semibold" style={{ color: 'var(--qt-near-black)' }}>{incoming.length ? incoming.map((node) => tx(node.label)).join(' · ') : tr('Origin point', 'Sehemu ya kuanzia')}</dd>
+              </div>
+              <div>
+                <dt className="qt-technical-label">{tr('Leads to', 'Inaelekea kwenye')}</dt>
+                <dd className="mt-1 text-xs font-semibold" style={{ color: 'var(--qt-near-black)' }}>{outgoing.length ? outgoing.map((node) => tx(node.label)).join(' · ') : tr('End point', 'Sehemu ya mwisho')}</dd>
+              </div>
+            </dl>
+          </>
+        ) : (
+          <p className="text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>
+            {tr('Hover, focus, or tap a node to preview it. Select it to keep its relationships visible.', 'Weka kielekezi, lenga, au gusa nodi kuona muhtasari. Ichague ili mahusiano yake yaendelee kuonekana.')}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

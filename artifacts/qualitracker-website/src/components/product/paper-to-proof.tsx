@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { useI18n, L } from '@/lib/i18n';
 
 type Mode = 'paper' | 'digital';
 
 // Illustrative freezer temperature log. Not a real laboratory's data.
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const DAYS = [L('Mon', 'Jtatu'), L('Tue', 'Jnne'), L('Wed', 'Jtano'), L('Thu', 'Alh'), L('Fri', 'Ijm')];
 const PAPER = ['-19', '', '-18', '-1B', ''];
 const DIGITAL = [
   { v: '-19.2 °C', who: 'A. Mushi · 07:42', ok: true },
@@ -16,12 +17,13 @@ const DIGITAL = [
 
 export function PaperToProof() {
   const reduceMotion = useReducedMotion();
+  const { tr, tx } = useI18n();
   const [mode, setMode] = useState<Mode>('paper');
 
   return (
     <div className="rounded-xl border p-5 sm:p-6" style={{ background: '#FFFFFF', borderColor: 'var(--qt-border-grey)' }} data-testid="paper-to-proof">
-      <div role="tablist" aria-label="Record keeping method" className="inline-flex rounded-lg p-1" style={{ background: 'var(--qt-lab-grey)' }}>
-        {([['paper', 'Paper today'], ['digital', 'With QualiTracker eQMS']] as const).map(([id, label]) => (
+      <div role="tablist" aria-label={tr('Record keeping method', 'Njia ya kutunza rekodi')} className="inline-flex rounded-lg p-1" style={{ background: 'var(--qt-lab-grey)' }}>
+        {([['paper', tr('Paper today', 'Karatasi leo')], ['digital', tr('With QualiTracker eQMS', 'Kwa QualiTracker eQMS')]] as const).map(([id, label]) => (
           <button
             key={id}
             role="tab"
@@ -36,7 +38,7 @@ export function PaperToProof() {
         ))}
       </div>
 
-      <p className="qt-technical-label mt-5">Freezer 2 · daily temperature check · acceptable range −25 to −15 °C</p>
+      <p className="qt-technical-label mt-5">{tr('Freezer 2 · daily temperature check · acceptable range −25 to −15 °C', 'Friza 2 · ukaguzi wa joto wa kila siku · kiwango kinachokubalika −25 hadi −15 °C')}</p>
       <div className="mt-3 grid grid-cols-5 gap-2">
         {DAYS.map((day, i) => {
           const d = DIGITAL[i];
@@ -44,7 +46,7 @@ export function PaperToProof() {
           const missing = paperValue === '';
           return (
             <motion.div
-              key={`${mode}-${day}`}
+              key={mode + '-' + day.en}
               initial={reduceMotion ? undefined : { opacity: 0, y: 6 }}
               animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.05 }}
@@ -55,9 +57,9 @@ export function PaperToProof() {
                 borderStyle: mode === 'paper' && missing ? 'dashed' : 'solid',
               }}
             >
-              <p className="font-mono-ui text-[10px] uppercase" style={{ color: 'var(--qt-body-grey)' }}>{day}</p>
+              <p className="font-mono-ui text-[10px] uppercase" style={{ color: 'var(--qt-body-grey)' }}>{tx(day)}</p>
               {mode === 'paper' ? (
-                <p className="mt-2 text-sm italic" style={{ color: 'var(--qt-near-black)', fontFamily: 'cursive' }}>{missing ? ', ' : paperValue}</p>
+                <p className="mt-2 text-sm italic" style={{ color: 'var(--qt-near-black)', fontFamily: 'cursive' }}>{missing ? '·' : paperValue}</p>
               ) : (
                 <>
                   <p className="mt-2 text-xs font-bold" style={{ color: d.ok ? 'var(--qt-near-black)' : 'var(--qt-gold-text, #9D833B)' }}>{d.v}</p>
@@ -72,17 +74,17 @@ export function PaperToProof() {
       <div aria-live="polite" className="mt-5 text-xs leading-5" style={{ color: 'var(--qt-body-grey)' }}>
         {mode === 'paper' ? (
           <ul className="list-disc space-y-1 pl-4">
-            <li>Two days were never filled in, and nobody finds out until an audit.</li>
-            <li>“-1B” could be −18 or −19. Nobody can tell which, and the sample decision depends on it.</li>
+            <li>{tr("Two days were never filled in, and nobody finds out until an audit.", "Siku mbili hazikujazwa kamwe, na hakuna anayegundua hadi ukaguzi.")}</li>
+            <li>{tr("“-1B” could be −18 or −19. Nobody can tell which, and the sample decision depends on it.", "“-1B” inaweza kuwa −18 au −19. Hakuna anayeweza kujua ni ipi, na uamuzi kuhusu sampuli unaitegemea.")}</li>
           </ul>
         ) : (
           <ul className="list-disc space-y-1 pl-4">
-            <li>Each entry carries a value, a person and a time, and an empty day is flagged as missing instead of hidden.</li>
-            <li>Thursday's out-of-range reading is flagged as it is recorded, so an action can be opened before samples are affected.</li>
+            <li>{tr("Each entry carries a value, a person and a time, and an empty day is flagged as missing instead of hidden.", "Kila kumbukumbu ina thamani, mtu na muda, na siku tupu huwekwa alama ya kukosekana badala ya kufichwa.")}</li>
+            <li>{tr("Thursday's out-of-range reading is flagged as it is recorded, so an action can be opened before samples are affected.", "Kipimo cha Alhamisi kilicho nje ya kiwango huwekwa alama kinaporekodiwa, ili hatua ifunguliwe kabla sampuli hazijaathirika.")}</li>
           </ul>
         )}
       </div>
-      <p className="mt-4 font-mono-ui text-[10px]" style={{ color: 'var(--qt-body-grey)' }}>Illustrative example, not a real laboratory's data. Names are placeholders.</p>
+      <p className="mt-4 font-mono-ui text-[10px]" style={{ color: 'var(--qt-body-grey)' }}>{tr("Illustrative example, not a real laboratory's data. Names are placeholders.", "Mfano tu, si data ya maabara halisi. Majina ni ya kubuni.")}</p>
     </div>
   );
 }

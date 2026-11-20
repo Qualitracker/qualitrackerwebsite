@@ -5,6 +5,7 @@ Target: WCAG 2.2 AA. This is a real inspection of the current code (contrast rat
 ## Checked and passing
 
 - **Focus states**: `.qt-focus` (2px solid `--qt-deep-teal`, 2px offset) applied to every interactive element built this session — buttons, links, form fields, docs sidebar items. Verified present in `index.css` and referenced consistently across components.
+- **Bypass navigation**: every page now begins with a keyboard-visible “Skip to main content” link targeting the stable `#main-content` landmark. The label is localized in English and Kiswahili.
 - **Reduced motion**: the global CSS media query in `index.css` zeroes animation/transition duration; the new Framer Motion reveals (`components/site/reveal.tsx`) separately call `useReducedMotion()` and skip the animation entirely rather than relying on the CSS override alone — belt and suspenders, correctly.
 - **Form errors**: both lead forms use `role="alert"` on the error message, so a screen reader announces it without the user needing to find it visually. Verified by triggering the real failure path (submitting with no backend running).
 - **Semantic heading order**: spot-checked every page — each has exactly one `<h1>` per rendered state (Docs' `IntroductionContent`/`ComingSoon` each render their own `<h1>` but never both at once, since only one is mounted at a time), section titles are `<h2>` via `SectionHeader`, card titles are `<h3>`. No skipped levels found.
@@ -20,7 +21,7 @@ Real Lighthouse run against `vite preview` (the dev server gives false readings 
 3. **`meta name="viewport"` had `maximum-scale=1`**, blocking pinch-zoom — a real barrier for low-vision users. Removed the cap entirely.
 
 Re-run after fixes: **100/100**, zero failing audits. This is the concrete lesson from finding these two: an opacity-based "dim the inactive state" pattern is a genuine, easy-to-miss contrast trap — anywhere else this pattern gets reused, check the dimmed state's contrast explicitly, not just the active one.
-- **Docs sidebar keyboard navigation** — the sidebar is a flat list of buttons; tabbing through ~40 items to reach page content is technically operable but not efficient. A "skip to content" link would help.
+- **Docs sidebar keyboard navigation** — the site-wide skip link bypasses the global navigation. The Docs sidebar is inside the main landmark, ahead of the article. A shortcut to the article and arrow-key navigation within the sidebar remain future enhancements.
 - **Touch target size** — not measured against the 24×24px (WCAG 2.2) / 44×44px (best practice) minimums on mobile; the compact `size="sm"` nav button and docs sidebar rows are the most likely to be under-sized and haven't been checked with a ruler.
 - **Colour-only status signal** — `StatusBadge` pairs a coloured dot with text label (good practice, not colour-only), but the accreditation-readiness bar's colour-coding (teal vs. gold based on the 70% threshold) has no non-colour indicator (e.g., an icon) alongside it. Minor, but a real gap for colour-blind users trying to distinguish "on track" from "needs attention" bars quickly.
 

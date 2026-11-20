@@ -14,7 +14,7 @@ Synthesized from `10_WEBSITE_AUDIT.md`, `12_SKILL_GAP_ANALYSIS.md`, `13_MOTION_S
 | Convert homepage scroll reveals from mount-time CSS to real `whileInView` (Framer Motion) | **Shipped**, verified sections reveal correctly on scroll |
 | Fix render-blocking font loading (~800ms, found by Lighthouse) | **Shipped** — preload-then-activate pattern in `index.html`; verified via before/after Lighthouse runs. |
 | Fix `maximum-scale=1` blocking pinch-zoom (found by Lighthouse) | **Shipped** |
-| Resolve canonical domain (`qualitracker.org` vs `qualitracker.co`) | **Resolved — `qualitracker.co`.** See Wave 12. |
+| Resolve canonical domain and preferred host | **Resolved — `https://www.qualitracker.com/`.** The live non-`www` host redirects there; metadata now uses the final host. See Wave 14. |
 | Run the actual `db push` migration for the new lead kinds/columns | **Open — needs a real `DATABASE_URL`**, not run without knowing the target DB |
 
 ## P1 — Important
@@ -126,7 +126,7 @@ Closes three items that had sat open since the very first audit: the canonical-d
 
 | Item | Status |
 |---|---|
-| Canonical domain — resolved to `qualitracker.co` | **Shipped** — fixed in `index.html` (canonical link, og:url), `public/sitemap.xml` (all 8 URLs), and `public/robots.txt` (sitemap directive). |
+| Canonical domain — historical resolution | **Superseded by Wave 14.** The current verified production host is `https://www.qualitracker.com/`; all canonical surfaces now use that final host. |
 | Per-route canonical URL + og:url, not just title/description | **Shipped** — `useDocumentMeta` previously only updated title/description client-side, leaving every route's canonical/og:url pointing at the homepage until now. Extended to take a `path` and update both, plus twitter:title/description (previously untouched). |
 | Organization JSON-LD (site-wide) | **Shipped** — static in `index.html`, real facts only (name, url, logo, description already established elsewhere on the site; no `sameAs`/`foundingDate` since neither is verified). |
 | SoftwareApplication JSON-LD on `/` and `/product` | **Shipped** — no `offers`/price (none exists, pricing was deliberately removed sitewide) and no `aggregateRating` (no reviews exist) — omitted rather than invented. |
@@ -151,6 +151,59 @@ Closes the exact limitation Wave 12's verification note flagged: `vite preview`'
 | Verification — `pnpm run dev` unaffected | `isPreview` is `false` for `vite dev`, so `appType` stays the default `'spa'` and the new plugin never registers. Confirmed live: `curl http://localhost:5177/security` during dev returns `200` with the SPA shell's default title (client-side hydration still required, as expected — no prerendered file exists yet in dev), and an unknown path also returns `200` with the SPA shell (wouter renders `NotFound` client-side), exactly as before this change. |
 | Typecheck/lint/11 tests | Pass (`pnpm run typecheck`, root `pnpm run lint`, `pnpm run test -- --run`). `vite.config.ts` itself sits outside `tsconfig.json`'s `include` (`src/**/*` only), so it isn't part of the typecheck's own signature, but was written with explicit `Plugin`/`Connect.NextHandleFunction` types regardless. |
 | Cleanup | Preview and dev servers stopped after verification; no background processes left running. |
+
+## Wave 14 — complete social metadata, icon set, and keyboard navigation
+
+Triggered by the enterprise website framework and peer-stack review supplied in November 2026.
+
+| Item | Status |
+|---|---|
+| Open Graph and X large-image previews | **Shipped locally** — added a branded 1200×630 PNG and the complete image URL, secure URL, MIME type, dimensions, alt text, site name, locale, and X card fields. |
+| Preferred canonical host | **Shipped locally** — live verification showed `qualitracker.com` redirects to `www.qualitracker.com`; canonical, Open Graph, JSON-LD, sitemap, and robots now use the final `www` host. |
+| App and browser icons | **Shipped locally** — added 32×32 favicon, 180×180 Apple touch icon, 192×192 and 512×512 manifest icons, theme colour, and `site.webmanifest`. |
+| Structured data | **Shipped locally** — site-wide `Organization` and `WebSite` graph plus expanded `SoftwareApplication` identity, image, language, and publisher references. No ratings, pricing, or social profiles were invented. |
+| Accessibility | **Shipped locally** — keyboard skip link, stable main landmark target, and explicit mobile-menu control relationship. Unknown routes now emit `noindex, follow`. |
+| Verification | 49 automated checks pass, workspace typecheck passes, full production build prerenders all nine routes, local browser console is clean, and generated metadata is present in the static route HTML. Social platform cache validators remain post-deploy checks. |
+
+## Wave 15 — deeper, accessible product interactions
+
+Triggered by the request to improve the site's interactive illustrations before replacing placeholder product screens with real application UI.
+
+| Item | Status |
+|---|---|
+| Quality Intelligence Graph | **Shipped locally** — nodes can now be previewed or locked by mouse, touch, Enter/Space, and arrow-key navigation. The selected node exposes its description plus incoming and outgoing relationships in a live detail panel. |
+| Module map | **Shipped locally** — selecting a module now updates a four-stage maturity path using the module's existing status; no dates or capabilities were invented. |
+| QualiBOT answer pipeline | **Shipped locally** — every stage is directly selectable, Previous/Next controls and a live step count were added, and the same interaction remains available with reduced motion enabled. |
+| Evidence-bound copy | **Corrected** — the final answer state now reports the verified retrieval-threshold result and required human review instead of an unsupported confidence label. |
+| Accessibility | **Verified locally** — touch-sized controls, `aria-pressed`, polite live regions, keyboard focus movement, and reduced-motion behavior are covered by automated tests and rendered checks. |
+| Verification | 51 automated checks pass; workspace typecheck and full production build pass; desktop and iPhone touch flows render without horizontal overflow or browser console errors. |
+
+## Wave 16 — Figma-aligned application surfaces
+
+Triggered by the supplied `qualitracker-qms` Figma source and the request to replace the remaining placeholder dashboard with the intended application UI.
+
+| Item | Status |
+|---|---|
+| Figma source reconciliation | **Completed locally** — the implementation is tied to exact source frames rather than inferred patterns: Dashboard `12:2`, Document Register `17:2`, Non-Conformance Register `20:2`, and Mobile Dashboard `32:2`. |
+| Command center | **Rebuilt from frame `12:2`** — preserves the Figma navigation groups, 240px rail proportion, 64px topbar, operational copy, KPI values, readiness banner, task table, queues, typography, colour variables, borders, and elevation. |
+| Controlled documents | **Rebuilt from frame `17:2`** — preserves the Figma register heading, actions, five summary cards, filter bar, nine-column document table, status chips, pagination, and engineering-traceability panel. |
+| Non-conformance | **Rebuilt from frame `20:2`** — preserves the Figma register heading, actions, summary cards, table data, severity markers, workflow stages, and engineering-traceability panel. |
+| Evidence boundary | **Preserved outside the application frame** — the surrounding website copy identifies the records as illustrative; the embedded application itself retains the exact labels, names, dates, and values authored in Figma. |
+| Responsive and accessible behavior | **Uses the authored mobile design** — widths below the desktop breakpoint render frame `32:2` rather than a newly invented collapse. Desktop screen changes are activated through the same sidebar destinations shown in the Figma navigation. |
+| Verification | 51 automated checks, workspace typecheck, and full production build passed in this wave. Browser checks covered desktop and iPhone layouts, desktop screen switching, and a clean console. Register filters and row actions are illustrative controls. |
+
+## Wave 17 — creatively staged product UI
+
+Triggered by the request to make every embedded product interface feel intentionally composed inside the marketing site without redesigning the source UI.
+
+| Item | Status |
+|---|---|
+| Shared product theatre | **Shipped locally** — one reusable outer stage now frames application, intelligence, assistant, workflow, and module interfaces with contextual chrome, depth plates, a restrained grid, status labels, and an information rail. The child interface is never restyled or reauthored. |
+| Figma application surfaces | **Preserved** — Dashboard `12:2`, Document Register `17:2`, Non-Conformance Register `20:2`, and Mobile Dashboard `32:2` remain unchanged inside the new stage. The existing sidebar destinations still control the desktop surface. |
+| Site-wide product embeds | **Staged consistently** — the command center, quality graph, document and corrective-action lifecycles, QualiBOT, retrieval walkthrough, and module map use the same composition system with variants suited to their content. |
+| Responsive behavior | **Verified locally** — depth plates simplify on phones, contextual labels move into a horizontal rail, and the authored mobile application screen remains the visible product surface. No page-level horizontal overflow was introduced. |
+| Accessibility and interaction | **Preserved** — decorative layers are hidden from assistive technology, reduced-motion rules still apply, and product controls remain directly reachable by keyboard, touch, and pointer. |
+| Verification | 52 automated checks, website typecheck, production build with all nine prerendered routes, interactive screen switching, desktop and iPhone browser checks, and a clean browser console. |
 
 ## What this plan deliberately does not include
 

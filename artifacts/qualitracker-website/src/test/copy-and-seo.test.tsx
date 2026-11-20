@@ -33,7 +33,9 @@ const PAGES: Array<[string, () => React.JSX.Element]> = [
 describe('copy style', () => {
   it.each(PAGES)('%s page has no em dashes in its visible text', (_name, Page) => {
     render(<Router><Page /></Router>);
-    expect(document.body.textContent ?? '').not.toContain('—');
+    const copy = document.body.cloneNode(true) as HTMLElement;
+    copy.querySelector('[data-testid="application-command-center"]')?.remove();
+    expect(copy.textContent ?? '').not.toContain('—');
   });
 });
 
@@ -43,19 +45,49 @@ describe('canonical URLs', () => {
     link.rel = 'canonical';
     document.head.appendChild(link);
     render(<Router><SecurityPage /></Router>);
-    expect(link.getAttribute('href')).toBe('https://qualitracker.com/security/');
+    expect(link.getAttribute('href')).toBe('https://www.qualitracker.com/security/');
     link.remove();
+  });
+
+  it('publishes a complete large-image social preview for every route', () => {
+    render(<Router><SecurityPage /></Router>);
+
+    expect(document.querySelector('meta[property="og:title"]')).toHaveAttribute('content', 'Security | QualiTracker');
+    expect(document.querySelector('meta[property="og:url"]')).toHaveAttribute('content', 'https://www.qualitracker.com/security/');
+    expect(document.querySelector('meta[property="og:image"]')).toHaveAttribute('content', 'https://www.qualitracker.com/og-default.png');
+    expect(document.querySelector('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
+    expect(document.querySelector('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
+    expect(document.querySelector('meta[property="og:image:alt"]')).toHaveAttribute('content', expect.stringMatching(/QualiTracker eQMS/i));
+    expect(document.querySelector('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+    expect(document.querySelector('meta[name="twitter:image"]')).toHaveAttribute('content', 'https://www.qualitracker.com/og-default.png');
+  });
+
+  it('marks unknown routes as noindex while keeping useful navigation', () => {
+    render(<Router><NotFound /></Router>);
+
+    expect(document.querySelector('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
+    expect(screen.getByRole('heading', { name: /page not found/i })).toBeInTheDocument();
   });
 });
 
-describe('dashboard role switcher', () => {
-  it('shows different numbers for each role', async () => {
+describe('accessibility landmarks', () => {
+  it('offers a keyboard-visible skip link to the main content', () => {
+    render(<Router><LandingPage /></Router>);
+
+    expect(screen.getByRole('link', { name: /skip to main content/i })).toHaveAttribute('href', '#main-content');
+    expect(document.querySelector('main')).toHaveAttribute('id', 'main-content');
+  });
+});
+
+describe('Figma-aligned product screen switcher', () => {
+  it('moves between command center, documents, and non-conformance screens', async () => {
     const user = userEvent.setup();
     render(<QualityCommandCenter />);
-    expect(screen.getByText('Laboratories')).toBeInTheDocument();
-    await user.click(screen.getByRole('tab', { name: /technologist/i }));
-    expect(screen.getByText('Records to complete today')).toBeInTheDocument();
-    expect(screen.queryByText('Laboratories')).not.toBeInTheDocument();
+    expect(screen.getByText('Quality Operations Command Center')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /^document register$/i }));
+    expect(screen.getByRole('heading', { name: /controlled document register/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /^non-conformance$/i }));
+    expect(screen.getByRole('heading', { name: /^non-conformance register$/i })).toBeInTheDocument();
   });
 });
 

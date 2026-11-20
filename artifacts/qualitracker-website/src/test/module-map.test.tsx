@@ -9,6 +9,7 @@ describe('ModuleMap', () => {
     render(<ModuleMap />);
     expect(screen.getByText(/nothing is live yet/i)).toBeInTheDocument();
     expect(screen.getByTestId('row-capability-document-sop-control')).toBeInTheDocument();
+    expect(screen.getByTestId('module-maturity-path')).toHaveTextContent('Stage 3/4');
   });
 
   it('shows the selected module with its stage, and keeps QualiBOT out of the beta', async () => {
@@ -19,5 +20,6 @@ describe('ModuleMap', () => {
 
     expect(screen.getByText(/not part of the november beta/i)).toBeInTheDocument();
     expect(screen.getByTestId('status-badge-in-development')).toBeInTheDocument();
+    expect(screen.getByTestId('module-maturity-path')).toHaveTextContent('Stage 2/4');
   });
 });

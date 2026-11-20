@@ -28,13 +28,13 @@ const ITEMS: Array<{ n: 1 | 2 | 3; title: string; copy: string; shape: LatticeSh
 
 /** Left: a list where one statement is highlighted. Right: a bracket-framed lattice and a mono log that follow it. */
 export function HowItWorks() {
-  const { t } = useI18n();
+  const { t, tr } = useI18n();
   const [active, setActive] = useState(0);
   const item = ITEMS[active];
 
   return (
     <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16" data-testid="how-it-works">
-      <div role="tablist" aria-label="How QualiTracker eQMS works" aria-orientation="vertical" className="divide-y" style={{ borderColor: 'var(--qt-border-grey)' }}>
+      <div role="tablist" aria-label={tr('How QualiTracker eQMS works', 'Jinsi QualiTracker eQMS inavyofanya kazi')} aria-orientation="vertical" className="divide-y" style={{ borderColor: 'var(--qt-border-grey)' }}>
         {ITEMS.map((it, i) => {
           const on = i === active;
           return (
@@ -67,7 +67,7 @@ export function HowItWorks() {
         </div>
         <div className="font-mono-ui mt-4 rounded-md border border-dashed p-4 text-[11px] leading-5" style={{ borderColor: 'var(--qt-border-grey)', color: 'var(--qt-near-black)', background: '#FFFFFF' }} aria-live="polite">
           {item.log.map((line) => <p key={line}>{line}</p>)}
-          <p className="mt-2" style={{ color: 'var(--qt-body-grey)' }}>Illustrative. Not a real laboratory's records.</p>
+          <p className="mt-2" style={{ color: 'var(--qt-body-grey)' }}>{tr("Illustrative. Not a real laboratory's records.", 'Mfano wa kuonyesha. Si rekodi za maabara halisi.')}</p>
         </div>
       </div>
     </div>

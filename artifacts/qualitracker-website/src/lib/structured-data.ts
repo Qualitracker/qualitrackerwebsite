@@ -8,8 +8,11 @@ export const SOFTWARE_APPLICATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: 'QualiTracker eQMS',
+  url: 'https://www.qualitracker.com/product/',
+  image: 'https://www.qualitracker.com/og-default.png',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
+  inLanguage: ['en', 'sw'],
   description: 'A digital quality-management system for laboratories: document control, quality records, and QualiBOT, an AI assistant grounded in a lab’s own documents.',
-  publisher: { '@type': 'Organization', name: 'Qualitracker Limited' },
+  publisher: { '@id': 'https://www.qualitracker.com/#organization' },
 };
