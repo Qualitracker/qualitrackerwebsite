@@ -5,8 +5,27 @@ import userEvent from '@testing-library/user-event';
 import { QualityIntelligenceGraph } from '@/components/product/quality-intelligence-graph';
 import { RagPipelineScroll } from '@/components/product/rag-pipeline-scroll';
 import { ProductTheatre } from '@/components/product/product-theatre';
+import { AskQualiTrackerDemo } from '@/components/product/ask-qualitracker-demo';
 
 describe('interactive product illustrations', () => {
+  // Value: protects=custom questions are preserved and cannot receive unrelated audit answers;
+  // fails_when=Send replays the selected preset; why_new=the locale test sends a preset;
+  // seam=none; no_claim=the response is a local demo, not a live retrieval check.
+  it('keeps a submitted custom question and declines to answer it from the sample audit', async () => {
+    const user = userEvent.setup();
+    const question = 'Can you compare this lab with another lab?';
+    render(<AskQualiTrackerDemo />);
+
+    const input = screen.getByRole('textbox', { name: 'Ask QualiBOT a question' });
+    await user.clear(input);
+    await user.type(input, question);
+    await user.click(screen.getByRole('button', { name: 'Send question' }));
+
+    expect(await screen.findByText(/couldn't find a relevant record/i)).toBeInTheDocument();
+    expect(screen.getByText(question)).toBeInTheDocument();
+    expect(screen.queryByText('CAPA-014')).not.toBeInTheDocument();
+  });
+
   it('lets touch and keyboard users lock a quality-graph node and inspect its relationships', async () => {
     const user = userEvent.setup();
     render(<QualityIntelligenceGraph />);

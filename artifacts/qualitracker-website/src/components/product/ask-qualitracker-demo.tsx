@@ -22,20 +22,32 @@ const QUESTIONS: Record<Mode, Text> = {
 export function AskQualiTrackerDemo() {
   const { tr, tx } = useI18n();
   const [mode, setMode] = useState<Mode>('found');
-  const [customQuestion, setCustomQuestion] = useState<string | null>(null);
+  const [draft, setDraft] = useState<string | null>(null);
+  const [submittedQuestion, setSubmittedQuestion] = useState<string | null>(null);
   const [thinking, setThinking] = useState(false);
-  const question = customQuestion ?? tx(QUESTIONS[mode]);
+  const question = submittedQuestion ?? tx(QUESTIONS[mode]);
+  const inputValue = draft ?? question;
 
-  function selectMode(next: Mode) {
-    setCustomQuestion(null);
+  function showResponse(next: Mode, submitted: string | null) {
+    if (thinking) return;
+    setMode(next);
+    setSubmittedQuestion(submitted);
+    setDraft(null);
     setThinking(true);
-    // A brief, real "retrieving" beat — not decoration, the same thinking
-    // state the brand kit's own BotAvatar spec defines (a pulsing ring)
-    // wired up here, since it was previously defined in CSS but unused.
-    window.setTimeout(() => {
-      setMode(next);
-      setThinking(false);
-    }, 450);
+    window.setTimeout(() => setThinking(false), 450);
+  }
+
+  function sendQuestion() {
+    if (draft === null) {
+      showResponse(mode, submittedQuestion);
+      return;
+    }
+    const submitted = draft.trim();
+    if (!submitted) return;
+    // The demo has one matching source, shown by either language's audit preset.
+    const auditQuestion = QUESTIONS.found;
+    const matchesAudit = submitted === auditQuestion.en || submitted === auditQuestion.sw;
+    showResponse(matchesAudit ? 'found' : 'missing', submitted);
   }
 
   return (
@@ -108,7 +120,7 @@ export function AskQualiTrackerDemo() {
           <SegmentedControl
             aria-label={tr('Demo question state', 'Hali ya swali la onyesho')}
             value={mode}
-            onChange={selectMode}
+            onChange={(next) => showResponse(next, null)}
             options={[
               { value: 'found', label: tr('Audit finding', 'Tatizo la ukaguzi') },
               { value: 'missing', label: tr('Out of scope', 'Nje ya wigo') },
@@ -118,8 +130,8 @@ export function AskQualiTrackerDemo() {
 
         <div className="flex gap-2 rounded-xl border p-2" style={{ borderColor: 'var(--qt-border-grey)', background: 'var(--qt-lab-grey)' }}>
           <input
-            value={question}
-            onChange={(event) => setCustomQuestion(event.target.value)}
+            value={inputValue}
+            onChange={(event) => setDraft(event.target.value)}
             className="min-w-0 flex-1 bg-transparent px-2 text-xs outline-none"
             style={{ color: 'var(--qt-near-black)' }}
             aria-label={tr('Ask QualiBOT a question', 'Uliza QualiBOT swali')}
@@ -127,7 +139,8 @@ export function AskQualiTrackerDemo() {
           />
           <button
             type="button"
-            onClick={() => selectMode(mode)}
+            onClick={sendQuestion}
+            disabled={thinking || !inputValue.trim()}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
             style={{ background: 'var(--qt-deep-teal)', color: '#FFFFFF' }}
             aria-label={tr('Send question', 'Tuma swali')}

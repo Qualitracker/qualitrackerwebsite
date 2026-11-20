@@ -27,7 +27,7 @@ and /browse are available. Use /browse for all web browsing (Aside first, the bu
 Use the resolved install path above for gstack file paths
 (default: ~/.Codex/skills/gstack).
 
-The Skill gate in .Codex/settings.json runs .Codex/hooks/check-gstack.cjs with
+In Claude Code, the Skill gate in `.claude/settings.json` runs `.claude/hooks/check-gstack.cjs` with
 Node.js and blocks when it cannot run. If a skill is blocked with "node: not
 found", tell the user to install Node.js (https://nodejs.org); if it is blocked
 with "Cannot find module ... check-gstack.cjs", the hook file is missing from

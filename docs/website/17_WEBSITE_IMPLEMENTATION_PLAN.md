@@ -186,11 +186,11 @@ Triggered by the supplied `qualitracker-qms` Figma source and the request to rep
 |---|---|
 | Figma source reconciliation | **Completed locally** — the implementation is tied to exact source frames rather than inferred patterns: Dashboard `12:2`, Document Register `17:2`, Non-Conformance Register `20:2`, and Mobile Dashboard `32:2`. |
 | Command center | **Rebuilt from frame `12:2`** — preserves the Figma navigation groups, 240px rail proportion, 64px topbar, operational copy, KPI values, readiness banner, task table, queues, typography, colour variables, borders, and elevation. |
-| Controlled documents | **Rebuilt from frame `17:2`** — preserves the Figma register heading, actions, five summary cards, filter bar, ten-column document data, status chips, pagination, and engineering-traceability panel. |
+| Controlled documents | **Rebuilt from frame `17:2`** — preserves the Figma register heading, actions, five summary cards, filter bar, nine-column document table, status chips, pagination, and engineering-traceability panel. |
 | Non-conformance | **Rebuilt from frame `20:2`** — preserves the Figma register heading, actions, summary cards, table data, severity markers, workflow stages, and engineering-traceability panel. |
 | Evidence boundary | **Preserved outside the application frame** — the surrounding website copy identifies the records as illustrative; the embedded application itself retains the exact labels, names, dates, and values authored in Figma. |
 | Responsive and accessible behavior | **Uses the authored mobile design** — widths below the desktop breakpoint render frame `32:2` rather than a newly invented collapse. Desktop screen changes are activated through the same sidebar destinations shown in the Figma navigation. |
-| Verification | 51 automated checks, workspace typecheck, and full production build pass. Browser checks cover desktop and iPhone layouts, screen switching, document filtering, non-conformance selection, and a clean console. |
+| Verification | 51 automated checks, workspace typecheck, and full production build passed in this wave. Browser checks covered desktop and iPhone layouts, desktop screen switching, and a clean console. Register filters and row actions are illustrative controls. |
 
 ## Wave 17 — creatively staged product UI
 
