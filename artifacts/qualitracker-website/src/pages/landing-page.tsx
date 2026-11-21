@@ -255,25 +255,15 @@ function LandingPage() {
       {/* Product proof: the real dashboard shape */}
       <section className="py-14 lg:py-24" style={{ background: 'var(--qt-lab-grey)' }}>
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end lg:gap-16">
+          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:gap-16">
             <Reveal>
-              <SectionHeader eyebrow={tr("Product walkthrough", "Utambulisho wa bidhaa")} title={tr("Explore the quality workspace.", "Chunguza eneo la kazi la ubora.")} />
-            </Reveal>
-            <Reveal delay={0.05}>
+              <SectionHeader eyebrow={tr("See it, not just read about it", "Ione, usisome tu")} title={tr("This is what your dashboard actually looks like.", "Hivi ndivyo dashibodi yako inavyoonekana.")} />
               <p className="mt-5 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                {tr("Check what’s due, find a controlled document, or follow a non-conformance. The previews use sample records.", "Angalia kazi zinazokaribia makataa, tafuta nyaraka zinazodhibitiwa au fuatilia tukio la kutokidhi kiwango. Skrini hizi zina rekodi za mfano.")}
+                {tr("Your labs, departments, roles, and people, scoped to who you are and where you work, the moment you log in.", "Maabara, idara, majukumu, na watu wako, vilivyopangwa kulingana na wewe ni nani na unafanya kazi wapi, mara tu unapoingia.")}
               </p>
             </Reveal>
-            <Reveal delay={0.1} className="min-w-0 lg:col-span-2">
-              <ProductTheatre
-                variant="application"
-                label={tr('QualiTracker eQMS', 'QualiTracker eQMS')}
-                status={tr('Interactive product surface', 'Skrini shirikishi ya bidhaa')}
-                caption={tr('Quality operations workspace', 'Eneo la kazi la uendeshaji wa ubora')}
-                detail={tr('Dashboard · documents · non-conformance', 'Dashibodi · nyaraka · kutokidhi kiwango')}
-              >
-                <QualityCommandCenter />
-              </ProductTheatre>
+            <Reveal delay={0.1}>
+              <QualityCommandCenter />
             </Reveal>
           </div>
         </div>
