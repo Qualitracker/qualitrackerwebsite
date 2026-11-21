@@ -29,7 +29,7 @@ export default function NotFound() {
         <h1 className="font-brand mt-2 text-3xl font-bold" style={{ color: 'var(--qt-near-black)' }}>{tr('Page not found.', 'Ukurasa haujapatikana.')}</h1>
         <div className="font-mono-ui qt-brackets relative mt-6 p-5 text-[12px] leading-6" style={{ color: 'var(--qt-near-black)', background: '#FFFFFF' }}>
           <span className="qt-bracket-b absolute inset-0" aria-hidden="true" />
-          <p>$ find record <span style={{ color: 'var(--qt-deep-teal)' }}>{location}</span></p>
+          {location !== '/404.html' && <p>$ find record <span style={{ color: 'var(--qt-deep-teal)' }}>{location}</span></p>}
           <p style={{ color: 'var(--qt-body-grey)' }}>{tr('→ no matching record. It may have moved, or never existed.', '→ hakuna rekodi inayolingana. Huenda ilihamishwa, au haikuwepo kamwe.')}</p>
         </div>
         <p className="mt-6 text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>

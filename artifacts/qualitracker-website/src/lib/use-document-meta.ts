@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { withPageSlash } from '@/lib/page-url';
 
 const SITE_ORIGIN = 'https://www.qualitracker.com';
 const DEFAULT_IMAGE = `${SITE_ORIGIN}/og-default.png`;
@@ -43,7 +44,7 @@ export function useDocumentMeta(
     // Firebase Hosting serves every route with a trailing slash (firebase.json
     // trailingSlash: true) and redirects the bare form, so the canonical must
     // be the slash form or search engines see a redirect and a duplicate.
-    const canonicalUrl = `${SITE_ORIGIN}${path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`}`;
+    const canonicalUrl = `${SITE_ORIGIN}${withPageSlash(path)}`;
     const imageUrl = absoluteUrl(options.image ?? DEFAULT_IMAGE);
     const imageAlt = options.imageAlt ?? DEFAULT_IMAGE_ALT;
     const previousValues: Array<{ element: Element; attribute: string; value: string | null; created: boolean }> = [];
@@ -110,6 +111,7 @@ export function useStructuredData(data: Record<string, unknown>) {
   useEffect(() => {
     const script = document.createElement('script');
     script.type = 'application/ld+json';
+    script.setAttribute('data-route-schema', '');
     script.textContent = JSON.stringify(data);
     document.head.appendChild(script);
     return () => {

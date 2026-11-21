@@ -5,6 +5,7 @@ import { Logo } from '@/components/brand/logo';
 import { Button } from '@/components/site/button';
 import { CommandPalette } from '@/components/site/command-palette';
 import { useI18n, type DictKey } from '@/lib/i18n';
+import { withPageSlash } from '@/lib/page-url';
 
 const NAV_LINKS: Array<{ id: string; key: DictKey; href: string }> = [
   { id: 'product', key: 'nav.product', href: '/product' },
@@ -38,9 +39,9 @@ export function SiteNav() {
         <Link href="/" aria-label={tr('QualiTracker home', 'Ukurasa wa mwanzo wa QualiTracker')} data-testid="link-brand-home">
           <Logo height={28} />
         </Link>
-        <nav className="hidden items-center gap-6 md:flex" aria-label={tr('Main navigation', 'Urambazaji mkuu')}>
+        <nav className="hidden items-center gap-6 min-[1152px]:flex" aria-label={tr('Main navigation', 'Urambazaji mkuu')}>
           {NAV_LINKS.map((item) => {
-            const active = location === item.href;
+            const active = withPageSlash(location) === withPageSlash(item.href);
             return (
               <Link
                 key={item.href}
@@ -48,13 +49,14 @@ export function SiteNav() {
                 className="qt-dashed rounded px-3 py-1 text-[13px] font-medium"
                 style={{ color: active ? 'var(--qt-deep-teal)' : 'var(--qt-near-black)', borderColor: active ? 'var(--qt-deep-teal)' : 'transparent' }}
                 data-testid={`link-nav-${item.id}`}
+                aria-current={active ? 'page' : undefined}
               >
                 {t(item.key)}
               </Link>
             );
           })}
         </nav>
-        <div className="ml-auto hidden items-center gap-3 md:flex">
+        <div className="ml-auto hidden items-center gap-3 min-[1152px]:flex">
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
@@ -81,7 +83,7 @@ export function SiteNav() {
         </div>
         <button
           type="button"
-          className="ml-auto flex h-9 w-9 items-center justify-center rounded-md md:hidden"
+          className="ml-auto flex h-9 w-9 items-center justify-center rounded-md min-[1152px]:hidden"
           style={{ color: 'var(--qt-near-black)' }}
           onClick={() => setMenuOpen((v) => !v)}
           aria-expanded={menuOpen}
@@ -93,9 +95,9 @@ export function SiteNav() {
         </button>
       </div>
       {menuOpen && (
-        <nav id="mobile-navigation" className="border-t px-5 py-3 md:hidden" style={{ borderColor: 'var(--qt-border-grey)' }} aria-label={tr('Mobile navigation', 'Urambazaji wa simu')}>
+        <nav id="mobile-navigation" className="border-t px-5 py-3 min-[1152px]:hidden" style={{ borderColor: 'var(--qt-border-grey)' }} aria-label={tr('Mobile navigation', 'Urambazaji wa simu')}>
           {NAV_LINKS.map((item) => (
-            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-sm font-medium" style={{ color: 'var(--qt-near-black)' }}>
+            <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="block py-2.5 text-sm font-medium" style={{ color: 'var(--qt-near-black)' }} aria-current={withPageSlash(location) === withPageSlash(item.href) ? 'page' : undefined}>
               {t(item.key)}
             </Link>
           ))}
