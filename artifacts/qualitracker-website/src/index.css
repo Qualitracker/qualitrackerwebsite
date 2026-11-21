@@ -165,7 +165,7 @@
 
 @layer base {
   * { @apply border-border; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 4rem; }
   body { @apply font-sans antialiased bg-background text-foreground; margin: 0; }
   ::selection { background: hsl(var(--accent) / .35); color: var(--qt-near-black); }
 }
