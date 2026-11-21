@@ -1,9 +1,31 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
+import { useId, useState, type CSSProperties, type ReactNode } from 'react';
+import * as Tabs from '@radix-ui/react-tabs';
+import { ClipboardList, FileText, LayoutDashboard } from 'lucide-react';
 import lockupMark from '@/assets/figma-app/qualitracker-lockup-mark.svg';
 import mobileSymbol from '@/assets/figma-app/qualitracker-mobile-symbol.svg';
+import { L, useI18n } from '@/lib/i18n';
 
 type Surface = 'dashboard' | 'documents' | 'nonconformance';
 type Tone = 'neutral' | 'info' | 'warning' | 'success' | 'critical' | 'accent';
+
+const PREVIEWS = {
+  dashboard: {
+    icon: LayoutDashboard,
+    label: L('Operations overview', 'Muhtasari wa uendeshaji'),
+    description: L('See work awaiting review, upcoming deadlines, and readiness indicators.', 'Ona kazi zinazosubiri mapitio, makataa yajayo na viashiria vya utayari.'),
+  },
+  documents: {
+    icon: FileText,
+    label: L('Controlled documents', 'Nyaraka zinazodhibitiwa'),
+    description: L('Inspect document owners, revision status, and review dates.', 'Angalia wasimamizi wa nyaraka, hali ya matoleo na tarehe za mapitio.'),
+  },
+  nonconformance: {
+    icon: ClipboardList,
+    label: L('Quality events', 'Matukio ya ubora'),
+    description: L('See how non-conformances are recorded, assigned, and tracked.', 'Ona jinsi matukio ya kutokidhi kiwango yanavyorekodiwa, kugawiwa na kufuatiliwa.'),
+  },
+};
+const SURFACES: Surface[] = ['dashboard', 'documents', 'nonconformance'];
 
 const FIGMA_TOKENS = {
   '--figma-nav': '#012e36', '--figma-primary': '#036173', '--figma-nav-item': '#a5ddd7', '--figma-mint': '#6ecbc2',
@@ -79,8 +101,67 @@ function Topbar() {
 }
 
 export function QualityCommandCenter() {
+  const { tr, tx } = useI18n();
   const [surface, setSurface] = useState<Surface>('dashboard');
-  return <div className="qt-figma-app overflow-hidden rounded-[10px] border bg-white qt-shadow-overlay" style={{ ...FIGMA_TOKENS, borderColor: 'var(--figma-border-subtle)', color: 'var(--figma-text)' }} data-testid="application-command-center"><div className="hidden min-h-[1024px] grid-cols-[16.667%_83.333%] md:grid"><Sidebar surface={surface} setSurface={setSurface} /><main className="min-w-0" style={{ background: 'var(--figma-canvas)' }}><Topbar />{surface === 'dashboard' ? <Dashboard /> : surface === 'documents' ? <DocumentRegister /> : <NonConformanceRegister />}</main></div><div className="md:hidden"><MobileDashboard /></div></div>;
+  const hintId = useId();
+  const dashboard = surface === 'dashboard';
+
+  return (
+    <Tabs.Root
+      className="min-w-0"
+      value={surface}
+      onValueChange={(value) => {
+        const next = SURFACES.find((item) => item === value);
+        if (next) setSurface(next);
+      }}
+    >
+      <div className="rounded-t-[10px] border border-[var(--qt-border-grey)] bg-white p-3 sm:p-4">
+        <Tabs.List
+          aria-label={tr('Explore the workspace', 'Chunguza eneo la kazi')}
+          className="grid grid-cols-3 gap-1 rounded-lg bg-[var(--qt-lab-grey)] p-1"
+        >
+          {SURFACES.map((item) => {
+            const { icon: Icon, label } = PREVIEWS[item];
+            return (
+              <Tabs.Trigger
+                key={item}
+                value={item}
+                className="qt-focus flex min-h-12 min-w-0 flex-col items-center justify-center gap-1.5 rounded-md px-1.5 py-2 text-center text-xs font-semibold leading-tight text-[var(--qt-deep-teal)] motion-safe:transition-colors hover:bg-white/70 data-[state=active]:bg-white data-[state=active]:shadow-sm sm:flex-row sm:text-sm"
+              >
+                <Icon size={16} aria-hidden="true" className="shrink-0" />
+                {tx(label)}
+              </Tabs.Trigger>
+            );
+          })}
+        </Tabs.List>
+        <p className="mt-2 px-1 text-sm leading-5 text-[var(--qt-body-grey)]" aria-live="polite">
+          {tx(PREVIEWS[surface].description)}
+        </p>
+        {!dashboard && (
+          <p id={hintId} className="mt-1 px-1 text-xs text-[var(--qt-body-grey)] md:hidden">
+            {tr('Scroll sideways to explore the desktop preview.', 'Sogeza kando ili kuchunguza mwonekano wa kompyuta.')}
+          </p>
+        )}
+      </div>
+      <Tabs.Content
+        value={surface}
+        aria-describedby={dashboard ? undefined : hintId}
+        tabIndex={dashboard ? undefined : 0}
+        className="qt-figma-app qt-focus overflow-x-auto rounded-b-[10px] border bg-white qt-shadow-overlay"
+        style={{ ...FIGMA_TOKENS, borderColor: 'var(--figma-border-subtle)', color: 'var(--figma-text)' }}
+        data-testid="application-command-center"
+      >
+        <div className={`${dashboard ? 'hidden md:grid' : 'grid min-w-[1040px] md:min-w-0'} min-h-[1024px] grid-cols-[16.667%_83.333%]`}>
+          <Sidebar surface={surface} setSurface={setSurface} />
+          <div className="min-w-0" style={{ background: 'var(--figma-canvas)' }}>
+            <Topbar />
+            {surface === 'dashboard' ? <Dashboard /> : surface === 'documents' ? <DocumentRegister /> : <NonConformanceRegister />}
+          </div>
+        </div>
+        {dashboard && <div className="md:hidden"><MobileDashboard /></div>}
+      </Tabs.Content>
+    </Tabs.Root>
+  );
 }
 
 function Dashboard() {

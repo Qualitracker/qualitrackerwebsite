@@ -257,21 +257,20 @@ function LandingPage() {
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end lg:gap-16">
             <Reveal>
-              <SectionHeader eyebrow={tr("See it, not just read about it", "Ione, usisome tu")} title={tr("Work through the actual product surfaces.", "Tumia skrini halisi za bidhaa.")} />
+              <SectionHeader eyebrow={tr("Product walkthrough", "Utambulisho wa bidhaa")} title={tr("Explore the quality workspace.", "Chunguza eneo la kazi la ubora.")} />
             </Reveal>
             <Reveal delay={0.05}>
               <p className="mt-5 max-w-[380px] text-sm leading-6" style={{ color: 'var(--qt-body-grey)' }}>
-                {tr("Move between the Figma-designed command center, controlled documents, and non-conformance workflow. Every record shown is explicitly illustrative, while the screen structure follows the intended application.", "Hamisha kati ya kituo cha amri kilichoundwa Figma, nyaraka zinazodhibitiwa, na mtiririko wa kutokidhi kiwango. Kila rekodi ni mfano, huku muundo wa skrini ukifuata programu iliyokusudiwa.")}
+                {tr("Check what’s due, find a controlled document, or follow a non-conformance. The previews use sample records.", "Angalia kazi zinazokaribia makataa, tafuta nyaraka zinazodhibitiwa au fuatilia tukio la kutokidhi kiwango. Skrini hizi zina rekodi za mfano.")}
               </p>
             </Reveal>
-            <Reveal delay={0.1} className="lg:col-span-2">
+            <Reveal delay={0.1} className="min-w-0 lg:col-span-2">
               <ProductTheatre
                 variant="application"
                 label={tr('QualiTracker eQMS', 'QualiTracker eQMS')}
                 status={tr('Interactive product surface', 'Skrini shirikishi ya bidhaa')}
                 caption={tr('Quality operations workspace', 'Eneo la kazi la uendeshaji wa ubora')}
                 detail={tr('Dashboard · documents · non-conformance', 'Dashibodi · nyaraka · kutokidhi kiwango')}
-                markers={[tr('Dashboard', 'Dashibodi'), tr('Document register', 'Rejesta ya nyaraka'), tr('Non-conformance', 'Kutokidhi kiwango')]}
               >
                 <QualityCommandCenter />
               </ProductTheatre>

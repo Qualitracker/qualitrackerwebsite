@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'wouter';
 
@@ -86,8 +86,25 @@ describe('Figma-aligned product screen switcher', () => {
     expect(screen.getByText('Quality Operations Command Center')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /^document register$/i }));
     expect(screen.getByRole('heading', { name: /controlled document register/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Controlled documents', selected: true })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /^non-conformance$/i }));
     expect(screen.getByRole('heading', { name: /^non-conformance register$/i })).toBeInTheDocument();
+  });
+
+  it('switches the active preview with the external controls and arrow keys', async () => {
+    const user = userEvent.setup();
+    render(<QualityCommandCenter />);
+
+    const overview = screen.getByRole('tab', { name: 'Operations overview', selected: true });
+    await user.click(overview);
+    await user.keyboard('{ArrowRight}');
+
+    await waitFor(() => expect(screen.getByRole('tab', { name: 'Controlled documents', selected: true })).toBeInTheDocument());
+    expect(screen.getByRole('tabpanel', { name: 'Controlled documents' })).toHaveTextContent('Controlled Document Register');
+    expect(screen.getByText('Scroll sideways to explore the desktop preview.')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('tab', { name: 'Quality events' }));
+    expect(screen.getByRole('tabpanel', { name: 'Quality events' })).toHaveTextContent('Non-Conformance Register');
   });
 });
 
