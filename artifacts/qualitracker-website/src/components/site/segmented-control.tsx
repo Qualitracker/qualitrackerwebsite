@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 /**
  * A tab-like state switcher styled as an engineered control, not a default
  * browser/component-library tab strip: mono uppercase labels, a filled
@@ -16,6 +17,7 @@ export function SegmentedControl<T extends string>({ value, onChange, options, .
   return (
     <div
       role="tablist"
+      onKeyDown={navigateTabs}
       aria-label={rest['aria-label']}
       className="inline-flex rounded-md p-1"
       style={{ background: 'var(--qt-lab-grey)', boxShadow: 'inset 0 0 0 1px var(--qt-border-grey)' }}
@@ -28,6 +30,7 @@ export function SegmentedControl<T extends string>({ value, onChange, options, .
             type="button"
             role="tab"
             aria-selected={isActive}
+            tabIndex={isActive ? 0 : -1}
             onClick={() => onChange(opt.value)}
             className="qt-button qt-focus rounded px-3 py-1.5 font-mono-ui text-[10px] font-bold uppercase tracking-[.08em]"
             style={{

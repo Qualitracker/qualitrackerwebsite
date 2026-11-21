@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 import { useState } from 'react';
 import { useI18n, L } from '@/lib/i18n';
 
@@ -17,13 +18,14 @@ export function HorizonMap() {
   const h = HORIZONS[active];
   return (
     <div data-testid="horizon-map">
-      <div role="tablist" aria-label={tr('Growth horizons', 'Vipindi vya ukuaji')} className="flex flex-wrap items-center gap-2">
+      <div role="tablist" onKeyDown={navigateTabs} aria-label={tr('Growth horizons', 'Vipindi vya ukuaji')} className="flex flex-wrap items-center gap-2">
         {HORIZONS.map((item, i) => (
           <button
             key={item.id}
             role="tab"
             type="button"
             aria-selected={i === active}
+            tabIndex={i === active ? 0 : -1}
             aria-controls="horizon-panel"
             onClick={() => setActive(i)}
             className="qt-focus font-mono-ui rounded-full border px-4 py-2 text-[11px] transition-colors"

@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 import { useState, type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useI18n } from '@/lib/i18n';
@@ -23,7 +24,7 @@ export function DataPath({ steps }: { steps: DataPathStep[] }) {
 
   return (
     <div data-testid="data-path">
-      <div role="tablist" aria-label={tr('Path of your data', 'Njia ya data yako')} className="relative grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div role="tablist" onKeyDown={navigateTabs} aria-label={tr('Path of your data', 'Njia ya data yako')} className="relative grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="absolute left-[12%] right-[12%] top-[26px] hidden h-px border-t border-dashed md:block" style={{ borderColor: 'var(--qt-light-teal)' }} aria-hidden="true" />
         {steps.map((s, i) => {
           const on = i === active;
@@ -33,6 +34,7 @@ export function DataPath({ steps }: { steps: DataPathStep[] }) {
               role="tab"
               type="button"
               aria-selected={on}
+              tabIndex={on ? 0 : -1}
               aria-controls="data-path-panel"
               onClick={() => setActive(i)}
               className="qt-focus relative z-10 flex flex-col items-center gap-2 rounded-lg px-2 py-2 text-center"

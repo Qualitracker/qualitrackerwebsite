@@ -92,17 +92,21 @@ function controlPoint(x1: number, y1: number, x2: number, y2: number, bend: numb
 }
 
 interface QualityIntelligenceGraphProps {
-  /** Controlled active node — lets an external element (e.g. a TraceBlock)
-      drive the highlight. Falls back to internal hover/focus state when omitted. */
-  activeId?: NodeId | null;
-  onActiveChange?: (id: NodeId | null) => void;
+  previewId?: NodeId | null;
+  selectedId?: NodeId | null;
+  onPreviewChange?: (id: NodeId | null) => void;
+  onSelectedChange?: (id: NodeId | null) => void;
 }
 
-export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIntelligenceGraphProps = {}) {
+export function QualityIntelligenceGraph({ previewId, selectedId, onPreviewChange, onSelectedChange }: QualityIntelligenceGraphProps = {}) {
   const { tr, tx } = useI18n();
-  const [preview, setPreview] = useState<NodeId | null>(null);
-  const [locked, setLocked] = useState<NodeId | null>(null);
-  const active = activeId ?? preview ?? locked;
+  const [localPreview, setLocalPreview] = useState<NodeId | null>(null);
+  const [localSelection, setLocalSelection] = useState<NodeId | null>(null);
+  const preview = previewId === undefined ? localPreview : previewId;
+  const locked = selectedId === undefined ? localSelection : selectedId;
+  const setPreview = onPreviewChange ?? setLocalPreview;
+  const setLocked = onSelectedChange ?? setLocalSelection;
+  const active = preview ?? locked;
   const reduceMotion = useReducedMotion();
 
   const connectedTo = (id: NodeId) =>
@@ -114,19 +118,16 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
 
   function previewNode(id: NodeId) {
     setPreview(id);
-    onActiveChange?.(id);
   }
 
   function clearPreview() {
     setPreview(null);
-    onActiveChange?.(locked);
   }
 
   function toggleLocked(id: NodeId) {
     const next = locked === id ? null : id;
     setLocked(next);
     setPreview(null);
-    onActiveChange?.(next);
   }
 
   function moveFocus(current: NodeId, direction: 1 | -1) {
@@ -205,7 +206,6 @@ export function QualityIntelligenceGraph({ activeId, onActiveChange }: QualityIn
                 } else if (event.key === 'Escape') {
                   setLocked(null);
                   setPreview(null);
-                  onActiveChange?.(null);
                 }
               }}
               tabIndex={0}

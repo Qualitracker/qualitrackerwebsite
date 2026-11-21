@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useI18n, L } from '@/lib/i18n';
@@ -32,13 +33,14 @@ export function ShiftHandover() {
 
   return (
     <div className="rounded-xl border p-5 sm:p-6" style={{ background: '#FFFFFF', borderColor: 'var(--qt-border-grey)' }} data-testid="shift-handover">
-      <div role="tablist" aria-label={tr('Handover method', 'Njia ya makabidhiano')} className="inline-flex rounded-lg p-1" style={{ background: 'var(--qt-lab-grey)' }}>
+      <div role="tablist" onKeyDown={navigateTabs} aria-label={tr('Handover method', 'Njia ya makabidhiano')} className="inline-flex rounded-lg p-1" style={{ background: 'var(--qt-lab-grey)' }}>
         {([['paper', tr('Paper notes', 'Maelezo ya karatasi')], ['digital', tr('With QualiTracker eQMS', 'Kwa QualiTracker eQMS')]] as const).map(([id, label]) => (
           <button
             key={id}
             role="tab"
             type="button"
             aria-selected={mode === id}
+            tabIndex={mode === id ? 0 : -1}
             onClick={() => choose(id)}
             className="qt-focus rounded-md px-4 py-2 text-xs font-semibold transition-colors"
             style={{ background: mode === id ? 'var(--qt-dark-navy)' : 'transparent', color: mode === id ? '#FFFFFF' : 'var(--qt-body-grey)' }}

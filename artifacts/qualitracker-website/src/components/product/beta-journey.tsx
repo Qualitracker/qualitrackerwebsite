@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useI18n, L } from '@/lib/i18n';
@@ -21,7 +22,7 @@ export function BetaJourney() {
 
   return (
     <div data-testid="beta-journey">
-      <div role="tablist" aria-label={tr('Beta journey', 'Safari ya beta')} className="relative grid grid-cols-5 gap-1">
+      <div role="tablist" onKeyDown={navigateTabs} aria-label={tr('Beta journey', 'Safari ya beta')} className="relative grid grid-cols-5 gap-1">
         <div className="absolute left-[10%] right-[10%] top-[15px] h-px" style={{ background: 'var(--qt-border-grey)' }} aria-hidden="true" />
         {STEPS.map((s, i) => {
           const reached = i <= active;
@@ -31,6 +32,7 @@ export function BetaJourney() {
               role="tab"
               type="button"
               aria-selected={i === active}
+              tabIndex={i === active ? 0 : -1}
               aria-controls="beta-journey-panel"
               onClick={() => setActive(i)}
               className="qt-focus relative flex flex-col items-center gap-2 rounded-md py-1 text-center"

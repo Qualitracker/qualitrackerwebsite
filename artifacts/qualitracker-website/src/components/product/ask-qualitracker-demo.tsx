@@ -128,27 +128,26 @@ export function AskQualiTrackerDemo() {
           />
         </div>
 
-        <div className="flex gap-2 rounded-xl border p-2" style={{ borderColor: 'var(--qt-border-grey)', background: 'var(--qt-lab-grey)' }}>
+        <form onSubmit={(event) => { event.preventDefault(); sendQuestion(); }} className="flex gap-2 rounded-xl border p-2" style={{ borderColor: 'var(--qt-border-grey)', background: 'var(--qt-lab-grey)' }}>
           <input
             value={inputValue}
             onChange={(event) => setDraft(event.target.value)}
-            className="min-w-0 flex-1 bg-transparent px-2 text-xs outline-none"
+            className="qt-focus min-w-0 flex-1 bg-transparent px-2 text-xs"
             style={{ color: 'var(--qt-near-black)' }}
             aria-label={tr('Ask QualiBOT a question', 'Uliza QualiBOT swali')}
             data-testid="input-ask-question"
           />
           <button
-            type="button"
-            onClick={sendQuestion}
+            type="submit"
             disabled={thinking || !inputValue.trim()}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+            className="qt-focus flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
             style={{ background: 'var(--qt-deep-teal)', color: '#FFFFFF' }}
             aria-label={tr('Send question', 'Tuma swali')}
             data-testid="button-send-ask"
           >
             <ArrowRight size={15} />
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

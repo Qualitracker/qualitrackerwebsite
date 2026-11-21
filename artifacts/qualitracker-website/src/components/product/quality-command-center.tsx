@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 import { useState } from 'react';
 import { L, useI18n } from '@/lib/i18n';
 
@@ -55,13 +56,14 @@ export function QualityCommandCenter() {
           {tr('Illustrative sample', 'Mfano wa kuonyesha')}
         </span>
       </div>
-      <div role="tablist" aria-label={tr('Sign in as', 'Ingia kama')} className="flex flex-wrap gap-2 px-5 pt-4">
+      <div role="tablist" onKeyDown={navigateTabs} aria-label={tr('Sign in as', 'Ingia kama')} className="flex flex-wrap gap-2 px-5 pt-4">
         {VIEWS.map((v, i) => (
           <button
             key={v.role.en}
             role="tab"
             type="button"
             aria-selected={i === index}
+            tabIndex={i === index ? 0 : -1}
             onClick={() => setIndex(i)}
             className="qt-focus rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition-colors"
             style={{
