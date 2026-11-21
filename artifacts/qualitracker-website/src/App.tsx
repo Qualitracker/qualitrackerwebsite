@@ -6,8 +6,10 @@ import {
   Route,
   Switch,
   useLocation,
+  useRouter,
   Router as WouterRouter,
 } from 'wouter';
+import { withPageSlash } from '@/lib/page-url';
 
 // Route-based code splitting: each page ships only its own code on first
 // load, instead of one bundle carrying the Docs sidebar, the RAG diagram,
@@ -25,6 +27,8 @@ const PrivacyPage = lazy(() => import('@/pages/privacy-page'));
 const NotFound = lazy(() => import('@/pages/not-found'));
 
 const queryClient = new QueryClient();
+const navigateToPage: ReturnType<typeof useRouter>['aroundNav'] = (navigate, target, options) =>
+  navigate(withPageSlash(target), options);
 
 function RouteFallback() {
   // Deliberately minimal — this only shows for the brief window a route
@@ -71,7 +75,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+        <WouterRouter
+          base={import.meta.env.BASE_URL.replace(/\/$/, '')}
+          hrefs={withPageSlash}
+          aroundNav={navigateToPage}
+        >
           <Router />
         </WouterRouter>
         {/* QualiBOT site embed (ADR-033): renders nothing until

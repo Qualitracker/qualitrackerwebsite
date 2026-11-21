@@ -20,14 +20,14 @@
 
 import puppeteer from 'puppeteer';
 import { preview } from 'vite';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
-// The site's own 8 real routes — see App.tsx's <Switch>. Kept as a literal
+// The site's 9 indexable routes — see App.tsx's <Switch>. Kept as a literal
 // list rather than derived from App.tsx to avoid this script depending on
 // route internals; update both if a route is ever added or removed.
 //
@@ -43,8 +43,23 @@ const ROOT = join(__dirname, '..');
 // its own effect. Processing "/" last means every other route still sees
 // the pristine, build-fresh index.html as its fallback shell.
 const ROUTES = ['/product', '/solutions', '/docs', '/company', '/security', '/waitlist', '/talk-to-team', '/privacy', '/'];
+const NOT_FOUND = '/404.html';
+const DIST = join(ROOT, 'dist/public');
 
-const DEFAULT_TITLE = 'QualiTracker eQMS | Digital Quality Management for Medical Laboratories';
+function verifyDiscoveryFiles(canonicals) {
+  const sitemap = readFileSync(join(DIST, 'sitemap.xml'), 'utf8');
+  const sitemapUrls = Array.from(sitemap.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/g), ([, url]) => url);
+  const expectedUrls = [...canonicals].sort();
+  if (JSON.stringify(sitemapUrls.sort()) !== JSON.stringify(expectedUrls)) {
+    throw new Error('sitemap.xml must list each indexable page canonical URL exactly once.');
+  }
+
+  const robots = readFileSync(join(DIST, 'robots.txt'), 'utf8');
+  const homepage = canonicals.at(-1);
+  if (!robots.split(/\r?\n/).includes(`Sitemap: ${new URL('sitemap.xml', homepage)}`)) {
+    throw new Error('robots.txt must point to the canonical sitemap.xml URL.');
+  }
+}
 
 async function main() {
   const server = await preview({
@@ -68,19 +83,26 @@ async function main() {
   });
   try {
     const page = await browser.newPage();
-    for (const route of ROUTES) {
+    const canonicals = [];
+    for (const route of [NOT_FOUND, ...ROUTES]) {
+      const isNotFound = route === NOT_FOUND;
       // Vite serves project sites below their configured base path. Build the
       // browser URL from the preview origin so a route such as /product is
       // visited as /qualitrackerwebsite/product on GitHub Pages builds.
       const pathname = `${normalizedBasePath}${route}` || '/';
       const url = new URL(pathname, new URL(base).origin).toString();
       await page.goto(url, { waitUntil: 'networkidle0' });
-      // Wait for the route's own useDocumentMeta effect to set a
-      // route-specific title — the real signal that the lazy page chunk
-      // mounted, not just App.tsx's brief RouteFallback spinner.
-      await page
-        .waitForFunction((fallback) => document.title !== fallback, { timeout: 10000 }, DEFAULT_TITLE)
-        .catch(() => {});
+      // The lazy page must mount and set metadata before we save its HTML.
+      const expectedPath = route === '/' ? '/' : `${route}/`;
+      await page.waitForFunction((isNotFound, expectedPath) => {
+        const robots = document.querySelector('meta[name="robots"]')?.content;
+        const canonical = document.querySelector('link[rel="canonical"]')?.href;
+        return document.querySelector('main h1') && (isNotFound
+          ? robots === 'noindex, follow'
+          : robots === 'index, follow' && canonical && new URL(canonical).pathname === expectedPath);
+      }, { timeout: 10000 }, isNotFound, expectedPath).catch((cause) => {
+        throw new Error(`Missing page content or incorrect crawler metadata for ${route}`, { cause });
+      });
 
       // index.html loads Google Fonts without blocking first paint: a
       // rel="preload" link whose onload flips it to rel="stylesheet". Running
@@ -88,18 +110,25 @@ async function main() {
       // flipped, render-blocking <link rel="stylesheet"> (Lighthouse measured
       // ~800ms of render blocking). Put the preload form back before saving;
       // the saved page flips it again when a visitor's browser loads it.
-      const html = await page.evaluate(() => {
+      const { html, canonical } = await page.evaluate((isNotFound) => {
         document.querySelectorAll('link[rel="stylesheet"][as="style"]').forEach((link) => {
           link.setAttribute('rel', 'preload');
           link.setAttribute('onload', "this.onload=null;this.rel='stylesheet'");
         });
-        return '<!doctype html>\n' + document.documentElement.outerHTML;
-      });
-      const outPath = route === '/' ? join(ROOT, 'dist/public/index.html') : join(ROOT, 'dist/public', route.slice(1), 'index.html');
+        const canonical = document.querySelector('link[rel="canonical"]')?.href;
+        if (isNotFound) {
+          document.querySelector('link[rel="canonical"]')?.remove();
+          document.querySelector('meta[property="og:url"]')?.remove();
+        }
+        return { canonical, html: '<!doctype html>\n' + document.documentElement.outerHTML };
+      }, isNotFound);
+      if (!isNotFound) canonicals.push(canonical);
+      const outPath = isNotFound ? join(DIST, '404.html') : join(DIST, route.slice(1), 'index.html');
       mkdirSync(dirname(outPath), { recursive: true });
       writeFileSync(outPath, html);
       console.log(`prerendered ${route.padEnd(16)} -> ${outPath.replace(ROOT + '/', '')} (${(html.length / 1024).toFixed(1)} KiB)`);
     }
+    verifyDiscoveryFiles(canonicals);
   } finally {
     await browser.close();
     await new Promise((resolve, reject) => server.httpServer.close((err) => (err ? reject(err) : resolve())));
