@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { L, type Text, useI18n } from '@/lib/i18n';
@@ -64,7 +65,7 @@ export function RoadmapBuildLog() {
       <div className="flex flex-wrap items-center gap-2 border-b px-4 py-3" style={{ borderColor: 'rgba(255,255,255,.14)' }}>
         <span className="h-2.5 w-2.5 rounded-full" style={{ background: 'var(--qt-quality-gold)' }} aria-hidden="true" />
         <span className="font-mono-ui text-[11px]" style={{ color: 'var(--qt-light-teal)' }}>qualitracker / build-log</span>
-        <div role="tablist" aria-label={tr('Roadmap horizon', 'Kipindi cha ramani ya njia')} className="flex w-full justify-end gap-1 sm:ml-auto sm:w-auto">
+        <div role="tablist" onKeyDown={navigateTabs} aria-label={tr('Roadmap horizon', 'Kipindi cha ramani ya njia')} className="flex w-full justify-end gap-1 sm:ml-auto sm:w-auto">
           {HORIZONS.map((h) => {
             const selected = h.id === active;
             return (
@@ -73,6 +74,7 @@ export function RoadmapBuildLog() {
                 role="tab"
                 id={`roadmap-tab-${h.id}`}
                 aria-selected={selected}
+                tabIndex={selected ? 0 : -1}
                 aria-controls="roadmap-panel"
                 type="button"
                 onClick={() => setActive(h.id)}

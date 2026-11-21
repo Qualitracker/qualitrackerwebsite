@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 
+// Scroll positions are verified in the browser; jsdom has no layout engine.
+Object.defineProperty(window, 'scrollTo', { writable: true, value: () => {} });
+Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { writable: true, value: () => {} });
+
 // jsdom deliberately doesn't implement IntersectionObserver — framer-motion's
 // `whileInView` (used by components/site/reveal.tsx) needs it to mount at
 // all. A minimal stub is enough for render-without-throwing smoke tests;

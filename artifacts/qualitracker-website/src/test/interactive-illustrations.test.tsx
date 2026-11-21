@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { QualityIntelligenceGraph } from '@/components/product/quality-intelligence-graph';
 import { RagPipelineScroll } from '@/components/product/rag-pipeline-scroll';
 import { ProductTheatre } from '@/components/product/product-theatre';
 import { AskQualiTrackerDemo } from '@/components/product/ask-qualitracker-demo';
+import { AccreditationReadinessWidget } from '@/components/product/accreditation-readiness-widget';
+import { QualityCommandCenter } from '@/components/product/quality-command-center';
+import ProductPage from '@/pages/product-page';
 
 describe('interactive product illustrations', () => {
   // Value: protects=custom questions are preserved and cannot receive unrelated audit answers;
@@ -19,11 +22,48 @@ describe('interactive product illustrations', () => {
     const input = screen.getByRole('textbox', { name: 'Ask QualiBOT a question' });
     await user.clear(input);
     await user.type(input, question);
-    await user.click(screen.getByRole('button', { name: 'Send question' }));
+    await user.keyboard('{Enter}');
 
     expect(await screen.findByText(/couldn't find a relevant record/i)).toBeInTheDocument();
     expect(screen.getByText(question)).toBeInTheDocument();
     expect(screen.queryByText('CAPA-014')).not.toBeInTheDocument();
+  });
+
+  it('selects a readiness category on tap without depending on hover or focus', () => {
+    render(<AccreditationReadinessWidget />);
+    const category = screen.getByTestId('button-readiness-1');
+    fireEvent.click(category);
+    expect(category).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByTestId('button-readiness-0')).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('moves between the original dashboard tabs with arrows and Home', async () => {
+    const user = userEvent.setup();
+    render(<QualityCommandCenter />);
+    await user.tab();
+    expect(screen.getByRole('tab', { name: 'Lab director' })).toHaveFocus();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'Quality manager', selected: true })).toHaveFocus();
+    expect(screen.getByText('Open findings')).toBeInTheDocument();
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('tab', { name: 'Lab director', selected: true })).toHaveFocus();
+  });
+
+  it('keeps graph and trace selections in sync after a temporary preview', async () => {
+    const user = userEvent.setup();
+    render(<ProductPage />);
+    const trace = screen.getByTestId('trace-step-capa');
+    await user.click(trace);
+    expect(trace).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByTestId('graph-control-capa')).toHaveAttribute('aria-pressed', 'true');
+    const audit = screen.getByTestId('trace-step-audit');
+    await user.hover(audit);
+    expect(screen.getByTestId('graph-detail')).toHaveTextContent(/audit/i);
+    await user.unhover(audit);
+    expect(within(screen.getByTestId('graph-detail')).getByText('CAPA')).toBeInTheDocument();
+    await user.click(screen.getByTestId('graph-control-document'));
+    expect(screen.getByTestId('trace-step-document')).toHaveAttribute('aria-pressed', 'true');
+    expect(trace).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('lets touch and keyboard users lock a quality-graph node and inspect its relationships', async () => {

@@ -92,12 +92,14 @@ interface TraceBlockProps<T extends string> {
   eyebrow: string;
   steps: Array<TraceStep<T>>;
   activeId?: T | null;
-  onStepFocus?: (id: T | null) => void;
+  selectedId: T | null;
+  onStepFocus: (id: T | null) => void;
+  onStepSelect: (id: T) => void;
   className?: string;
 }
 
 /** A directional traceability path — Standard → SOP → Process → Evidence → Audit → CAPA. */
-export function TraceBlock<T extends string>({ eyebrow, steps, activeId, onStepFocus, className = '' }: TraceBlockProps<T>) {
+export function TraceBlock<T extends string>({ eyebrow, steps, activeId, selectedId, onStepFocus, onStepSelect, className = '' }: TraceBlockProps<T>) {
   return (
     <div className={`qt-card p-4 ${className}`}>
       <p className="qt-technical-eyebrow mb-3">{eyebrow}</p>
@@ -115,10 +117,12 @@ export function TraceBlock<T extends string>({ eyebrow, steps, activeId, onStepF
                 type="button"
                 className="qt-focus block w-full rounded px-1.5 py-0.5 text-left transition-colors"
                 style={{ background: isActive ? 'var(--qt-teal-tint)' : 'transparent' }}
-                onMouseEnter={() => onStepFocus?.(step.id)}
-                onFocus={() => onStepFocus?.(step.id)}
-                onMouseLeave={() => onStepFocus?.(null)}
-                onBlur={() => onStepFocus?.(null)}
+                aria-pressed={selectedId === step.id}
+                onClick={() => onStepSelect(step.id)}
+                onMouseEnter={() => onStepFocus(step.id)}
+                onFocus={() => onStepFocus(step.id)}
+                onMouseLeave={() => onStepFocus(null)}
+                onBlur={() => onStepFocus(null)}
                 data-testid={`trace-step-${step.id}`}
               >
                 <span className="qt-technical-id">{step.label}</span>

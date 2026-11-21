@@ -1,3 +1,4 @@
+import { navigateTabs } from '@/lib/tab-keyboard';
 import { useState } from 'react';
 import { useI18n, type DictKey } from '@/lib/i18n';
 import { DashedLattice, type LatticeShape } from '@/components/product/dashed-lattice';
@@ -34,7 +35,7 @@ export function HowItWorks() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16" data-testid="how-it-works">
-      <div role="tablist" aria-label={tr('How QualiTracker eQMS works', 'Jinsi QualiTracker eQMS inavyofanya kazi')} aria-orientation="vertical" className="divide-y" style={{ borderColor: 'var(--qt-border-grey)' }}>
+      <div role="tablist" onKeyDown={navigateTabs} aria-label={tr('How QualiTracker eQMS works', 'Jinsi QualiTracker eQMS inavyofanya kazi')} aria-orientation="vertical" className="divide-y" style={{ borderColor: 'var(--qt-border-grey)' }}>
         {ITEMS.map((it, i) => {
           const on = i === active;
           return (
@@ -44,6 +45,7 @@ export function HowItWorks() {
                 type="button"
                 id={`hiw-tab-${i}`}
                 aria-selected={on}
+                tabIndex={on ? 0 : -1}
                 aria-controls="hiw-panel"
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}

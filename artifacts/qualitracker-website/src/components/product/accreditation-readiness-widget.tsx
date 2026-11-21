@@ -20,8 +20,7 @@ const CATEGORIES = [
  */
 export function AccreditationReadinessWidget() {
   const { tr, tx } = useI18n();
-  const [hovered, setHovered] = useState<number | null>(null);
-  const active = hovered ?? 0;
+  const [active, setActive] = useState(0);
 
   return (
     <div className="qt-card qt-shadow-overlay p-5" style={{ background: 'var(--qt-clinical-white)' }}>
@@ -40,8 +39,10 @@ export function AccreditationReadinessWidget() {
         <button
           key={cat.label.en}
           type="button"
-          onMouseEnter={() => setHovered(i)}
-          onFocus={() => setHovered(i)}
+          onMouseEnter={() => setActive(i)}
+          onFocus={() => setActive(i)}
+          onClick={() => setActive(i)}
+          aria-pressed={active === i}
           className="qt-button qt-focus mb-2 flex w-full items-center gap-3 rounded-md px-1 py-1 text-left last:mb-0"
           data-testid={`button-readiness-${i}`}
         >

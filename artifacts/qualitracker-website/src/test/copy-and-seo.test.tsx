@@ -33,9 +33,7 @@ const PAGES: Array<[string, () => React.JSX.Element]> = [
 describe('copy style', () => {
   it.each(PAGES)('%s page has no em dashes in its visible text', (_name, Page) => {
     render(<Router><Page /></Router>);
-    const copy = document.body.cloneNode(true) as HTMLElement;
-    copy.querySelector('[data-testid="application-command-center"]')?.remove();
-    expect(copy.textContent ?? '').not.toContain('—');
+    expect(document.body.textContent ?? '').not.toContain('—');
   });
 });
 
@@ -79,15 +77,14 @@ describe('accessibility landmarks', () => {
   });
 });
 
-describe('Figma-aligned product screen switcher', () => {
-  it('moves between command center, documents, and non-conformance screens', async () => {
+describe('dashboard role switcher', () => {
+  it('shows different numbers for each role', async () => {
     const user = userEvent.setup();
     render(<QualityCommandCenter />);
-    expect(screen.getByText('Quality Operations Command Center')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /^document register$/i }));
-    expect(screen.getByRole('heading', { name: /controlled document register/i })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /^non-conformance$/i }));
-    expect(screen.getByRole('heading', { name: /^non-conformance register$/i })).toBeInTheDocument();
+    expect(screen.getByText('Laboratories')).toBeInTheDocument();
+    await user.click(screen.getByRole('tab', { name: /technologist/i }));
+    expect(screen.getByText('Records to complete today')).toBeInTheDocument();
+    expect(screen.queryByText('Laboratories')).not.toBeInTheDocument();
   });
 });
 

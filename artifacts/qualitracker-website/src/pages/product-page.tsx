@@ -34,7 +34,13 @@ const TRACE_STEPS: Array<{ id: NodeId; label: Text; relation?: Text }> = [
 function ProductPage() {
   const { tr, tx } = useI18n();
   const traceSteps = TRACE_STEPS.map((s) => ({ id: s.id, label: tx(s.label), relation: s.relation ? tx(s.relation) : undefined }));
-  const [activeGraphNode, setActiveGraphNode] = useState<NodeId | null>(null);
+  const [previewNode, setPreviewNode] = useState<NodeId | null>(null);
+  const [selectedNode, setSelectedNode] = useState<NodeId | null>(null);
+
+  function selectTraceNode(id: NodeId) {
+    setSelectedNode((current) => current === id ? null : id);
+    setPreviewNode(null);
+  }
   useDocumentMeta(
     'Product | QualiTracker',
     'The QMS Module and QualiBOT: document control, quality records, and an AI assistant grounded in your lab’s own documents.',
@@ -86,9 +92,9 @@ function ProductPage() {
               >
                 <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
                   <div className="max-w-[680px]">
-                    <QualityIntelligenceGraph activeId={activeGraphNode} onActiveChange={setActiveGraphNode} />
+                    <QualityIntelligenceGraph previewId={previewNode} selectedId={selectedNode} onPreviewChange={setPreviewNode} onSelectedChange={setSelectedNode} />
                   </div>
-                  <TraceBlock<NodeId> eyebrow={tr("Traceability path", "Njia ya ufuatiliaji")} steps={traceSteps} activeId={activeGraphNode} onStepFocus={(id) => setActiveGraphNode(id)} />
+                  <TraceBlock<NodeId> eyebrow={tr("Traceability path", "Njia ya ufuatiliaji")} steps={traceSteps} activeId={previewNode ?? selectedNode} selectedId={selectedNode} onStepFocus={setPreviewNode} onStepSelect={selectTraceNode} />
                 </div>
               </ExplorerFrame>
             </ProductTheatre>
