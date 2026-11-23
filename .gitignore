@@ -50,3 +50,16 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Environment, secrets & private infrastructure artifacts
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.sqlite3
+*.zone
+docs/dns/
+docs/migration/
+gstack/
