@@ -1,6 +1,6 @@
 # Move everything from Hostinger and Contabo to Google Cloud
 
-Written 2026-10-20 for execution starting 2026-10-21. Status of every claim is marked **[verified]** (checked from outside by us), **[assumed]** (believed, not checked) or **[unknown]** (needs the inventory). Companion docs: `23_GCP_SETUP_RUNBOOK.md` (details and commands), `docs/dns/qualitracker.com.zone` (target DNS), `docs/migration/*.sh` (server scripts).
+Written 2026-10-20 for execution starting 2026-10-21. Status of every claim is marked **[verified]** (checked from outside by us), **[assumed]** (believed, not checked) or **[unknown]** (needs the inventory). Companion docs: `23_GCP_SETUP_RUNBOOK.md` (details and commands); target DNS zone files and server inventory/backup scripts must be stored in private operations storage (never committed to this public website repository).
 
 ## 1. What exists today
 
@@ -10,7 +10,7 @@ Written 2026-10-20 for execution starting 2026-10-21. Status of every claim is m
 | Hostinger | Any hosting/email/VPS plans, other domains on the account | [unknown] team to list (section 5, Hostinger checklist) |
 | Google | Website live on Firebase Hosting, project `qualitracker-website-e6c53` | [verified] |
 | Google | Workspace email (MX, DKIM) | [verified] |
-| Contabo (`5.189.158.117`, Germany) | nginx + Node/Express backend for the MeLSAT challenge, plus the `chat` / `dev.chat` sites | [verified] it answers; contents [unknown] |
+| Legacy VPS (`<LEGACY_ORIGIN_VPS_IP>`) | nginx + Node/Express backend for the MeLSAT challenge, plus the `chat` / `dev.chat` sites | [verified] it answers; contents [unknown] |
 | Contabo | Participant data (registrations, tokens, scores, staff login), database type | [assumed] on the server only; [unknown] type |
 | Contabo | Source code of the challenge backend | [unknown] not in any repo visible to the team account |
 
@@ -49,8 +49,8 @@ Browser -> backend: Firebase Hosting rewrites do not list `africa-south1`, so th
    gcloud storage buckets create gs://qualitracker-migration-backups --location=africa-south1 \
      --uniform-bucket-level-access --public-access-prevention
    ```
-2. **Inventory + backup of Contabo (Damian, ~1 h).** `sudo bash contabo-inventory.sh > inventory.txt` (read-only, no secret values; skim before sharing), then `sudo bash contabo-backup.sh /path/to/app --<db flag>` for each app, upload the folder to the bucket, **restore-test on a laptop** (open the SQL/db file, un-tar the app). Do not delete anything on the server.
-3. **Cloud DNS zone, not yet live (Owner, ~30 min).** Create the zone, import `docs/dns/qualitracker.com.zone`, compare every record with Hostinger's answers (runbook 8a). Do **not** change nameservers yet.
+2. **Inventory + backup of legacy VPS (Damian, ~1 h).** Run the private read-only inventory script (no secret values; skim before sharing), then back up each app and database, upload the folder to the private bucket, **restore-test on a laptop** (open the SQL/db file, un-tar the app). Do not delete anything on the server.
+3. **Cloud DNS zone, not yet live (Owner, ~30 min).** Create the zone, import the privately stored `qualitracker.com.zone`, compare every record with Hostinger's answers (runbook 8a). Do **not** change nameservers yet.
 4. **Hostinger inventory (login owner, ~20 min).** Do the checklist in section 5; unlock the domain and *request* the transfer code (keep it private).
 5. **Send Claude** the inventory file (secrets-free) and tell it where the source lives. Claude then builds the container, hosting config and migration for each app.
 
@@ -60,7 +60,7 @@ Browser -> backend: Firebase Hosting rewrites do not list `africa-south1`, so th
 
 ## 4a. Phase order (team decision, 2026-10-20)
 
-**Correction that shapes it:** the demo and quality challenge sites do **not** run on Hostinger. They run on the Contabo server (`5.189.158.117`, verified: it answers for both host names). Hostinger holds only the domain registration and DNS. So "moving the challenges to Google" *is* the first part of moving off the Contabo VPS, and "leaving Hostinger" is a DNS/registrar job.
+**Correction that shapes it:** the demo and quality challenge sites do **not** run on Hostinger. They run on the separate legacy VPS (`<LEGACY_ORIGIN_VPS_IP>`). Hostinger holds only the domain registration and DNS. So "moving the challenges to Google" *is* the first part of retiring the legacy VPS, and "leaving Hostinger" is a DNS/registrar job.
 
 | Phase | Scope | Done when |
 |---|---|---|
@@ -70,7 +70,7 @@ Browser -> backend: Firebase Hosting rewrites do not list `africa-south1`, so th
 
 **Gate to start Phase 1b/1c:** Damian's inventory and backup of the Contabo server (section 4, step 2) and the location of the challenge backend's source code. Without the source and the data, the challenge backend cannot be rebuilt on Google.
 
-**Recommendation: do the DNS move (Phase 3, first half) at the start of Phase 1, not the end.** Phase 1 needs several DNS changes (verification and routing records for the two new Hosting sites, restoring the two missing host names). Doing them in Hostinger's panel means more manual edits and slow, uneven replication between its two nameservers (seen on 2026-10-19). With Cloud DNS the edits are made once, in Google, and are checked with `dig` straight away. The zone file is ready (`docs/dns/qualitracker.com.zone`); the switch needs the record-by-record comparison in runbook 8a and a mail test. The registrar transfer can still wait until the end.
+**Recommendation: do the DNS move (Phase 3, first half) at the start of Phase 1, not the end.** Phase 1 needs several DNS changes (verification and routing records for the two new Hosting sites, restoring the two missing host names). Doing them in Hostinger's panel means more manual edits and slow, uneven replication between its two nameservers (seen on 2026-10-19). With Cloud DNS the edits are made once, in Google, and are checked with `dig` straight away. Keep the zone file in private operations storage; the switch needs the record-by-record comparison in runbook 8a and a mail test. The registrar transfer can still wait until the end.
 
 ## 5. Checklists
 
